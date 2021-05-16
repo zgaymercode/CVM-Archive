@@ -3,7 +3,7 @@ module.exports = {
         cmds_enabled: 1,
         prefix: "cv",
         startstatus: /* PLAYING */ "cvhelp for help!",
-        token: "TOKEN_HERE"
+        token: "ODQzMDgwNTU1MDEyMTYxNTQ2.YJ-p8w.rpprVGmOaRo4Nrcdzcu4FYFYJ2o"
     },
     messages: {
         notowner: "Sorry, this command can only be ran by the owner of the channel. if the owner left, you can use the claim command to claim it",
@@ -14,20 +14,20 @@ module.exports = {
         oof: "Something happend, please try again",
     },
     db: {
-        host: "HOST_ADDRESS",
-        user: "USERNAME",
-        pass: "PASSWORD",
+        host: "192.168.0.60",
+        user: "vcbot",
+        pass: "fds&6$738dd%f8#yf7",
         database: "vcbot"
     },
     embed: {
-        ver: "0.1",
+        ver: "0.5",
         footer: "Bot created by the WolfTribe",
         color: '#1F85DE'
     },
     server: {
-        memberrole: "843537697426505798", // use if server config has @everyone locked to see chan's
+        memberrole: "843537697426505798",
     },
     staff: [
-        "USER_ID_FORDEV" // this is the developer for when commands are disabled
+        "827007664529342505"
     ]
 }
