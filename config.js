@@ -17,7 +17,7 @@ module.exports = {
         host: "HOST_ADDRESS",
         user: "USERNAME",
         pass: "PASSWORD",
-        database: "DATABASENAME"
+        database: "vcbot"
     },
     embed: {
         ver: "0.1",
