@@ -118,7 +118,8 @@ client.on("message", async (msg) => {    // check if msg author is a bot or if t
 
 })
 client.on("guildDelete", function (guild) {
-    // Delete all records of that server regarding channels
+    // Delete all records of that server regarding catagories
+    // channels will be removed from db with the intervals
     con.getConnection(function (err, d) {
         if (err) {
             console.error("error connecting: " + err.stack);
