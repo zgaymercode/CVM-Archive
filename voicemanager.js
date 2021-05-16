@@ -80,7 +80,7 @@ client.on("ready", () => {
 });
 client.on("message", async (msg) => {    // check if msg author is a bot or if the message is in a guild
     if (msg.author.bot) return;
-    if (!msg.guild) fn.Reply(msg, "You must be in a server to use this bot");
+    if (!msg.guild) return;
     // handle the command arguments and schtuffs
     let prefix = config.bot.prefix;
     if (!msg.content.startsWith(prefix)) return;
