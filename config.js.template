@@ -25,9 +25,9 @@ module.exports = {
         color: '#1F85DE'
     },
     server: {
-        memberrole: "843537697426505798",
+        memberrole: "ROLE_ID", // this is used for the lock command, in current settings, it's disabled
     },
     staff: [
-        "827007664529342505"
+        "BOTSTAFF_USERID" // when commands are disabled, users in this array are still allowed to use the bot
     ]
 }
