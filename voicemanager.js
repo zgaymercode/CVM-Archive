@@ -188,7 +188,6 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
                     if (res.length > 0) {
                         let vc = oldState.guild.channels.cache.get(oldState.channelID);
                         if (vc.members.size < 1) {
-                            // https://github.com/Tomato6966/Discord-Join-to-Create/blob/main/jointocreate.js
                             vc.delete()
                             //yeet the info from the database
                             let sqlzor = SqlString.format('DELETE FROM channels WHERE id=?', [oldchan]);
