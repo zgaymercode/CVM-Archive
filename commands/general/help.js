@@ -1,4 +1,12 @@
 const Discord = module.require("discord.js");
+function send(msg, embed, fn) {
+    msg.channel.send(embed).then((m) => {
+        setTimeout(() => {
+            m.delete();
+            fn.Reply(msg, "Menu go YEET ")
+        }, 45000);
+    });
+}
 module.exports.run = async (client, con, config, msg, args, fn) => {
     try {
         let prefix = config.bot.prefix;
@@ -24,16 +32,27 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
                     if (help.aliases) {
                         embed.addField("Aliases", help.aliases);
                     }
-                    if (help.category) {
-                        embed.addField("Category", help.category);
-                    }
+                    embed.addField("Category", help.category);
 
-                    msg.channel.send(embed).then((m) => {
-                        setTimeout(() => {
-                            m.delete();
-                            fn.Reply(msg, "Menu go YEET ")
-                        }, 45000);
-                    });
+                    if (help.category === "Dev") {
+                        if (config.staff.includes(msg.author.id)) {
+                            send(msg, embed, fn);
+                            return;
+                        } else {
+                            fn.Reply(msg, "Sorry, This is a Dev Command")
+                            return;
+                        }
+                    }
+                    if (help.category === "Administrative") {
+                        if (msg.member.hasPermission("MANAGE_GUILD") || msg.member.hasPermission("ADMINISTRATOR")) {
+                            send(msg, embed, fn);
+                            return;
+                        } else {
+                            fn.Reply(msg, config.messages.nomanager)
+                            return;
+                        }
+                    }
+                    send(msg, embed, fn);
 
                 } catch {
                     let embed = new Discord.MessageEmbed()
