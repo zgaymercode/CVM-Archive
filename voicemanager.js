@@ -80,7 +80,7 @@ client.on("ready", () => {
         fn.ChannelCleanup(client);
         fn.CatagoryCleanup(client);
         fn.consolelog(client, m);
-    }, 300000); // every 5 minutes
+    }, 150000); // every 2.5 minutes
 });
 client.on("message", async (msg) => {    // check if msg author is a bot or if the message is in a guild
     if (msg.author.bot) return;

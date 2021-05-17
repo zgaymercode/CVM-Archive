@@ -48,45 +48,7 @@ function BotStatus(client) {
     client.user.setActivity(activities_list[index], { type: "WATCHING" }); // sets bot's activities to one of the phrases in the arraylist.
 }
 //#endregion
-async function Reply(msg, error) {
-    let embed = new Discord.MessageEmbed()
-        .setColor(config.embed.color)
-        .setDescription(error);
-    msg.channel.send(embed).then((m) => {
-        setTimeout(() => {
-            m.delete();
-        }, 5000);
-    })
-}
-async function vcOwnerCheck(vcid, uid, msg) {
-    var sql = SqlString.format('SELECT * FROM channels WHERE id=? AND oid=?', [vcid, uid]);
-    con.getConnection(function (err, d) {
-        if (err) {
-            console.error("error connecting: " + err.stack);
-            return;
-        }
-        d.query(sql, async (er, re) => {
-            if (er) console.error(er);
-            if (!re) {
-                if (msg.member.hasPermission("MOVE_MEMBERS") || msg.member.hasPermission("ADMINISTRATOR")) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-            if (re) {
-                return true;
-            }
-        })
-        d.release(function (err) {
-            if (err) {
-                ErrorMessage("close connection", err);
-            }
-            console.info("Ended Connection");
-            // The connection is terminated now
-        });
-    });
-}
+//#region Cron Jobs
 async function ChannelCleanup(client) {
     con.getConnection(function (err, d) {
         if (err) {
@@ -97,9 +59,10 @@ async function ChannelCleanup(client) {
             if (er) console.error(er);
             if (!re) return;
             if (re) {
-                for (let i = 0; i < re.length; i++){
+                for (let i = 0; i < re.length; i++) {
                     let id = re[i].id;
-                    if (!client.channels.cache.find(c => c.id === id)) {
+                    let vc = client.channels.cache.find(c => c.id === id);
+                    if (!vc) {
                         // Channel does not exist anymore, Yeet it from the db
                         let sqlGAYYY = SqlString.format(`DELETE FROM channels WHERE id=?`, [id]);
                         d.query(sqlGAYYY, async (err, res) => {
@@ -107,6 +70,21 @@ async function ChannelCleanup(client) {
                             if (!res) return;
                             if (res) console.log("Removed " + id + " from the DB");
                         })
+                    } else {
+                        /*
+                            If there's any stale channels, we should take care of them as well
+                            YEEET
+                        */
+                        if (vc.members.size < 1) {
+                            vc.delete()
+                            //yeet the info from the database
+                            let sqlzor = SqlString.format('DELETE FROM channels WHERE id=?', [vc.id]);
+                            d.query(sqlzor, async (er, res234) => {
+                                if (er) console.error(er);
+                                if (!res234) console.error("Could not delete entry");
+                                if (res234) console.log("Channel yeeted");
+                            })
+                        }
                     }
                 }
             }
@@ -153,6 +131,49 @@ async function CatagoryCleanup(client) {
         });
     });
 }
+//#endregion
+//#region Utility Functions
+async function Reply(msg, error) {
+    let embed = new Discord.MessageEmbed()
+        .setColor(config.embed.color)
+        .setDescription(error);
+    msg.channel.send(embed).then((m) => {
+        setTimeout(() => {
+            m.delete();
+        }, 5000);
+    })
+}
+async function vcOwnerCheck(vcid, uid, msg) {
+    var sql = SqlString.format('SELECT * FROM channels WHERE id=? AND oid=?', [vcid, uid]);
+    con.getConnection(function (err, d) {
+        if (err) {
+            console.error("error connecting: " + err.stack);
+            return;
+        }
+        d.query(sql, async (er, re) => {
+            if (er) console.error(er);
+            if (!re) {
+                if (msg.member.hasPermission("MOVE_MEMBERS") || msg.member.hasPermission("ADMINISTRATOR")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            if (re) {
+                return true;
+            }
+        })
+        d.release(function (err) {
+            if (err) {
+                ErrorMessage("close connection", err);
+            }
+            console.info("Ended Connection");
+            // The connection is terminated now
+        });
+    });
+}
+//#endregion
+
 function timesince(timestamp) {
     var CurrentDate = moment();
     var startDate = moment(CurrentDate, 'YYYY-M-DD HH:mm:ss')
