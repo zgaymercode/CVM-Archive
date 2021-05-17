@@ -23,6 +23,6 @@ Community Voice Manager is a Discord.js Bot made to create temporary voice chann
 ## Future Plans
 Things that will come to the bot in the near future
 - [ ] Channel Name Templates
-- [ ] Dynamic help command (cvhelp )
+- [ ] Dynamic help command (cvhelp [commandname])
 - [ ] Command to Kick a member from voice chat
 - [ ] Win the game
