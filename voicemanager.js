@@ -130,44 +130,54 @@ client.on("message", async (msg) => {    // check if msg author is a bot or if t
     else if (client.aliases.has(cmd)) command = client.commands.get(client.aliases.get(cmd));
     if (!command) return;
     // handle the command
-    
+    msg.delete()
     if (config.bot.cmds_enabled == 0) {
         // user needs to be a part of bot staff for commands to run
         if (config.staff.includes(msg.author.id)) {
             command.run(client, con, config, msg, args, fn);
+            return;
         } else {
             fn.Reply(msg, config.messages.disablemessage);
+            return;
         }
     } else {
         if (command.help.category === "Dev") {
             if (config.staff.includes(msg.author.id)) {
                 command.run(client, con, config, msg, args, fn);
+                return;
             } else {
                 fn.Reply(msg, "Sorry, This is a Dev Command")
+                return;
             }
         } else if (command.help.category === "Administrative") {
             if (msg.member.hasPermission("MANAGE_GUILD") || msg.member.hasPermission("ADMINISTRATOR")) {
                 command.run(client, con, config, msg, args, fn);
+                return;
             } else {
                 fn.Reply(msg, config.messages.nomanager)
+                return;
             }
         } if (command.help.category === "VC Owner Command") {
             if (msg.member.voice.channel) {
                 if (fn.vcOwnerCheck(msg.member.voice.channel.id, msg.author.id, msg)) {
                     command.run(client, con, config, msg, args, fn);
+                    return;
                 } else {
                     fn.Reply(msg, config.messages.nomanager)
+                    return;
                 }
             } else {
                 fn.Reply(msg, "You are not in a voice chat")
+                return;
             }
             
         } else {
             command.run(client, con, config, msg, args, fn);
+            return;
         }
         
     }
-    msg.delete()
+    
 })
 client.on("guildDelete", function (guild) {
     console.log("Bot has left: " + guild.id);
