@@ -70,7 +70,7 @@ var con = mysql.createPool({
 });
 //#endregion
 client.on("ready", () => {
-    m = 15; // max intervals before restart
+    m = 100; // max intervals before restart
     client.user.setActivity(config.bot.startstatus, { type: "PLAYING" });
     fn.consolelog(client, m);
     fn.ChannelCleanup(client);
@@ -149,9 +149,10 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
                     if (res.length > 0) {
                         let u = client.users.cache.get(uid);
                         let template = `${u.username}'s Room`;
-                        let newchan = await oldState.guild.channels.create(template, {
+                        let newchan = await newState.guild.channels.create(template, {
                             type: 'voice',
                             parent: newState.channel.parent.id,
+                            userLimit: newState.channel.userLimit
                         })
                         newState.setChannel(newchan);
                         var sql2 = SqlString.format('INSERT INTO channels SET id=?, oid=?, created=CURRENT_TIMESTAMP()', [newchan.id, uid]);
