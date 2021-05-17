@@ -149,7 +149,8 @@ client.on("message", async (msg) => {    // check if msg author is a bot or if t
                 fn.Reply(msg, "Sorry, This is a Dev Command")
                 return;
             }
-        } else if (command.help.category === "Administrative") {
+        }
+        if (command.help.category === "Administrative") {
             if (msg.member.hasPermission("MANAGE_GUILD") || msg.member.hasPermission("ADMINISTRATOR")) {
                 command.run(client, con, config, msg, args, fn);
                 return;
@@ -157,7 +158,8 @@ client.on("message", async (msg) => {    // check if msg author is a bot or if t
                 fn.Reply(msg, config.messages.nomanager)
                 return;
             }
-        } if (command.help.category === "VC Owner Command") {
+        }
+        if (command.help.category === "VC Owner Command") {
             if (msg.member.voice.channel) {
                 if (fn.vcOwnerCheck(msg.member.voice.channel.id, msg.author.id, msg)) {
                     command.run(client, con, config, msg, args, fn);
@@ -170,11 +172,8 @@ client.on("message", async (msg) => {    // check if msg author is a bot or if t
                 fn.Reply(msg, "You are not in a voice chat")
                 return;
             }
-            
-        } else {
-            command.run(client, con, config, msg, args, fn);
-            return;
         }
+        command.run(client, con, config, msg, args, fn);
         
     }
     
