@@ -8,8 +8,7 @@ Community Voice Manager is a Discord.js Bot made to create temporary voice chann
 - [X] Lockable channels
 - [X] Claim channels if owner is no longer present
 - [X] invite members to locked channels
-- [X] create multiple catagories with different templates<br>
-%INC% = Increment&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%USERNAME% = username
+- [X] create multiple catagories with different templates
 - [X] Allow enabling/disabling of lockable channels per-catagory
 
 ## Commands
@@ -25,7 +24,8 @@ In order for commands to run, you must either be in a voice chat, or have the Ma
 -**invite @member** : allows a mentioned member to see and join the channel<br><br><br>
 **Server Management**<br>
 -**newcat** : Generates a new category and a join channel for that category<br><br>
--**template** : Updates the Channel's template<br><br>
+-**template** : Updates the Channel's template<br>
+%INC% = Increment&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%USERNAME% = username<br><br>
 -**increment** : Overrides the Channel's increment<br><br>
 -**lockable <category_id> enable|disable** : Enables/Disables the ability to lock a channel within a category<br><br>
 -**debug** : Debugs the bot's perms for the server or a channel<br><br>
