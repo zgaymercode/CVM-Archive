@@ -48,7 +48,7 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
                 embed = new Discord.MessageEmbed()
                     .setColor(embedcolor)
                     .setTimestamp()
-                    .setDescription("This is a list of all of my commands. If you want more specific information about a command like it's usage, feel free to run " + prefix + "help <command_name> for more help on a command")
+                    .setDescription("This is a list of all of my commands(note some commands only appear if you're in a voice chat, or if you're the owner of a voice chat). If you want more specific information about a command like it's usage, feel free to run " + prefix + "help <command_name> for more help on a command")
                     .setThumbnail(client.user.avatarURL({ dynamic: true }))
                     .setAuthor(client.user.username)
                     .setFooter(config.embed.footer + " | " + config.embed.ver, client.user.avatarURL({ dynamic: true }));
@@ -67,8 +67,8 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
             }
             if (msg.member.hasPermission("MANAGE_GUILD") || msg.member.hasPermission("ADMINISTRATOR")) {
                 embed.addField(prefix + "newcat", "Generates a new category and a join channel for that category");
-                embed.addField(prefix + "template", "Updates the Channel's template");
-                embed.addField(prefix + "increment", "Overrides the Channel's increment");
+                embed.addField(prefix + "template", "Updates the category's template");
+                embed.addField(prefix + "increment", "Overrides the category's increment");
                 embed.addField(prefix + "lockable <category_id> enable|disable", "Enables/Disables the ability to lock a channel within a category");
                 embed.addField(prefix + "debug", "Debugs the bot's perms for the server or a channel");
             }
