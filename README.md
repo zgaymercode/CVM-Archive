@@ -17,17 +17,17 @@ In order for commands to run, you must either be in a voice chat, or have the Ma
 -**owner** : Shows who the current owner of the channel is<br><br>
 -**claim** : Claim the voice chat if the owner has left<br><br><br>
 **Voice Channel Owners**<br>
--**kick @member** : Kicks the mentioned member from the current voice chat<br><br>
+-**kick** : Kicks the mentioned member from the current voice chat<br><br>
 -**rename** : allows the channel owner to rename the voice chat<br><br>
 -**lock** : Locks the channel and makes it visible and joinable by those who are invited.<br><br>
 -**unlock** : unlocks a voice chat and allows it to be seen and joined by anyone<br><br>
--**invite @member** : allows a mentioned member to see and join the channel<br><br><br>
+-**invite** : allows a mentioned member to see and join the channel<br><br><br>
 **Server Management**<br>
 -**newcat** : Generates a new category and a join channel for that category<br><br>
--**template <category_id> <new_template>** : Updates the Channel's template<br>
+-**template** : Updates the Channel's template<br>
 %INC% = Increment&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%USERNAME% = username<br><br>
 -**increment** : Overrides the Channel's increment<br><br>
--**lockable <category_id> enable|disable** : Enables/Disables the ability to lock a channel within a category<br><br>
+-**lockable** : Enables/Disables the ability to lock a channel within a category<br><br>
 -**debug** : Debugs the bot's perms for the server or a channel<br><br>
 
 ## Automated Tasks
