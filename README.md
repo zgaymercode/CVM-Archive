@@ -2,13 +2,16 @@
 Community Voice Manager is a Discord.js Bot made to create temporary voice channels<br>
 
 ## Commands
+Public
 -**owner** : Shows who the current owner of the channel is<br><br>
 -**claim** : Claim the voice chat if the owner has left<br><br>
+Voice Channel Owners
 -**kick @member** : Kicks the mentioned member from the current voice chat<br><br>
 -**rename** : allows the channel owner to rename the voice chat<br><br>
 -**lock** : Locks the channel and makes it visible and joinable by those who are invited.<br><br>
 -**unlock** : unlocks a voice chat and allows it to be seen and joined by anyone<br><br>
 -**invite @member** : allows a mentioned member to see and join the channel<br><br>
+Server Management
 -**newcat** : Generates a new category and a join channel for that category<br><br>
 -**template** : Updates the Channel's template<br><br>
 -**increment** : Overrides the Channel's increment<br><br>
