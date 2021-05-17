@@ -83,6 +83,6 @@ module.exports.help = {
     name: "debug",
     //aliases: [""],
     description: "Debugs the server's permissions or the mentioned channel's permissions",
-    usage: "cvdebug OR cvdebug #channel",
+    usage: "debug",
     category: "General"
 }

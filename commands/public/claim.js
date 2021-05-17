@@ -66,6 +66,6 @@ module.exports.help = {
     name: "claim",
     //aliases: [""],
     description: "Claims a voice chat when the owner has left",
-    usage: "cvclaim",
+    usage: "claim",
     category: "General"
 }

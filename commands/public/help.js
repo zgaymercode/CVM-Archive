@@ -1,7 +1,8 @@
 const Discord = module.require("discord.js");
 module.exports.run = async (client, con, config, msg, args, fn) => {
     try {
-        if (args) {
+        let prefix = config.bot.prefix;
+        if (args.length > 0) {
             try {
                 const cmd = args.shift().toLowerCase();
                 let command = client.commands.get(cmd);
@@ -17,7 +18,7 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
                     embed.setDescription(help.description);
                 }
                 if (help.usage) {
-                    embed.addField("Usage", help.usage)
+                    embed.addField("Usage", prefix + help.usage)
                 }
                 if (help.aliases) {
                     embed.addField("Aliases", help.aliases);
@@ -41,24 +42,25 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
         } else {
 
 
-            let prefix = config.bot.prefix;
+            
             let embedcolor = config.embed.color;
 
             let embed = new Discord.MessageEmbed()
                 .setColor(embedcolor)
                 .setTimestamp()
+                .setDescription("This is a list of all of my commands. If you want more specific information about a command like it's usage, feel free to run " + prefix + "help <command_name> for more help on a command")
                 .setThumbnail(client.user.avatarURL({ dynamic: true }))
                 .setAuthor(client.user.username)
                 .setFooter(config.embed.footer + " | " + config.embed.ver, client.user.avatarURL({ dynamic: true }))
-                .addField(config.bot.prefix + "owner", "Shows who the current owner of the channel is")
-                .addField(config.bot.prefix + "claim", "Claim the voice chat if the owner has left")
-                .addField(config.bot.prefix + "rename", "allows the channel owner to rename the voice chat")
-                .addField(config.bot.prefix + "lock", "Locks the channel and makes it visible and joinable by those who are invited.")
-                .addField(config.bot.prefix + "unlock", "unlocks a voice chat and allows it to be seen and joined by anyone")
-                .addField(config.bot.prefix + "invite @member", "allows a mentioned member to see and join the channel");
+                .addField(prefix + "owner", "Shows who the current owner of the channel is")
+                .addField(prefix + "claim", "Claim the voice chat if the owner has left")
+                .addField(prefix + "rename", "allows the channel owner to rename the voice chat")
+                .addField(prefix + "lock", "Locks the channel and makes it visible and joinable by those who are invited.")
+                .addField(prefix + "unlock", "unlocks a voice chat and allows it to be seen and joined by anyone")
+                .addField(prefix + "invite @member", "allows a mentioned member to see and join the channel");
             if (msg.member.hasPermission("MANAGE_GUILD") || msg.member.hasPermission("ADMINISTRATOR")) {
-                embed.addField(config.bot.prefix + "newcat", "Generates a new category and a join channel for that category");
-                embed.addField(config.bot.prefix + "debug", "Debugs the bot's perms for the server or a channel");
+                embed.addField(prefix + "newcat", "Generates a new category and a join channel for that category");
+                embed.addField(prefix + "debug", "Debugs the bot's perms for the server or a channel");
             }
 
             msg.channel.send(embed);
@@ -73,6 +75,6 @@ module.exports.help = {
     name: "help",
     aliases: ["h"],
     description: "This command shows information about other commands",
-    usage: "cvhelp OR cvhelp <commandname>",
+    usage: "help",
     category: "General"
 }

@@ -65,6 +65,6 @@ module.exports.help = {
     name: "rename",
     //aliases: [""],
     description: "Renames the channel that you are in, assuming you're the owner or have the right perms",
-    usage: "cvrename <new name>",
+    usage: "rename <new name>",
     category: "General"
 }

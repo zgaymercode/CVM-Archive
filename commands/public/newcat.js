@@ -70,6 +70,6 @@ module.exports.help = {
     name: "newcat",
     //aliases: [""],
     description: "creates a new catagory for voice chat",
-    usage: "cvnewcat",
+    usage: "newcat",
     category: "General"
 }

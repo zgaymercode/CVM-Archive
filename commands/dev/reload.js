@@ -29,6 +29,6 @@ module.exports.help = {
 	name: "reload",
 	//aliases: [""],
 	description: "reloads the specified command",
-	usage: "cvreload <commandname>",
+	usage: "reload <commandname>",
 	category: "Dev"
 };

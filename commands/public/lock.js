@@ -61,6 +61,6 @@ module.exports.help = {
     name: "lock",
     //aliases: [""],
     description: "locks a channel",
-    usage: "cvlock",
+    usage: "lock",
     category: "General"
 }
