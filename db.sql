@@ -12,7 +12,10 @@ USE `vcbot`;
 CREATE TABLE IF NOT EXISTS `catagory` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `gid` varchar(50) DEFAULT NULL,
+  `pid` varchar(50) DEFAULT NULL,
   `joinchan` varchar(50) DEFAULT NULL,
+  `template` varchar(50) DEFAULT NULL,
+  `increment` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 24 DEFAULT CHARSET = latin1;
 -- Data exporting was unselected.
@@ -26,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `channels` (
   `last_rename` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`num`),
   KEY `created` (`created`)
-) ENGINE = InnoDB AUTO_INCREMENT = 57 DEFAULT CHARSET = latin1;
+) ENGINE = InnoDB AUTO_INCREMENT = 108 DEFAULT CHARSET = latin1;
 -- Data exporting was unselected.
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
