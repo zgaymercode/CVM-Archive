@@ -16,6 +16,6 @@ module.exports.help = {
     name: "restart",
     //aliases: [""],
     description: "restarts the bot",
-    usage: "",
+    usage: "cvrestart",
     category: "Dev"
 }

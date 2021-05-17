@@ -82,7 +82,7 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
 module.exports.help = {
     name: "debug",
     //aliases: [""],
-    description: "Debugs the server's permissions and setup",
-    usage: "",
+    description: "Debugs the server's permissions or the mentioned channel's permissions",
+    usage: "cvdebug OR cvdebug #channel",
     category: "General"
 }

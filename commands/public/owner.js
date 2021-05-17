@@ -40,6 +40,6 @@ module.exports.help = {
     name: "owner",
     //aliases: [""],
     description: "Shows who the current owner is",
-    usage: "",
+    usage: "cvowner",
     category: "General"
 }

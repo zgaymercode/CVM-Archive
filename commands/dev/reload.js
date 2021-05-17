@@ -28,7 +28,7 @@ module.exports.run = (client, con, config, msg, args, fn) => {
 module.exports.help = {
 	name: "reload",
 	//aliases: [""],
-	description: "",
-	usage: "",
+	description: "reloads the specified command",
+	usage: "cvreload <commandname>",
 	category: "Dev"
 };

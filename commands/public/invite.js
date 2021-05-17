@@ -68,6 +68,6 @@ module.exports.help = {
     name: "invite",
     //aliases: [""],
     description: "invites a member to a locked channel",
-    usage: "",
+    usage: "cvinvite @member",
     category: "General"
 }

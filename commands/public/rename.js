@@ -64,7 +64,7 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
 module.exports.help = {
     name: "rename",
     //aliases: [""],
-    description: "Renames a channel",
-    usage: "",
+    description: "Renames the channel that you are in, assuming you're the owner or have the right perms",
+    usage: "cvrename <new name>",
     category: "General"
 }

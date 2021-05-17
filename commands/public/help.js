@@ -73,6 +73,6 @@ module.exports.help = {
     name: "help",
     aliases: ["h"],
     description: "This command shows information about other commands",
-    usage: "help OR help <commandname>",
+    usage: "cvhelp OR cvhelp <commandname>",
     category: "General"
 }

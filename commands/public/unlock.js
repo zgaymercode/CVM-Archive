@@ -47,6 +47,6 @@ module.exports.help = {
     name: "unlock",
     //aliases: [""],
     description: "unlocks a channel",
-    usage: "",
+    usage: "cvunlock",
     category: "General"
 }
