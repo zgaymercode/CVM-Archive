@@ -28,7 +28,12 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
                         embed.addField("Category", help.category);
                     }
 
-                    msg.channel.send(embed);
+                    msg.channel.send(embed).then((m) => {
+                        setTimeout(() => {
+                            m.delete();
+                            fn.Reply(msg, "Menu go YEET ")
+                        }, 45000);
+                    });
 
                 } catch {
                     let embed = new Discord.MessageEmbed()
@@ -79,7 +84,7 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
                     setTimeout(() => {
                         m.delete();
                         fn.Reply(msg, "Menu go YEET ")
-                    }, 30000);
+                    }, 45000);
                 });
             } else {
                 fn.Reply(msg, "You are not able to run this command at this time, please try again when you're in a voice channel")

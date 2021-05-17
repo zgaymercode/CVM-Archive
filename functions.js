@@ -141,7 +141,7 @@ async function Reply(msg, error) {
     msg.channel.send(embed).then((m) => {
         setTimeout(() => {
             m.delete();
-        }, 5000);
+        }, 45000);
     })
 }
 async function vcOwnerCheck(vcid, uid, msg) {
