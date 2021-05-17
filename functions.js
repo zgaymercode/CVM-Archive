@@ -181,6 +181,32 @@ function timesince(timestamp) {
 
     return minDiff;
 }
+async function BlistedWordCheck(word, msg) {
+    let gid = msg.guild.id;
+    var sql = SqlString.format('SELECT word FROM blacklistedwords WHERE word=? AND gid=?', [word, gid]);
+    con.getConnection(function (err, d) {
+        if (err) {
+            console.error("error connecting: " + err.stack);
+            return;
+        }
+        d.query(sql, async (er, re) => {
+            if (er) console.error(er);
+            if (!re) {
+                return true;
+            }
+            if (re) {
+                return false;
+            }
+        })
+        d.release(function (err) {
+            if (err) {
+                ErrorMessage("close connection", err);
+            }
+            console.info("Ended Connection");
+            // The connection is terminated now
+        });
+    });
+}
 //#endregion
 module.exports = {
     consolelog,
@@ -190,4 +216,5 @@ module.exports = {
     ChannelCleanup,
     CatagoryCleanup,
     timesince,
+    BlistedWordCheck,
 }
