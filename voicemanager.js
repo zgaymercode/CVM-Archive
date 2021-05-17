@@ -179,7 +179,12 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
                     if (!res) return;
                     if (res.length > 0) {
                         let u = client.users.cache.get(uid);
-                        let template = `${u.username}'s Room`;
+                        let t = res[0].template;
+                        if (t === null) {
+                            template = `${u.username}'s Room`;
+                        } else {
+                            
+                        }
                         let newchan = await newState.guild.channels.create(template, {
                             type: 'voice',
                             parent: newState.channel.parent.id,
