@@ -53,5 +53,5 @@ module.exports.help = {
     //aliases: [""],
     description: "locks a channel",
     usage: "lock",
-    category: "VC Owner Cmd"
+    category: "VC Owner Command"
 }

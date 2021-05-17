@@ -39,5 +39,5 @@ module.exports.help = {
     //aliases: [""],
     description: "unlocks a channel",
     usage: "unlock",
-    category: "VC Owner Cmd"
+    category: "VC Owner Command"
 }

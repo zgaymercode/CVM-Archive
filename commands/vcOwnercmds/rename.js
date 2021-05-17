@@ -53,5 +53,5 @@ module.exports.help = {
     //aliases: [""],
     description: "Renames the channel that you are in, assuming you're the owner or have the right perms",
     usage: "rename <new name>",
-    category: "VC Owner Cmd"
+    category: "VC Owner Command"
 }

@@ -151,7 +151,7 @@ client.on("message", async (msg) => {    // check if msg author is a bot or if t
             } else {
                 fn.Reply(msg, config.messages.nomanager)
             }
-        } if (command.help.category === "VC Owner Cmd") {
+        } if (command.help.category === "VC Owner Command") {
             if (msg.member.voice.channel) {
                 if (fn.vcOwnerCheck(msg.member.voice.channel.id, msg.author.id, msg)) {
                     command.run(client, con, config, msg, args, fn);

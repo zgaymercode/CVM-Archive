@@ -60,5 +60,5 @@ module.exports.help = {
     //aliases: [""],
     description: "invites a member to a locked channel",
     usage: "invite @member",
-    category: "VC Owner Cmd"
+    category: "VC Owner Command"
 }
