@@ -3,7 +3,7 @@ Community Voice Manager is a Discord.js Bot made to create temporary voice chann
 
 
 
-### Commands
+## Commands
 -**cvowner**:   Shows who the current owner of the channel is
 <br><br>-**cvclaim**:   Claim the voice chat if the owner has left
 <br><br>-**cvrename**:   allows the channel owner to rename the voice chat
@@ -14,6 +14,7 @@ Community Voice Manager is a Discord.js Bot made to create temporary voice chann
 <br><br>-**cvdebug**:   Debugs the bot's perms for the server or a channel
 <br><br><br><br>
 
-### Functions
+## Functions
 -**ChannelCleanup** : Deletes Empty channels that didn't get deleted when the last member left, and removes stale db entries<br><br>
--**CatagoryCleanup** : Deletes stale catagory entries from the database.
+-**CatagoryCleanup** : Deletes stale catagory entries from the database.<br><br>
+- [ ] Create 
