@@ -66,7 +66,7 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
 module.exports.help = {
     name: "template",
     //aliases: [""],
-    description: "Updates the Channel's template. instead of <new_template> you can put reset to reset to default. %INC% = Increment&nbsp;&nbsp;%USERNAME% = username",
+    description: "Updates the Channel's template. instead of <new_template> you can put reset to reset to default. %INC% = Increment&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%USERNAME% = username",
     usage: "template <category_id> <new_template>",
     category: "Administrative"
 }
