@@ -10,6 +10,7 @@ Community Voice Manager is a Discord.js Bot made to create temporary voice chann
 - [X] invite members to locked channels
 - [X] create multiple catagories with different templates
 - [X] Allow enabling/disabling of lockable channels per-catagory
+- [ ] Filterable voice channels (banned words)
 
 ## Commands
 In order for commands to run, you must either be in a voice chat, or have the Manage Server / Administrator perms<br><br>
