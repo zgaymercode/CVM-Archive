@@ -13,3 +13,7 @@ Community Voice Manager is a Discord.js Bot made to create temporary voice chann
 <br>-**cvnewcat**:   Generates a new category and a join channel for that category
 <br>-**cvdebug**:   Debugs the bot's perms for the server or a channel
 <br>
+
+### Functions
+-**ChannelCleanup** : Deletes Empty channels that didn't get deleted when the last member left, and removes stale db entries<br><br>
+-**CatagoryCleanup** : Deletes stale catagory entries from the database.
