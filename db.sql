@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `catagory` (
   `gid` varchar(50) DEFAULT NULL,
   `joinchan` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 23 DEFAULT CHARSET = latin1;
+) ENGINE = InnoDB AUTO_INCREMENT = 24 DEFAULT CHARSET = latin1;
 -- Data exporting was unselected.
 -- Dumping structure for table vcbot.channels
 CREATE TABLE IF NOT EXISTS `channels` (
@@ -22,8 +22,11 @@ CREATE TABLE IF NOT EXISTS `channels` (
   `id` varchar(50) DEFAULT NULL,
   `oid` varchar(50) DEFAULT NULL,
   `locked` int(1) DEFAULT '0',
-  PRIMARY KEY (`num`)
-) ENGINE = InnoDB AUTO_INCREMENT = 27 DEFAULT CHARSET = latin1;
+  `created` timestamp NULL DEFAULT NULL,
+  `last_rename` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`num`),
+  KEY `created` (`created`)
+) ENGINE = InnoDB AUTO_INCREMENT = 57 DEFAULT CHARSET = latin1;
 -- Data exporting was unselected.
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
