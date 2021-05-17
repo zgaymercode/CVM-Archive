@@ -72,5 +72,5 @@ module.exports.help = {
     //aliases: [""],
     description: "creates a new catagory for voice chat",
     usage: "newcat",
-    category: "General"
+    category: "Administrative"
 }

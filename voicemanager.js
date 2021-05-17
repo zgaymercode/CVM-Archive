@@ -145,6 +145,23 @@ client.on("message", async (msg) => {    // check if msg author is a bot or if t
             } else {
                 fn.Reply(msg, "Sorry, This is a Dev Command")
             }
+        } else if (command.help.category === "Administrative") {
+            if (msg.member.hasPermission("MANAGE_GUILD") || msg.member.hasPermission("ADMINISTRATOR")) {
+                command.run(client, con, config, msg, args, fn);
+            } else {
+                fn.Reply(msg, config.messages.nomanager)
+            }
+        } if (command.help.category === "VC Owner Cmd") {
+            if (msg.member.voice.channel) {
+                if (fn.vcOwnerCheck(msg.member.voice.channel.id, msg.author.id, msg)) {
+                    command.run(client, con, config, msg, args, fn);
+                } else {
+                    fn.Reply(msg, config.messages.nomanager)
+                }
+            } else {
+                fn.Reply(msg, "You are not in a voice chat")
+            }
+            
         } else {
             command.run(client, con, config, msg, args, fn);
         }
