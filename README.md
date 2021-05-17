@@ -26,7 +26,7 @@ In order for commands to run, you must either be in a voice chat, or have the Ma
 **Server Management**<br>
 -**newcat** : Generates a new category and a join channel for that category<br><br>
 -**template** : Updates the Channel's template<br>
-%INC% = Increment&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%USERNAME% = username<br><br>
+%INC% = Increment&nbsp;&nbsp;&nbsp;%NICKNAME% = nickname&nbsp;&nbsp;&nbsp;%USERNAME% = username<br><br>
 -**increment** : Overrides the Channel's increment<br><br>
 -**lockable** : Enables/Disables the ability to lock a channel within a category<br><br>
 -**debug** : Debugs the bot's perms for the server or a channel<br><br>

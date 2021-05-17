@@ -205,7 +205,10 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
                     if (er) console.log(er);
                     if (!res) return;
                     if (res.length > 0) {
+                        let guild = client.channels.cache.get(newState.channelID).guild;
                         let u = client.users.cache.get(uid);
+                        let m = guild.members.cache.get(uid);
+                        console.log(m)
                         let t = res[0].template;
                         let inc = res[0].increment;
                         if (t === null) {
@@ -213,7 +216,8 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
                         } else {
                             // use the user generated template
                             let step1 = t.replace('%USERNAME%', u.username)
-                            template = step1.replace('%INC%', inc + 1);
+                            let step2 = step1.replace('%INC%', inc + 1);
+                            template = step2.replace('%NICKNAME%', m.nickname)
                             d.query(`UPDATE catagory SET increment = increment + 1 WHERE joinchan='${channelid}'`, (er3, res3) => {
                                 if (er3) console.error(er3);
                                 return;

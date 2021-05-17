@@ -74,7 +74,7 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
             }
             if (msg.member.hasPermission("MANAGE_GUILD") || msg.member.hasPermission("ADMINISTRATOR")) {
                 embed.addField(prefix + "newcat", "Generates a new category and a join channel for that category");
-                embed.addField(prefix + "template", "Updates the category's template");
+                embed.addField(prefix + "template", "Updates the category's template.");
                 embed.addField(prefix + "increment", "Overrides the category's increment");
                 embed.addField(prefix + "lockable <category_id> enable|disable", "Enables/Disables the ability to lock a channel within a category");
                 embed.addField(prefix + "debug", "Debugs the bot's perms for the server or a channel");
