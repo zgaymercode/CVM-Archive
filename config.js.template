@@ -4,6 +4,7 @@ module.exports = {
         renamecooldown: 5, // this is in minutes
         prefix: "cv",
         startstatus: /* PLAYING */ "cvhelp for help!",
+        giturl: "https://github.com/zgaymercode/CommunityVoiceManager",
         token: "TOKEN_HERE"
     },
     messages: {

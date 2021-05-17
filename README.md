@@ -14,6 +14,7 @@ Community Voice Manager is a Discord.js Bot made to create temporary voice chann
 ## Commands
 In order for commands to run, you must either be in a voice chat, or have the Manage Server / Administrator perms<br><br>
 **Public**<br>
+-**github** : Shows a link to this github page<br><br>
 -**owner** : Shows who the current owner of the channel is<br><br>
 -**claim** : Claim the voice chat if the owner has left<br><br><br>
 **Voice Channel Owners**<br>
