@@ -73,8 +73,12 @@ client.on("ready", () => {
     m = 15; // max intervals before restart
     client.user.setActivity(config.bot.startstatus, { type: "PLAYING" });
     fn.consolelog(client, m);
+    fn.ChannelCleanup(client);
+    fn.CatagoryCleanup(client);
     setInterval(() => {
         //fn.BotStatus(client);
+        fn.ChannelCleanup(client);
+        fn.CatagoryCleanup(client);
         fn.consolelog(client, m);
     }, 300000); // every 5 minutes
 });

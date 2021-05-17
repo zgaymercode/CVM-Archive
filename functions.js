@@ -97,7 +97,51 @@ async function ChannelCleanup(client) {
             if (er) console.error(er);
             if (!re) return;
             if (re) {
-                
+                for (let i = 0; i < re.length; i++){
+                    let id = re[i].id;
+                    if (!client.channels.cache.find(c => c.id === id)) {
+                        // Channel does not exist anymore, Yeet it from the db
+                        let sqlGAYYY = SqlString.format(`DELETE FROM channels WHERE id=?`, [id]);
+                        d.query(sqlGAYYY, async (err, res) => {
+                            if (err) console.error(err);
+                            if (!res) return;
+                            if (res) console.log("Removed " + id + " from the DB");
+                        })
+                    }
+                }
+            }
+        })
+        d.release(function (err) {
+            if (err) {
+                ErrorMessage("close connection", err);
+            }
+            console.info("Ended Connection");
+            // The connection is terminated now
+        });
+    });
+}
+async function CatagoryCleanup(client) {
+    con.getConnection(function (err, d) {
+        if (err) {
+            console.error("error connecting: " + err.stack);
+            return;
+        }
+        d.query('SELECT * FROM catagory', async (er, re) => {
+            if (er) console.error(er);
+            if (!re) return;
+            if (re) {
+                for (let i = 0; i < re.length; i++) {
+                    let id = re[i].joinchan;
+                    if (!client.channels.cache.find(c => c.id === id)) {
+                        // Channel does not exist anymore, Yeet it from the db
+                        let sqlGAYYY = SqlString.format(`DELETE FROM catagory WHERE joinchan=?`, [id]);
+                        d.query(sqlGAYYY, async (err, res) => {
+                            if (err) console.error(err);
+                            if (!res) return;
+                            if (res) console.log("Removed " + id + " from the DB");
+                        })
+                    }
+                }
             }
         })
         d.release(function (err) {
@@ -114,4 +158,6 @@ module.exports = {
     BotStatus,
     Reply,
     vcOwnerCheck,
+    ChannelCleanup,
+    CatagoryCleanup,
 }
