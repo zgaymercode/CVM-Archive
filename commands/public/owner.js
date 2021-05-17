@@ -2,7 +2,6 @@ const Discord = module.require("discord.js");
 const SqlString = module.require('sqlstring')
 module.exports.run = async (client, con, config, msg, args, fn) => {
     try {
-        msg.delete();
         if (msg.member.voice.channel) {
             let vcid = msg.member.voice.channel.id;
             var sql = SqlString.format('SELECT * FROM channels WHERE id=?', [vcid]);

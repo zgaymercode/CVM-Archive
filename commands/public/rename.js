@@ -2,7 +2,6 @@ const Discord = module.require("discord.js");
 const SqlString = module.require('sqlstring')
 module.exports.run = async (client, con, config, msg, args, fn) => {
     try {
-        msg.delete();
         // CURRENT_TIMESTAMP()
         if (msg.member.voice.channel) {
 

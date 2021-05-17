@@ -1,7 +1,6 @@
 const Discord = module.require("discord.js");
 module.exports.run = async (client, con, config, msg, args, fn) => {
     try {
-        msg.delete();
         let prefix = config.bot.prefix;
         let embedcolor = config.embed.color;
 

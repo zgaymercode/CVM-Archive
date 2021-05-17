@@ -3,7 +3,6 @@ const fs = require("fs");
 const mysql = module.require("mysql");
 
 exports.run = (client, con, config, msg, args, fn) => {
-    msg.delete()
     msg.channel.send("RESTARTING NOW!!!").then((m) => {
         setTimeout(() => {
             m.delete();

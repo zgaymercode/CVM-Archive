@@ -10,7 +10,6 @@ async function UpdateOwner(d, msg, fn, vc) {
 }
 module.exports.run = async (client, con, config, msg, args, fn) => {
     try {
-        msg.delete();
         if (msg.member.voice.channel) {
             let uid = msg.author.id;
             let vc = msg.member.voice.channel;

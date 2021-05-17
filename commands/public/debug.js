@@ -2,7 +2,6 @@
 const Discord = module.require("discord.js");
 module.exports.run = async (client, con, config, msg, args, fn) => {
     try {
-        msg.delete();
         if (msg.member.hasPermission("MANAGE_GUILD") || msg.member.hasPermission("ADMINISTRATOR")) {
            
             let arg = msg.mentions.channels.first();
@@ -33,7 +32,11 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
                 } else {
                     embed.addField("Move Members", "❌ I do not have this permission! I use this when members create a new channel")
                 }
-                msg.channel.send(embed)
+                msg.channel.send(embed).then((m) => {
+                    setTimeout(() => {
+                        m.delete()
+                    }, 10000);
+                })
             } else {
                 let embed = new Discord.MessageEmbed()
                     .setColor(config.embed.color)
@@ -60,7 +63,11 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
                     embed.addField("Move Members", "❌ I do not have this permission! I use this when members create a new channel")
                 }
 
-                msg.channel.send(embed)
+                msg.channel.send(embed).then((m) => {
+                    setTimeout(() => {
+                        m.delete()
+                    }, 10000);
+                });
             }
             
         } else {

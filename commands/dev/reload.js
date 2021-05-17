@@ -3,7 +3,6 @@ const { join } = require("path");
 const mysql = module.require("mysql");
 
 module.exports.run = (client, con, config, msg, args, fn) => {
-	msg.delete();
 		if (!args[0]) return msg.channel.send("Please provide a command to reload!");
 		const commandName = args[0].toLowerCase();
 		const command = client.commands.get(commandName) || client.commands.get(client.aliases.get(commandName));

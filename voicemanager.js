@@ -103,7 +103,7 @@ client.on("message", async (msg) => {    // check if msg author is a bot or if t
     if (config.bot.cmds_enabled == 0) {
         // user needs to be a part of bot staff for commands to run
         if (config.staff.includes(msg.author.id)) {
-            command.run(client, con, config, msg, args, fn)
+            command.run(client, con, config, msg, args, fn);
         } else {
             fn.Reply(msg, config.messages.disablemessage);
         }
@@ -119,7 +119,7 @@ client.on("message", async (msg) => {    // check if msg author is a bot or if t
         }
         
     }
-
+    msg.delete()
 })
 client.on("guildDelete", function (guild) {
     console.log("Bot has left: " + guild.id);

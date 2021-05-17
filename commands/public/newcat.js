@@ -3,7 +3,6 @@ const mysql = require("mysql");
 const SqlString = require("sqlstring");
 module.exports.run = async (client, con, config, msg, args, fn) => {
     try {
-        msg.delete();
         // create the catagory & join channel
         let newcat = await msg.guild.channels.create('new-category', {
             type: 'category',
