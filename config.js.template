@@ -1,7 +1,7 @@
 module.exports = {
     bot: {
         cmds_enabled: 1,
-        renamecooldown: 5,
+        renamecooldown: 5, // this is in minutes
         prefix: "cv",
         startstatus: /* PLAYING */ "cvhelp for help!",
         token: "TOKEN_HERE"
