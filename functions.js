@@ -29,11 +29,14 @@ function consolelog(client, maxi) {
     if (v === maxi) {
         console.log("Maximum numbers of intervals per-session has been reached... Restarting");
         setTimeout(() => {
+            // I use pm2 to run my bot, so process.exit will essentially restart it
+            // a way around not using pm2 is create a shardman file and use that instead
             process.exit(); // restart electroheart <3
         }, 500);
     }
 }
 function BotStatus(client) {
+    // Random status' are fun arn't they? xD
     const activities_list = [
         "the world go by..",
         "all the timezones",
@@ -54,11 +57,11 @@ async function ChannelCleanup(client) {
         }
         d.query('SELECT * FROM channels', async (er, re) => {
             if (er) console.error(er);
-            if (!re) return;
             if (re) {
                 for (let i = 0; i < re.length; i++) {
                     let id = re[i].id;
                     let vc = client.channels.cache.find(c => c.id === id);
+                    // check if it exists
                     if (!vc) {
                         // Channel does not exist anymore, Yeet it from the db
                         let sqlGAYYY = SqlString.format(`DELETE FROM channels WHERE id=?`, [id]);
@@ -85,6 +88,7 @@ async function ChannelCleanup(client) {
                     }
                 }
             }
+            return;
         })
         d.release(function (err) {
             if (err) {
@@ -103,7 +107,6 @@ async function CatagoryCleanup(client) {
         }
         d.query('SELECT * FROM catagory', async (er, re) => {
             if (er) console.error(er);
-            if (!re) return;
             if (re) {
                 for (let i = 0; i < re.length; i++) {
                     let id = re[i].joinchan;
@@ -118,6 +121,7 @@ async function CatagoryCleanup(client) {
                     }
                 }
             }
+            return;
         })
         d.release(function (err) {
             if (err) {
