@@ -1,7 +1,5 @@
 # CommunityVoiceManager
-Community Voice Manager is a Discord.js Bot made to create temporary voice channels
-
-
+Community Voice Manager is a Discord.js Bot made to create temporary voice channels<br>
 
 ## Commands
 -**cvowner**:   Shows who the current owner of the channel is<br><br>
@@ -23,5 +21,4 @@ Community Voice Manager is a Discord.js Bot made to create temporary voice chann
 ## Future Plans
 Things that will come to the bot in the near future
 - [ ] Channel Name Templates
-- [ ] Command to Kick a member from voice chat
 - [ ] Win the game
