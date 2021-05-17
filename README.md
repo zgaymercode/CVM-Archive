@@ -24,7 +24,7 @@ In order for commands to run, you must either be in a voice chat, or have the Ma
 -**invite @member** : allows a mentioned member to see and join the channel<br><br><br>
 **Server Management**<br>
 -**newcat** : Generates a new category and a join channel for that category<br><br>
--**template** : Updates the Channel's template<br>
+-**template <category_id> <new_template>** : Updates the Channel's template<br>
 %INC% = Increment&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%USERNAME% = username<br><br>
 -**increment** : Overrides the Channel's increment<br><br>
 -**lockable <category_id> enable|disable** : Enables/Disables the ability to lock a channel within a category<br><br>
