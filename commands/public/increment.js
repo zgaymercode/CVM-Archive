@@ -54,5 +54,5 @@ module.exports.help = {
     //aliases: [""],
     description: "Updates the incremental number for a catagory",
     usage: "increment <catagoryid> <increment_#>",
-    category: "Dev"//"General"
+    category: "General"
 }
