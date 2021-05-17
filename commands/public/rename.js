@@ -24,7 +24,7 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
                             let rename = re[0].last_rename;
                             let cooldown = config.bot.renamecooldown;
                             let timesincelast = fn.timesince(rename);
-                            if (timesincelast < cooldown) {
+                            if (timesincelast < cooldown && rename != null) {
                                 let timeleft = cooldown - timesincelast;
                                 fn.Reply(msg, "You must wait another " + timeleft + " minutes before renaming this channel again" )
                             } else {
