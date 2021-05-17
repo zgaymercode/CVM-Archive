@@ -20,9 +20,6 @@ var con = mysql.createPool({
 var v = -1;
 function consolelog(client, maxi) {
     v = v + 1;
-    guildcount = client.guilds.cache.size;
-    usercache = client.users.cache.size;
-    channelcache = client.channels.cache.size;
     console.log(`Welcome to ` + client.user.username);
     console.log(" ");
     if (v < maxi) {
@@ -172,8 +169,6 @@ async function vcOwnerCheck(vcid, uid, msg) {
         });
     });
 }
-//#endregion
-
 function timesince(timestamp) {
     var CurrentDate = moment();
     var startDate = moment(CurrentDate, 'YYYY-M-DD HH:mm:ss')
@@ -182,6 +177,7 @@ function timesince(timestamp) {
 
     return minDiff;
 }
+//#endregion
 module.exports = {
     consolelog,
     BotStatus,
