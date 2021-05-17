@@ -3,7 +3,7 @@ const SqlString = module.require('sqlstring')
 module.exports.run = async (client, con, config, msg, args, fn) => {
     try {
         let pid = args[0];
-        
+        if (!pid) fn.Reply('you must supply arguments for this command, try ' + config.bot.prefix + 'help template  for more info');
         if (args[1] === 'reset') {
             con.getConnection(function (err, d) {
                 if (err) {
