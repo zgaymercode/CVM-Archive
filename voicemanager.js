@@ -181,8 +181,9 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
                         let u = client.users.cache.get(uid);
                         let t = res[0].template;
                         if (t === null) {
-                            template = `${u.username}'s Room`;
+                            template = `${u.username}'s Room`; // use the default template
                         } else {
+                            // use the user generated template
                             
                         }
                         let newchan = await newState.guild.channels.create(template, {

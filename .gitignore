@@ -20,4 +20,3 @@ config.js
 .vscode/
 *.sw*
 config.js
-commands/dev/test.js
