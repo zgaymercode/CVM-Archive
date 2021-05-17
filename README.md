@@ -4,7 +4,7 @@ Community Voice Manager is a Discord.js Bot made to create temporary voice chann
 
 
 ### Commands
--**cvowner** Shows who the current owner of the channel is
+-**cvowner** Shows who the current owner of the channel is<br>
 -**cvclaim** Claim the voice chat if the owner has left
 -**cvrename** allows the channel owner to rename the voice chat
 -**cvlock** Locks the channel and makes it visible and joinable by those who are invited.
