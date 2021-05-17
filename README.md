@@ -20,5 +20,7 @@ Community Voice Manager is a Discord.js Bot made to create temporary voice chann
 
 ## Future Plans
 Things that will come to the bot in the near future
-- [X] Channel Name Templates
+- [ ] Channel Name Templates
+- [ ] Update increment numbers via command (for manual overrides)
+- [ ] Allow enabling/disabling of lockable channels per-catagory
 - [ ] Win the game
