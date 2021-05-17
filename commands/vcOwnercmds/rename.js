@@ -21,6 +21,9 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
                         let timeleft = cooldown - timesincelast;
                         fn.Reply(msg, "You must wait another " + timeleft + " minutes before renaming this channel again")
                     } else {
+                        /*
+                        word Filter fn.BlistedWordCheck(word, msg);
+                        */
                         var sql2 = SqlString.format('UPDATE channels SET last_rename=CURRENT_TIMESTAMP() WHERE id=?', [vcid]);
                         d.query(sql2, async (er2, re2) => {
                             if (er2) console.error(er2);
