@@ -60,6 +60,8 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
                 .addField(prefix + "invite @member", "allows a mentioned member to see and join the channel");
             if (msg.member.hasPermission("MANAGE_GUILD") || msg.member.hasPermission("ADMINISTRATOR")) {
                 embed.addField(prefix + "newcat", "Generates a new category and a join channel for that category");
+                embed.addField(prefix + "template", "Updates the Channel's template");
+                embed.addField(prefix + "increment", "Overrides the Channel's increment");
                 embed.addField(prefix + "debug", "Debugs the bot's perms for the server or a channel");
             }
 

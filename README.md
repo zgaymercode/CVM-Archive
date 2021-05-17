@@ -17,10 +17,18 @@ Community Voice Manager is a Discord.js Bot made to create temporary voice chann
 -**ChannelCleanup** : Deletes Empty channels that didn't get deleted when the last member left, and removes stale db entries<br><br>
 -**CatagoryCleanup** : Deletes stale catagory entries from the database.<br><br>
 
+## Features
+- [X] Channel Name Templates
+- [X] Update increment numbers via command (for manual overrides)
+- [X] Ability to rename Channels
+- [X] Lockable channels
+- [X] Claim channels if owner is no longer present
+- [X] invite members to locked channels
+- [X] create multiple catagories with different templates
+- [ ] Allow enabling/disabling of lockable channels per-catagory
 
 ## Future Plans
 Things that will come to the bot in the near future
-- [ ] Channel Name Templates
+
 - [ ] Update increment numbers via command (for manual overrides)
-- [ ] Allow enabling/disabling of lockable channels per-catagory
 - [ ] Win the game
