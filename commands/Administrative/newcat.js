@@ -3,7 +3,7 @@ const mysql = require("mysql");
 const SqlString = require("sqlstring");
 module.exports.run = async (client, con, config, msg, args, fn) => {
     try {
-        // create the catagory & join channel
+        // create the category & join channel
         let newcat = await msg.guild.channels.create('new-category', {
             type: 'category',
             permissionsOverwrites: [
@@ -70,7 +70,7 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
 module.exports.help = {
     name: "newcat",
     //aliases: [""],
-    description: "creates a new catagory for voice chat",
+    description: "creates a new category for voice chat",
     usage: "newcat",
     category: "Administrative"
 }

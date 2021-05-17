@@ -33,7 +33,7 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
                 fn.Reply(msg, 'The increment you provided is not a number')
             }
         } else {
-            fn.Reply(msg, 'The catagory id you provided is not a number')
+            fn.Reply(msg, 'The category id you provided is not a number')
         }
 
     }
@@ -45,7 +45,7 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
 module.exports.help = {
     name: "increment",
     //aliases: [""],
-    description: "Updates the incremental number for a catagory",
-    usage: "increment <catagoryid> <increment_#>",
+    description: "Updates the incremental number for a category",
+    usage: "increment <categoryid> <increment_#>",
     category: "Administrative"
 }

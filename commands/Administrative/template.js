@@ -67,6 +67,6 @@ module.exports.help = {
     name: "template",
     //aliases: [""],
     description: "Updates the Channel's template. instead of <new_template> you can put reset to reset to default",
-    usage: "template <catagory_id> <new_template>",
+    usage: "template <category_id> <new_template>",
     category: "Administrative"
 }
