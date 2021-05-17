@@ -17,4 +17,11 @@ Community Voice Manager is a Discord.js Bot made to create temporary voice chann
 ## Functions
 -**ChannelCleanup** : Deletes Empty channels that didn't get deleted when the last member left, and removes stale db entries<br><br>
 -**CatagoryCleanup** : Deletes stale catagory entries from the database.<br><br>
-- [ ] Create 
+
+
+## Future Plans
+Things that will come to the bot in the near future
+<br>- [ ] Channel Name Templates
+<br>- [ ] Dynamic help command (cvhelp <commandname>)
+<br>- [ ] Command to Kick a member from voice chat
+<br>- [ ] Win the game
