@@ -122,30 +122,9 @@ client.on("message", async (msg) => {    // check if msg author is a bot or if t
 
 })
 client.on("guildDelete", function (guild) {
-    // Delete all records of that server regarding catagories
-    // channels will be removed from db with the intervals
-    con.getConnection(function (err, d) {
-        if (err) {
-            console.error("error connecting: " + err.stack);
-            return;
-        }
-        let gid = guild.id;
-        let sql = SqlString.format('DELETE FROM catagory WHERE gid=?', [gid]);
-        d.query(sql, async (er, re) => {
-            if (er) console.error(er)
-            if (!re) console.log("Bot has left guild: " + gid);
-            if (re) console.log("Bot has left guild: " + gid);
-        })
-
-        d.release(function (err) {
-            if (err) {
-                ErrorMessage("close connection", err);
-            }
-            console.info("Ended Connection");
-            // The connection is terminated now
-        });
-    });
-
+    console.log("Bot has left: " + guild.id);
+    fn.ChannelCleanup(client);
+    fn.CatagoryCleanup(client);
 });
 client.on("error", (er) => {
     console.error(er);
