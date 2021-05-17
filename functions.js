@@ -153,6 +153,14 @@ async function CatagoryCleanup(client) {
         });
     });
 }
+function timesince(timestamp) {
+    var CurrentDate = moment();
+    var startDate = moment(CurrentDate, 'YYYY-M-DD HH:mm:ss')
+    var endDate = moment(timestamp, 'YYYY-M-DD HH:mm:ss')
+    var minDiff = endDate.diff(startDate, 'minutes')
+
+    return minDiff;
+}
 module.exports = {
     consolelog,
     BotStatus,
@@ -160,4 +168,5 @@ module.exports = {
     vcOwnerCheck,
     ChannelCleanup,
     CatagoryCleanup,
+    timesince,
 }

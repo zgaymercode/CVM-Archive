@@ -154,7 +154,7 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
                             parent: newState.channel.parent.id,
                         })
                         newState.setChannel(newchan);
-                        var sql2 = SqlString.format('INSERT INTO channels SET id=?, oid=?', [newchan.id, uid]);
+                        var sql2 = SqlString.format('INSERT INTO channels SET id=?, oid=?, created=CURRENT_TIMESTAMP()', [newchan.id, uid]);
                         d.query(sql2, async (er2, res2) => {
                             if (er2) console.error(er);
                             if (!res2) console.error("Bot could not insert into db");
