@@ -8,10 +8,10 @@ const SqlString = require("sqlstring");
 const moment = require("moment");
 exports.run = async (client, con, config, msg, args, fn) => {
     try {
-       
+         fn.Reply(msg, "This command is blank")
     } catch (e) {
-        console.error(e)
-        fn.Reply(msg, "Welp, That failed")
+        console.error(e);
+        fn.Reply(msg, "There was an error in the matrix")
     }
 };
 module.exports.help = {
@@ -22,7 +22,7 @@ module.exports.help = {
     category: "Dev"
 }
 /*
-Add This when Working on commands to put the Reply message as "This command is under construction"
+Add This to the category when Working on commands to put the Reply message as "This command is under construction"
 "Under Maintenance"//
 
 */
