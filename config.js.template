@@ -30,9 +30,6 @@ module.exports = {
         footer: "Bot created by the WolfTribe",
         color: '#1F85DE'
     },
-    server: {
-        memberrole: "ROLE_ID", // this is used for the lock command, in current settings, it's disabled
-    },
     staff: [
         "BOTSTAFF_USERID" // when commands are disabled, users in this array are still allowed to use the bot
     ]

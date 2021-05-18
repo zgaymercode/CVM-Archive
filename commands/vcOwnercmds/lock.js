@@ -24,6 +24,7 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
                             if(!res234) console.log("cant find pid")
                             if (res234) {
                                 let lockable = res234[0].lockable;
+                                let member = res234[0].memberrole;
                                 if (lockable === 1) {
                                     var sql = SqlString.format('UPDATE channels SET locked="1" WHERE id=?', [vcid]);
                                     d.query(sql, async (er, re) => {
@@ -44,14 +45,14 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
                                                             CONNECT: true
                                                         }
                                                     );
-                                                    /*
-                                                    vc.updateOverwrite(
-                                                        member,
-                                                        {
-                                                            VIEW_CHANNEL: false
-                                                        }
-                                                    )
-                                                    */
+                                                    if (member != null) {
+                                                        vc.updateOverwrite(
+                                                            member,
+                                                            {
+                                                                VIEW_CHANNEL: false
+                                                            }
+                                                        )
+                                                    }
                                                     fn.Reply(msg, 'Successfully locked channel')
                                                 }
                                             })
