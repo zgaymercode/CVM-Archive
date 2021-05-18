@@ -50,54 +50,58 @@ function BotStatus(client) {
 //#endregion
 //#region Cron Jobs
 async function ChannelCleanup(client) {
-    con.getConnection(function (err, d) {
-        if (err) {
-            console.error("error connecting: " + err.stack);
-            return;
-        }
-        d.query('SELECT * FROM channels', async (er, re) => {
-            if (er) console.error(er);
-            if (re) {
-                for (let i = 0; i < re.length; i++) {
-                    let id = re[i].id;
-                    let vc = client.channels.cache.find(c => c.id === id);
-                    // check if it exists
-                    if (!vc) {
-                        // Channel does not exist anymore, Yeet it from the db
-                        let sqlGAYYY = SqlString.format(`DELETE FROM channels WHERE id=?`, [id]);
-                        d.query(sqlGAYYY, async (err, res) => {
-                            if (err) console.error(err);
-                            if (!res) return;
-                            if (res) console.log("Removed " + id + " from the DB");
-                        })
-                    } else {
-                        /*
-                            If there's any stale channels, we should take care of them as well
-                            YEEET
-                        */
-                        if (vc.members.size < 1) {
-                            vc.delete()
-                            //yeet the info from the database
-                            let sqlzor = SqlString.format('DELETE FROM channels WHERE id=?', [vc.id]);
-                            d.query(sqlzor, async (er, res234) => {
-                                if (er) console.error(er);
-                                if (!res234) console.error("Could not delete entry");
-                                if (res234) console.log("Channel yeeted");
+    try{
+        con.getConnection(function (err, d) {
+            if (err) {
+                console.error("error connecting: " + err.stack);
+                return;
+            }
+            d.query('SELECT * FROM channels', async (er, re) => {
+                if (er) console.error(er);
+                if (re) {
+                    for (let i = 0; i < re.length; i++) {
+                        let id = re[i].id;
+                        let vc = client.channels.cache.find(c => c.id === id);
+                        // check if it exists
+                        if (!vc) {
+                            // Channel does not exist anymore, Yeet it from the db
+                            let sqlGAYYY = SqlString.format(`DELETE FROM channels WHERE id=?`, [id]);
+                            d.query(sqlGAYYY, async (err, res) => {
+                                if (err) console.error(err);
+                                if (!res) return;
+                                if (res) console.log("Removed " + id + " from the DB");
                             })
+                        } else {
+                            /*
+                                If there's any stale channels, we should take care of them as well
+                                YEEET
+                            */
+                            if (vc.members.size < 1) {
+                                vc.delete()
+                                //yeet the info from the database
+                                let sqlzor = SqlString.format('DELETE FROM channels WHERE id=?', [vc.id]);
+                                d.query(sqlzor, async (er, res234) => {
+                                    if (er) console.error(er);
+                                    if (!res234) console.error("Could not delete entry");
+                                    if (res234) console.log("Channel yeeted");
+                                })
+                            }
                         }
                     }
                 }
-            }
-            return;
-        })
-        d.release(function (err) {
-            if (err) {
-                ErrorMessage("close connection", err);
-            }
-            console.info("Ended Connection");
-            // The connection is terminated now
+                return;
+            })
+            d.release(function (err) {
+                if (err) {
+                    ErrorMessage("close connection", err);
+                }
+                console.info("Ended Connection");
+                // The connection is terminated now
+            });
         });
-    });
+    }catch (e) {
+        console.error(e);
+    }
 }
 async function CatagoryCleanup(client) {
     con.getConnection(function (err, d) {
@@ -183,29 +187,29 @@ function timesince(timestamp) {
 }
 async function BlistedWordCheck(word, msg) {
     let gid = msg.guild.id;
-    var sql = SqlString.format('SELECT word FROM blacklistedwords WHERE word=? AND gid=?', [word, gid]);
-    con.getConnection(function (err, d) {
-        if (err) {
-            console.error("error connecting: " + err.stack);
-            return;
-        }
-        d.query(sql, async (er, re) => {
-            if (er) console.error(er);
-            if (!re) {
-                return true;
-            }
-            if (re) {
-                return false;
-            }
-        })
-        d.release(function (err) {
+    try {
+        
+        var sql = SqlString.format('SELECT * FROM blacklistedwords WHERE word=? AND gid=?', [word, gid]);
+        con.getConnection(function (err, d) {
             if (err) {
-                ErrorMessage("close connection", err);
+                console.error("error connecting: " + err.stack);
+                return;
             }
-            console.info("Ended Connection");
-            // The connection is terminated now
+            d.query(sql, (er, re) => {
+                if (re.length > 0) return true;
+                return false;                
+            })
+            d.release(function (err) {
+                if (err) {
+                    ErrorMessage("close connection", err);
+                }
+                console.info("Ended Connection");
+                // The connection is terminated now
+            });
         });
-    });
+    } catch (e) {
+        console.error(e);
+   }
 }
 //#endregion
 module.exports = {
