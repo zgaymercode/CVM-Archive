@@ -8,7 +8,8 @@ module.exports = {
         token: "TOKEN_HERE"
     },
     tmp: {
-        var: ""
+        var: "",
+        array: [],
     },
     messages: {
         notowner: "Sorry, this command can only be ran by the owner of the channel. if the owner left, you can use the claim command to claim it",
