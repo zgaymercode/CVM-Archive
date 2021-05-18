@@ -6,18 +6,23 @@ const mysql = require("mysql");
 const { readdirSync } = require("fs");
 const SqlString = require("sqlstring");
 const moment = require("moment");
-exports.run = (client, con, config, msg, args, fn) => {
+exports.run = async (client, con, config, msg, args, fn) => {
     try {
-        msg.delete();
-        msg.channel.send("This command is empty <3")
-    } catch {
+       
+    } catch (e) {
+        console.error(e)
         fn.Reply(msg, "Welp, That failed")
     }
 };
 module.exports.help = {
     name: "test",
     //aliases: [""],
-    description: "Test command for Dev tasks",
+    description: "Command Space for testing new functions / commands",
     usage: "test",
     category: "Dev"
 }
+/*
+Add This when Working on commands to put the Reply message as "This command is under construction"
+"Under Maintenance"//
+
+*/
