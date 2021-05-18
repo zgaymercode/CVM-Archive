@@ -21,7 +21,8 @@ In order for commands to run, you must either be in a voice chat, or have the Ma
 **Voice Channel Owners**<br>
 -**kick** : Kicks the mentioned member from the current voice chat<br><br>
 -**rename** : allows the channel owner to rename the voice chat<br><br>
--**lock** : Locks the channel and makes it visible and joinable by those who are invited.<br><br>
+-**lock** : Locks the channel and makes it visible and joinable by those who are invited.<br>
+if member is a staff, they can append memberrole @mention_role  and this will set that category to lock out that role as well<br><br>
 -**unlock** : unlocks a voice chat and allows it to be seen and joined by anyone<br><br>
 -**invite** : allows a mentioned member to see and join the channel<br><br><br>
 **Server Management**<br>
