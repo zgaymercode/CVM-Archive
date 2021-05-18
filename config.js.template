@@ -7,6 +7,9 @@ module.exports = {
         giturl: "https://github.com/zgaymercode/CommunityVoiceManager",
         token: "TOKEN_HERE"
     },
+    tmp: {
+        var: ""
+    },
     messages: {
         notowner: "Sorry, this command can only be ran by the owner of the channel. if the owner left, you can use the claim command to claim it",
         disablemessage: "Sorry, but this bot is still being built, Please contact <@827007664529342505> if you're intereseted in using this bot",
