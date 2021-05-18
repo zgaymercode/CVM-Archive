@@ -8,6 +8,14 @@
 CREATE DATABASE IF NOT EXISTS `vcbot`
 /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `vcbot`;
+-- Dumping structure for table vcbot.blacklistedwords
+CREATE TABLE IF NOT EXISTS `blacklistedwords` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `word` varchar(50) DEFAULT NULL,
+  `gid` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE = InnoDB DEFAULT CHARSET = latin1;
+-- Data exporting was unselected.
 -- Dumping structure for table vcbot.catagory
 CREATE TABLE IF NOT EXISTS `catagory` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -17,8 +25,9 @@ CREATE TABLE IF NOT EXISTS `catagory` (
   `template` varchar(50) DEFAULT NULL,
   `increment` int(11) DEFAULT '0',
   `lockable` int(11) DEFAULT '0',
+  `memberrole` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 4 DEFAULT CHARSET = latin1;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 DEFAULT CHARSET = latin1;
 -- Data exporting was unselected.
 -- Dumping structure for table vcbot.channels
 CREATE TABLE IF NOT EXISTS `channels` (
@@ -30,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `channels` (
   `last_rename` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`num`),
   KEY `created` (`created`)
-) ENGINE = InnoDB DEFAULT CHARSET = latin1;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 DEFAULT CHARSET = latin1;
 -- Data exporting was unselected.
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
