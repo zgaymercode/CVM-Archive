@@ -6,13 +6,25 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
         let pid = msg.member.voice.channel.parentID;
         if (args[0] === 'memberrole') {
             let memberrole = msg.mentions.roles.first();
-            con.getConnection(function (err, d) {
-                if (err) console.error(err);
-
-                d.release(function (err) {
+            if (memberrole) {
+                con.getConnection(function (err, d) {
                     if (err) console.error(err);
-                });
-            })
+                    let id = memberrole.id;
+                    var sql = SqlString.format('UPDATE catagory SET memberrole=? WHERE pid=?', [id, pid]);
+                    d.query(sql, async (er, re) => {
+                        if (er) console.error(er);
+                        if (!re) return;
+                        if (re) {
+                            fn.Reply(msg, "Member Role Successfully Updated");
+                        }
+                    })
+                    d.release(function (err) {
+                        if (err) console.error(err);
+                    });
+                })
+            } else {
+                fn.Reply(msg, "You must @mention a role to set this category's member role")
+            }
 
             return;
         }
