@@ -102,10 +102,12 @@ client.on("ready", () => {
     fn.consolelog(client, m);
     fn.ChannelCleanup(client);
     fn.CatagoryCleanup(client);
+    fn.FilterListCleanup(client);
     setInterval(() => {
-        //fn.BotStatus(client);
+        fn.BotStatus(client);
         fn.ChannelCleanup(client);
         fn.CatagoryCleanup(client);
+        fn.FilterListCleanup(client);
         fn.consolelog(client, m);
     }, 150000); // every 2.5 minutes
 });

@@ -38,11 +38,9 @@ function consolelog(client, maxi) {
 function BotStatus(client) {
     // Random status' are fun arn't they? xD
     const activities_list = [
-        "the world go by..",
-        "all the timezones",
-        "the spin go world round <3",
-        "you sleep o_O",
-        "Cowboys do the river dance"
+        'Multiple Voice chats at once. cvhelp for more info',
+        'cvhelp for more info',
+        'All the channels get created. cvhelp for more info',
     ];
     const index = Math.floor(Math.random() * (activities_list.length - 1) + 1); // generates a random number between 1 and the length of the activities array list (in this case 5).
     client.user.setActivity(activities_list[index], { type: "WATCHING" }); // sets bot's activities to one of the phrases in the arraylist.
@@ -115,6 +113,39 @@ async function CatagoryCleanup(client) {
                     if (!client.channels.cache.find(c => c.id === id)) {
                         // Channel does not exist anymore, Yeet it from the db
                         let sqlGAYYY = SqlString.format(`DELETE FROM catagory WHERE joinchan=?`, [id]);
+                        d.query(sqlGAYYY, async (err, res) => {
+                            if (err) console.error(err);
+                            if (!res) return;
+                            if (res) console.log("Removed " + id + " from the DB");
+                        })
+                    }
+                }
+            }
+            return;
+        })
+        d.release(function (err) {
+            if (err) {
+                console.error(err);
+            }
+        });
+    });
+}
+async function FilterListCleanup(client) {
+    con.getConnection(function (err, d) {
+        if (err) {
+            console.error("error connecting: " + err.stack);
+            return;
+        }
+        d.query('SELECT * FROM blacklistedwords', async (er, re) => {
+            if (er) console.error(er);
+            if (re) {
+                for (let i = 0; i < re.length; i++) {
+                    let id = re[i].gid;
+                    if (id === 0) return; // return on the global filter lists
+                    if (!client.guilds.cache.find(c => c.id === id)) {
+                        // Bot is no longer in this server, and on leave, the bot didn't clear everything
+                        // YEEEEEEEEEEEEEEEET :>
+                        let sqlGAYYY = SqlString.format(`DELETE FROM blacklistedwords WHERE gid=?`, [id]);
                         d.query(sqlGAYYY, async (err, res) => {
                             if (err) console.error(err);
                             if (!res) return;
@@ -212,5 +243,6 @@ module.exports = {
     ChannelCleanup,
     CatagoryCleanup,
     timesince,
+    FilterListCleanup,
     BlistedWordCheck,
 }
