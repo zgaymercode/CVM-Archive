@@ -21,6 +21,7 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
                         .setColor(config.embed.color)
                         .setFooter(footer, client.user.displayAvatarURL())
                         .setTitle("Help for Command: " + help.name)
+                        .setTimestamp();
 
 
                     if (help.description) {
