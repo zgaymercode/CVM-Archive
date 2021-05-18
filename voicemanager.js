@@ -65,12 +65,10 @@ const load = (dir = "./commands/") => {
                 // we add the the comamnd to the collection, Map.prototype.set() for more info
                 client.commands.set(pull.help.name, pull);
                 // we log if the command was loaded.
-                //console.log(`${success} Loaded command ${pull.help.name}.`);
+                //console.log(`Loaded command ${pull.help.name}.`);
             } else {
                 // we check if the command is loaded else throw a error saying there was command it didn't load
-                console.log(
-                    `Error loading command in ${dir}${dirs}. you have a missing help.name or help.name is not a string. or you have a missing help.category or help.category is not a string`
-                );
+                console.error(`Error loading command in ${dir}${dirs}${file}. you have a missing help.name or help.name is not a string. or you have a missing help.category or help.category is not a string`);
                 // we use continue to load other commands or else it will stop here
                 continue;
             }
@@ -79,9 +77,7 @@ const load = (dir = "./commands/") => {
                 pull.help.aliases.forEach((alias) => {
                     // we check if there is a conflict with any other aliases which have same name
                     if (client.aliases.get(alias))
-                        return console.warn(
-                            `Two commands or more commands have the same aliases ${alias}`
-                        );
+                        return console.warn(`Two commands or more commands have the same aliases ${alias}`);
                     client.aliases.set(alias, pull.help.name);
                 });
             }
@@ -150,6 +146,15 @@ client.on("message", async (msg) => {    // check if msg author is a bot or if t
                 return;
             }
         }
+        if (command.help.category === "Under Maintenance") {
+            if (config.staff.includes(msg.author.id)) {
+                command.run(client, con, config, msg, args, fn);
+                return;
+            } else {
+                fn.Reply(msg, "Sorry, This command is under Maintenance")
+                return;
+            }
+        }
         if (command.help.category === "Administrative") {
             if (msg.member.hasPermission("MANAGE_GUILD") || msg.member.hasPermission("ADMINISTRATOR")) {
                 command.run(client, con, config, msg, args, fn);
@@ -201,13 +206,12 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
                 //#region Join chan's
                 var sql = SqlString.format('SELECT * FROM catagory WHERE joinchan=?', [channelid]);
                 d.query(sql, async (er, res) => {
-                    if (er) console.log(er);
+                    if (er) console.error(er);
                     if (!res) return;
                     if (res.length > 0) {
                         let guild = client.channels.cache.get(newState.channelID).guild;
                         let u = client.users.cache.get(uid);
                         let m = guild.members.cache.get(uid);
-                        console.log(m)
                         let t = res[0].template;
                         let inc = res[0].increment;
                         if (t === null) {
@@ -240,7 +244,7 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
                 //#region Temp Chan Deletes
                 var sql4 = SqlString.format('SELECT * FROM channels WHERE id=?', [oldchan]);
                 d.query(sql4, async (er, res) => {
-                    if (er) console.log(er);
+                    if (er) console.error(er);
                     if (!res) return;
                     if (res.length > 0) {
                         let vc = oldState.guild.channels.cache.get(oldState.channelID);
