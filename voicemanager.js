@@ -236,10 +236,11 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
                         if (t === null) {
                             template = `${u.username}'s Room`; // use the default template
                         } else {
+                            /,/g
                             // use the user generated template
-                            let step1 = t.replace('%USERNAME%', u.username)
-                            let step2 = step1.replace('%INC%', inc + 1);
-                            template = step2.replace('%NICKNAME%', m.nickname)
+                            let step1 = t.replace(/%USERNAME%/g, u.username)
+                            let step2 = step1.replace(/%INC%/g, inc + 1);
+                            template = step2.replace(/%NICKNAME%/g, m.nickname)
                             d.query(`UPDATE catagory SET increment = increment + 1 WHERE joinchan='${channelid}'`, (er3, res3) => {
                                 if (er3) console.error(er3);
                                 return;
