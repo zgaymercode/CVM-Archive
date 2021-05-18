@@ -93,10 +93,8 @@ async function ChannelCleanup(client) {
             })
             d.release(function (err) {
                 if (err) {
-                    ErrorMessage("close connection", err);
+                    console.error(err);
                 }
-                console.info("Ended Connection");
-                // The connection is terminated now
             });
         });
     }catch (e) {
@@ -129,10 +127,8 @@ async function CatagoryCleanup(client) {
         })
         d.release(function (err) {
             if (err) {
-                ErrorMessage("close connection", err);
+                console.error(err);
             }
-            console.info("Ended Connection");
-            // The connection is terminated now
         });
     });
 }
@@ -170,10 +166,8 @@ async function vcOwnerCheck(vcid, uid, msg) {
         })
         d.release(function (err) {
             if (err) {
-                ErrorMessage("close connection", err);
+                console.error(err);
             }
-            console.info("Ended Connection");
-            // The connection is terminated now
         });
     });
 }
@@ -201,10 +195,8 @@ async function BlistedWordCheck(word, msg) {
             })
             d.release(function (err) {
                 if (err) {
-                    ErrorMessage("close connection", err);
+                    console.error(err);
                 }
-                console.info("Ended Connection");
-                // The connection is terminated now
             });
         });
     } catch (e) {

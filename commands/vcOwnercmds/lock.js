@@ -4,7 +4,18 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
     try {
         let vcid = msg.member.voice.channel.id;
         let pid = msg.member.voice.channel.parentID;
-        
+        if (args[0] === 'memberrole') {
+            let memberrole = msg.mentions.roles.first();
+            con.getConnection(function (err, d) {
+                if (err) console.error(err);
+
+                d.release(function (err) {
+                    if (err) console.error(err);
+                });
+            })
+
+            return;
+        }
         con.getConnection(function (err, d) {
             if (err) {
                 console.error("error connecting: " + err.stack);
@@ -71,10 +82,8 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
             })
             d.release(function (err) {
                 if (err) {
-                    ErrorMessage("close connection", err);
+                    console.error(err);
                 }
-                console.info("Ended Connection");
-                // The connection is terminated now
             });
         });
     }

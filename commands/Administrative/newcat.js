@@ -55,10 +55,8 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
             })
             d.release(function (err) {
                 if (err) {
-                    ErrorMessage("close connection", err);
+                    console.error(err);
                 }
-                console.info("Ended Connection");
-                // The connection is terminated now
             });
         });
     }   

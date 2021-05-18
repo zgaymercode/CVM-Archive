@@ -200,10 +200,8 @@ client.on("guildDelete", function (guild) {
         //#endregion
         d.release(function (err) {
             if (err) {
-                ErrorMessage("close connection", err);
+                console.error(err);
             }
-            console.info("Ended Connection");
-            // The connection is terminated now
         });
     });
 });
@@ -283,10 +281,8 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
                 //#endregion
                 d.release(function (err) {
                     if (err) {
-                        ErrorMessage("close connection", err);
+                        console.error(err);
                     }
-                    console.info("Ended Connection");
-                    // The connection is terminated now
                 });
             });
             
