@@ -41,5 +41,5 @@ if member is a staff, they can append memberrole @mention_role  and this will se
 
 ## Future Plans
 Things that will come to the bot in the near future
-
+- [ ] using %GAME% == User's current game
 - [ ] Win the game
