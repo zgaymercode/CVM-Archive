@@ -14,51 +14,24 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
             var sql234 = SqlString.format('SELECT * FROM catagory WHERE pid=?', [pid]);
             d.query(sql234, (er234, res234) => {
                 if (er234) console.error(er234);
+                if (!res234) console.log("cant find pid")
                 if (res234) {
                     let lockable = res234[0].lockable;
                     if (lockable === 0) fn.Reply(msg, "This channel is not allowed to be locked")
                     if (lockable === 1) {
-
-                        var sql234 = SqlString.format('SELECT * FROM catagory WHERE pid=?', [pid]);
-                        d.query(sql234, (er234, res234) => {
-                            if (er234) console.error(er234);
-                            if (!res234) console.log("cant find pid")
-                            if (res234) {
-                                let lockable = res234[0].lockable;
-                                if (lockable === 0) fn.Reply(msg, "This channel is not allowed to be locked")
-                                if (lockable === 1) {
-                                    var sql = SqlString.format('UPDATE channels SET locked="1" WHERE id=?', [vcid]);
-                                    d.query(sql, async (er, re) => {
-                                        if (er) console.error(er);
-                                        if (!re) fn.Reply(msg, config.messages.oof)
-                                        if (re) {
-                                            var sql = SqlString.format('UPDATE channels SET locked="1" WHERE id=?', [vcid]);
-                                            d.query(sql, async (er, re) => {
-                                                if (er) console.error(er);
-                                                if (!re) fn.Reply(msg, config.messages.oof)
-                                                if (re) {
-                                                    let vc = msg.guild.channels.cache.get(vcid);
-                                                    vc.lockPermissions().then(() => {
-                                                        fn.Reply(msg, "Successfully unlocked channel");
-                                                    });
-                                                }
-                                            })
-                                        }
-                                    })
-                                }
-                                
+                        var sql = SqlString.format('UPDATE channels SET locked="0" WHERE id=?', [vcid]);
+                        d.query(sql, async (er, re) => {
+                            if (er) console.error(er);
+                            if (!re) fn.Reply(msg, config.messages.oof)
+                            if (re) {
+                                let vc = msg.guild.channels.cache.get(vcid);
+                                vc.lockPermissions().then(() => {
+                                    fn.Reply(msg, "Successfully unlocked channel");
+                                });
                             }
                         })
-
                     }
 
-                }
-            })
-            d.query(sql, async (er, re) => {
-                if (er) console.error(er);
-                if (!re) fn.Reply(msg, config.messages.oof)
-                if (re) {
-                   
                 }
             })
             d.release(function (err) {
