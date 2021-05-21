@@ -28,7 +28,7 @@ if member is a staff, they can append memberrole @mention_role  and this will se
 **Server Management**<br>
 -**newcat** : Generates a new category and a join channel for that category<br><br>
 -**template** : Updates the Channel's template<br>
-%INC% = Increment&nbsp;&nbsp;&nbsp;%NICKNAME% = nickname&nbsp;&nbsp;&nbsp;%USERNAME% = username<br><br>
+%INC% = Increment&nbsp;&nbsp;%NICKNAME% = nickname&nbsp;&nbsp;%USERNAME% = username&nbsp;&nbsp;%GAME% == User's current game<br><br>
 -**increment** : Overrides the Channel's increment<br><br>
 -**lockable** : Enables/Disables the ability to lock a channel within a category<br><br>
 -**blistword** : Add/Removes words from your server's blacklist. also allows you to view and reset the list using reset or list<br><br>
@@ -42,5 +42,4 @@ if member is a staff, they can append memberrole @mention_role  and this will se
 ## Future Plans
 Things that will come to the bot in the near future
 - [ ] Slash Commands
-- [ ] using %GAME% == User's current game
 - [ ] Win the game
