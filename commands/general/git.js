@@ -18,7 +18,7 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
 module.exports.help = {
     name: "github",
     aliases: ["git"],
-    description: "Displays the GitHub link for this bot",
+    description: "Displays the GitHub link for this bot and invite link",
     usage: "github",
     category: "General"
 }
