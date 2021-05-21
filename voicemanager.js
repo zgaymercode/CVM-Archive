@@ -330,14 +330,11 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
     
 });
 
+
 client.ws.on('INTERACTION_CREATE', async interaction => {
     // Slash Commands Handler
     let cmdname = interaction.data.name;
-    if (client.slashcmds.has(cmdname)) {
-        let cmd;
-        cmd = client.slashcmds.get(cmdname);
-        cmd.run(client, interaction);
-    }
+    if (client.slashcmds.has(cmdname)) client.slashcmds.get(cmdname).run(client, interaction);
     return;
 });
 client.login(config.bot.token).catch(console.error());
