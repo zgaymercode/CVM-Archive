@@ -37,11 +37,15 @@ const { sep } = require('path');
 const mysql = require("mysql");
 const { readdirSync } = require("fs");
 const SqlString = require("sqlstring");
+const { promisify } = require("util");
+
+const readdir = promisify(require("fs").readdir);
+
 const fn = require('./functions.js');
-["commands", "aliases"].forEach((x) => (client[x] = new Discord.Collection()));
+["commands", "aliases", "slashcmds"].forEach((x) => (client[x] = new Discord.Collection()));
 //#endregion
 //#region LOAD ALL COMMANDS
-const load = (dir = "./commands/") => {
+const load = async (dir = "./commands/") => {
     readdirSync(dir).forEach((dirs) => {
         // we read the commands directory for sub folders and filter the files with name with extension .js
         const commands = readdirSync(`${dir}${sep}${dirs}${sep}`).filter((files) =>
@@ -82,6 +86,26 @@ const load = (dir = "./commands/") => {
                 });
             }
         }
+    });
+    let dir2 = "./slashcmds/";
+    const cmdFiles = await readdir(dir2);
+
+    cmdFiles.forEach((file2, i) => {
+        const cmd = require(`${dir2}${file2}`);
+        let name = cmd.name;
+        if (name === "template") return;
+        if (client.slashcmds.get(name)) {
+            console.warn(`Two or more slash commands have the same name: ${name}`);
+            return;
+        }
+        if (typeof name === 'string') {
+            client.slashcmds.set(name, cmd)
+        } else {
+            console.warn(`Error loading file in ${dir2}${file2}. you have a missing name or name is not a string`)
+            return;
+        }
+        
+        
     });
 };
 load();
@@ -306,4 +330,14 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
     
 });
 
+client.ws.on('INTERACTION_CREATE', async interaction => {
+    // Slash Commands Handler
+    let cmdname = interaction.data.name;
+    if (client.slashcmds.has(cmdname)) {
+        let cmd;
+        cmd = client.slashcmds.get(cmdname);
+        cmd.run(client, interaction);
+    }
+    return;
+});
 client.login(config.bot.token).catch(console.error());
