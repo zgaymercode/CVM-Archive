@@ -260,6 +260,7 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
                         if (t === null) {
                             template = `${u.username}'s Room`; // use the default template
                         } else {
+                            let game;
                             // use the user generated template
                             let activities = m.user.presence.activities;
                             for (let i = 0; i < activities.length; i++){
