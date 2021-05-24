@@ -104,8 +104,8 @@ const load = async (dir = "./commands/") => {
             console.warn(`Error loading file in ${dir2}${file2}. you have a missing name or name is not a string`)
             return;
         }
-        
-        
+
+
     });
 };
 load();
@@ -143,12 +143,12 @@ client.on("message", async (msg) => {    // check if msg author is a bot or if t
     if (!msg.content.startsWith(prefix)) return;
     const args = msg.content.slice(prefix.length).trim().split(/ +/g);
     const cmd = args.shift().toLowerCase();
-    
+
     let command;
 
     if (!msg.member) msg.member = msg.guild.fetchMember(msg.author);
     if (cmd.length === 0) return;
-    if (client.commands.has(cmd)) command = client.commands.get(cmd); 
+    if (client.commands.has(cmd)) command = client.commands.get(cmd);
     else if (client.aliases.has(cmd)) command = client.commands.get(client.aliases.get(cmd));
     if (!command) return;
     // handle the command
@@ -205,9 +205,9 @@ client.on("message", async (msg) => {    // check if msg author is a bot or if t
             }
         }
         command.run(client, con, config, msg, args, fn);
-        
+
     }
-    
+
 })
 client.on("guildDelete", function (guild) {
     console.log("Bot has left: " + guild.id);
@@ -260,16 +260,17 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
                         if (t === null) {
                             template = `${u.username}'s Room`; // use the default template
                         } else {
+                            let game;
                             // use the user generated template
                             let activities = m.user.presence.activities;
-                            for (let i = 0; i < activities.length; i++){
+                            for (let i = 0; i < activities.length; i++) {
                                 let act = activities[i];
                                 if (act.type === "PLAYING") {
                                     game = act.name;
                                     break;
                                 } else {
                                     continue;
-                                }                                
+                                }
                             }
                             if (!game) game = "No Game Detected";
                             let PreStep = t.replace(/%GAME%/g, game);
@@ -322,12 +323,12 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
                     }
                 });
             });
-            
 
-            
+
+
         }
     }
-    
+
 });
 
 
