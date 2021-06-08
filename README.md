@@ -42,4 +42,6 @@ if member is a staff, they can append memberrole @mention_role  and this will se
 ## Future Plans
 Things that will come to the bot in the near future
 - [ ] Slash Commands
+- [ ] Temporary stage-like channels ( controlable voice chats with video :3 )
+- [ ] Ability to create new join channel in a selected category
 - [ ] Win the game
