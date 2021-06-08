@@ -1,6 +1,9 @@
 const Discord = module.require("discord.js");
 const SqlString = module.require('sqlstring');
-module.exports.run = async (client, con, config, msg, args, fn) => {
+module.exports.run = async (client, msg, args) => {
+    let con = client.database;
+    let config = client.config;
+    let fn = client.functions;
     try {
         let vcid = msg.member.voice.channel.id;
         let pid = msg.member.voice.channel.parentID;
@@ -109,5 +112,6 @@ module.exports.help = {
     //aliases: [""],
     description: "locks a channel  if member is a staff, they can append memberrole @mention_role and this will set that category to lock out that role as well",
     usage: "lock",
-    category: "VC Owner Command"
+    category: "VC Owner Command",
+    maintenancemode: 0
 }

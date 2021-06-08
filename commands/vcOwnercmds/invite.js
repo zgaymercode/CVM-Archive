@@ -1,6 +1,9 @@
 const Discord = module.require("discord.js");
 const SqlString = module.require('sqlstring');
-module.exports.run = async (client, con, config, msg, args, fn) => {
+module.exports.run = async (client, msg, args) => {
+    let con = client.database;
+    let config = client.config;
+    let fn = client.functions;
     try {
         let vcid = msg.member.voice.channel.id;
         let uid = msg.author.id;
@@ -58,5 +61,6 @@ module.exports.help = {
     //aliases: [""],
     description: "invites a member to a locked channel",
     usage: "invite @member",
-    category: "VC Owner Command"
+    category: "VC Owner Command",
+    maintenancemode: 0
 }

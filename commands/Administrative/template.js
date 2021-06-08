@@ -1,6 +1,9 @@
 const Discord = module.require("discord.js");
 const SqlString = module.require('sqlstring')
-module.exports.run = async (client, con, config, msg, args, fn) => {
+module.exports.run = async (client, msg, args) => {
+    let con = client.database;
+    let config = client.config;
+    let fn = client.functions;
     try {
         let pid = args[0];
         if (!pid) fn.Reply('you must supply arguments for this command, try ' + config.bot.prefix + 'help template  for more info');
@@ -64,5 +67,6 @@ module.exports.help = {
     //aliases: [""],
     description: "Updates the Channel's template. instead of <new_template> you can put reset to reset to default. %INC% = Increment %USERNAME% = username   %NICKNAME% = nickname",
     usage: "template <category_id> <new_template>",
-    category: "Administrative"
+    category: "Administrative",
+    maintenancemode: 0
 }

@@ -1,0 +1,47 @@
+const Discord = module.require("discord.js");
+const SqlString = module.require('sqlstring');
+module.exports.run = async (client, msg, args) => {
+    let con = client.database;
+    let config = client.config;
+    let fn = client.functions;
+    try {
+        let vcid = msg.member.voice.channel.id;
+        let vc = msg.guild.channels.cache.get(vcid);
+        let newlim = args[0];
+        if (isNaN(newlim)) return fn.Reply(msg, "The limit provided is not an number!");
+        if (newlim < 2) return fn.Reply(msg, "The limit must be at least 2");
+        if (newlim > 99) return fn.Reply(msg, "The limit must be less than 100");
+        var sql = SqlString.format('SELECT * FROM channels WHERE id=?', [vcid]);
+        con.getConnection(function (err, d) {
+            if (err) {
+                console.error("error connecting: " + err.stack);
+                return;
+            }
+            d.query(sql, async (er, re) => {
+                if (er) console.error(er);
+                if (!re) fn.Reply(msg, config.messages.oof)
+                if (re) {
+                    vc.setUserLimit(newlim)
+                    fn.Reply(msg, `Successfully updated channel's limit to: ${newlim}`)
+                }
+            })
+            d.release(function (err) {
+                if (err) {
+                    console.error(err);
+                }
+            });
+        });
+
+    }
+    catch (error) {
+        console.log(error)
+    }
+}
+module.exports.help = {
+    name: "limit",
+    //aliases: [""],
+    description: "updates the user limit of a voice channel.",
+    usage: "limit #",
+    category: "VC Owner Command",
+    maintenancemode: 0
+}

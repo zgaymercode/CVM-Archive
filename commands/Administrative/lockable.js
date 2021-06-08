@@ -1,6 +1,9 @@
 const Discord = module.require("discord.js");
 const SqlString = module.require('sqlstring')
-module.exports.run = async (client, con, config, msg, args, fn) => {
+module.exports.run = async (client, msg, args) => {
+    let con = client.database;
+    let config = client.config;
+    let fn = client.functions;
     try {
         let pid = args[0];
         if (!isNaN(pid)) {
@@ -64,5 +67,6 @@ module.exports.help = {
     //aliases: [""],
     description: "Enables/Disables the ability to lock a channel within a category",
     usage: "lockable <category_id> enable|disable",
-    category: "Administrative"
+    category: "Administrative",
+    maintenancemode: 0
 }

@@ -1,7 +1,10 @@
 const Discord = module.require("discord.js");
 const SqlString = module.require('sqlstring');
 
-module.exports.run = async (client, con, config, msg, args, fn) => {
+module.exports.run = async (client, msg, args) => {
+    let con = client.database;
+    let config = client.config;
+    let fn = client.functions;
     try {
         let vcid = msg.member.voice.channel.id;
         var sql = SqlString.format('SELECT * FROM channels WHERE id=?', [vcid]);
@@ -61,7 +64,7 @@ module.exports.run = async (client, con, config, msg, args, fn) => {
                                 }
                                 
                                 if (blisted === 1) {
-                                    fn.Reply(msg, "Blacklisted Word detected, Please try a different name");
+                                    fn.Reply(msg, "Prohibited Word detected, Please try a different name");
                                 } else {
                                     var sql2 = SqlString.format('UPDATE channels SET last_rename=CURRENT_TIMESTAMP() WHERE id=?', [vcid]);
                                     d.query(sql2, async (er2, re2) => {
@@ -98,5 +101,6 @@ module.exports.help = {
     //aliases: [""],
     description: "Renames the channel that you are in, assuming you're the owner or have the right perms",
     usage: "rename <new name>",
-    category: "VC Owner Command"
+    category: "VC Owner Command",
+    maintenancemode: 0
 }

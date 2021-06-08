@@ -1,7 +1,10 @@
 const Discord = module.require("discord.js");
 const mysql = require("mysql");
 const SqlString = require("sqlstring");
-module.exports.run = async (client, con, config, msg, args, fn) => {
+module.exports.run = async (client, msg, args) => {
+    let con = client.database;
+    let config = client.config;
+    let fn = client.functions;
     try {
         // create the category & join channel
         let newcat = await msg.guild.channels.create('new-category', {
@@ -70,5 +73,6 @@ module.exports.help = {
     //aliases: [""],
     description: "creates a new category for voice chat",
     usage: "newcat",
-    category: "Administrative"
+    category: "Administrative",
+    maintenancemode: 0
 }

@@ -8,7 +8,10 @@ async function UpdateOwner(d, msg, fn, vc) {
         if (ro) fn.Reply(msg, "you have successfully claimed this channel");
     })
 }
-module.exports.run = async (client, con, config, msg, args, fn) => {
+module.exports.run = async (client, msg, args) => {
+    let con = client.database;
+    let config = client.config;
+    let fn = client.functions;
     try {
         if (msg.member.voice.channel) {
             let uid = msg.author.id;
@@ -67,5 +70,6 @@ module.exports.help = {
     //aliases: [""],
     description: "Claims a voice chat when the owner has left",
     usage: "claim",
-    category: "General"
+    category: "General",
+    maintenancemode: 0
 }

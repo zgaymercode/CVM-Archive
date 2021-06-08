@@ -1,6 +1,9 @@
 const Discord = module.require("discord.js");
 const SqlString = module.require('sqlstring')
-module.exports.run = async (client, con, config, msg, args, fn) => {
+module.exports.run = async (client, msg, args) => {
+    let con = client.database;
+    let config = client.config;
+    let fn = client.functions;
     try {
         let bpid = args[0];
         let bar = args[1];
@@ -45,5 +48,6 @@ module.exports.help = {
     //aliases: [""],
     description: "Updates the incremental number for a category",
     usage: "increment <categoryid> <increment_#>",
-    category: "Administrative"
+    category: "Administrative",
+    maintenancemode: 0
 }

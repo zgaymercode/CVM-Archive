@@ -1,5 +1,8 @@
 const Discord = module.require("discord.js");
-module.exports.run = async (client, con, config, msg, args, fn) => {
+module.exports.run = async (client, msg, args) => {
+    let con = client.database;
+    let config = client.config;
+    let fn = client.functions;
     try {
         let embed = new Discord.MessageEmbed()
             .setColor(config.embed.color)
@@ -20,5 +23,6 @@ module.exports.help = {
     aliases: ["git"],
     description: "Displays the GitHub link for this bot and invite link",
     usage: "github",
-    category: "General"
+    category: "General",
+    maintenancemode: 0
 }

@@ -1,10 +1,11 @@
 const Discord = module.require("discord.js");
 const SqlString = module.require('sqlstring');
-module.exports.run = async (client, con, config, msg, args, fn) => {
+module.exports.run = async (client, msg, args) => {
+    let con = client.database;
+    let config = client.config;
+    let fn = client.functions;
     try {
         let vcid = msg.member.voice.channel.id;
-        let uid = msg.author.id;
-        let vc = msg.guild.channels.cache.get(vcid);
         let member = msg.mentions.members.first()
         if (member) {
             var sql = SqlString.format('SELECT * FROM channels WHERE id=?', [vcid]);
@@ -50,6 +51,7 @@ module.exports.help = {
     name: "kick",
     //aliases: [""],
     description: "kicks a member from a locked channel",
-    usage: "kicks @member",
-    category: "VC Owner Command"
+    usage: "kick @member",
+    category: "VC Owner Command",
+    maintenancemode: 0
 }

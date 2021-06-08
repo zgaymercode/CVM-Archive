@@ -1,17 +1,22 @@
 
 const Discord = module.require("discord.js");
-module.exports.run = async (client, con, config, msg, args, fn) => {
+module.exports.run = async (client, msg, args) => {
+    let con = client.database;
+    let config = client.config;
+    let fn = client.functions;
     try {
-
-        let arg = msg.mentions.channels.first();
-        if (arg) {
+        
+        if (args) {
+            if (isNaN(args[0])) return fn.Reply(msg, `Supplied channel id is not numeric: ${args[0]}`);
+            let chid = args[0];
+            let arg = client.channels.cache.get(chid);
+            if (!arg) return fn.Reply(msg, `Could not find channel: ${chid} (channel mention: <#${chid}>). if the channel mention shows the right channel, contact bot support`);
             let embed = new Discord.MessageEmbed()
                 .setColor(config.embed.color)
                 .setTimestamp()
                 .setAuthor(client.user.username, client.user.avatarURL({ dynamic: true }))
                 .setDescription("This command should allow you to Check whether the bot has the correct perms in <#" + arg.id + ">")
-                .setFooter(config.embed.footer + " | " + config.embed.ver, client.user.avatarURL({ dynamic: true }));
-
+                .setFooter(`${config.embed.footer} | ${config.embed.ver}`, client.user.avatarURL({ dynamic: true }));
 
             //debugging a certain channel
             let pbits = arg.permissionsFor(msg.guild.me).serialize();
@@ -78,6 +83,7 @@ module.exports.help = {
     name: "debug",
     //aliases: [""],
     description: "Debugs the server's permissions or the mentioned channel's permissions",
-    usage: "debug",
-    category: "Administrative"
+    usage: "debug or debug (channel_id)",
+    category: "Administrative",
+    maintenancemode: 0
 }
