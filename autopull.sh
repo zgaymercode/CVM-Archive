@@ -6,4 +6,3 @@
 cd /home/wadmin/communityvoice/
 git fetch --all
 git reset --hard
-git pull
