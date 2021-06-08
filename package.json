@@ -2,6 +2,9 @@
   "scripts":{
     "start": "nodemon voicemanager.js"
   },
+  "engines": {
+    "node": "14"
+  },
   "dependencies": {
     "discord.js": "^12.5.3",
     "fs": "*",
