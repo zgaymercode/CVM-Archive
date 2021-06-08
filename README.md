@@ -23,4 +23,5 @@ Things that will come to the bot in the near future
 - [ ] Slash Commands
 - [ ] Temporary stage-like channels ( controlable voice chats with video :3 )
 - [ ] Ability to create new join channel in a selected category
+- [ ] Channels copy join channel's permissions as default permissions
 - [ ] Win the game
