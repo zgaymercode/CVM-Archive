@@ -6,95 +6,52 @@ module.exports.run = async (client, msg, args) => {
     let fn = client.functions;
     try {
         let vcid = msg.member.voice.channel.id;
-        let pid = msg.member.voice.channel.parentID;
-        if (args[0] === 'memberrole') {
-            let memberrole = msg.mentions.roles.first();
-            if (memberrole) {
-                con.getConnection(function (err, d) {
-                    if (err) console.error(err);
-                    let id = memberrole.id;
-                    var sql = SqlString.format('UPDATE catagory SET memberrole=? WHERE pid=?', [id, pid]);
-                    d.query(sql, async (er, re) => {
-                        if (er) console.error(er);
-                        if (!re) return;
-                        if (re) {
-                            fn.Reply(msg, "Member Role Successfully Updated");
-                        }
-                    })
-                    d.release(function (err) {
-                        if (err) console.error(err);
-                    });
-                })
-            } else {
-                fn.Reply(msg, "You must @mention a role to set this category's member role")
-            }
-
-            return;
-        }
         con.getConnection(function (err, d) {
             if (err) {
                 console.error("error connecting: " + err.stack);
                 return;
             }
-            var sql234 = SqlString.format('SELECT * FROM catagory WHERE pid=?', [pid]);
-            d.query(sql234, (er234, res234) => {
-                if (er234) console.error(er234);
-                if (res234) {
-                    let lockable = res234[0].lockable;
-                    if (lockable === 0) fn.Reply(msg, "This channel is not allowed to be locked")
-                    if (lockable === 1) {
-                        
-                        var sql234 = SqlString.format('SELECT * FROM catagory WHERE pid=?', [pid]);
-                        d.query(sql234, (er234, res234) => {
-                            if (er234) console.error(er234);
-                            if(!res234) console.log("cant find pid")
-                            if (res234) {
-                                let lockable = res234[0].lockable;
-                                let member = res234[0].memberrole;
-                                if (lockable === 1) {
+            let sqljccheck = SqlString.format(`SELECT * FROM channels WHERE id=?`, [vcid]);
+            d.query(sqljccheck, (erjccheck, rejccheck) => {
+                if (erjccheck) return console.error(erjccheck);
+                if (!rejccheck) return console.log(`can't find ${vcid} in channels`);
+                let jc = rejccheck[0].joinchan;
+                var sql234 = SqlString.format('SELECT * FROM catagory WHERE joinchan=?', [jc]);
+                d.query(sql234, (er234, res234) => {
+                    if (er234) console.error(er234);
+                    if (!res234) console.log("cant find pid")
+                    if (res234) {
+                        let lockable = res234[0].lockable;
+                        if (lockable === 0) fn.Reply(msg, "This channel is not allowed to be locked")
+                        if(lockable === 1) {
+                            var sql = SqlString.format('UPDATE channels SET locked="1" WHERE id=?', [vcid]);
+                            d.query(sql, async (er, re) => {
+                                if (er) console.error(er);
+                                if (!re) fn.Reply(msg, config.messages.oof)
+                                if (re) {
                                     var sql = SqlString.format('UPDATE channels SET locked="1" WHERE id=?', [vcid]);
                                     d.query(sql, async (er, re) => {
                                         if (er) console.error(er);
                                         if (!re) fn.Reply(msg, config.messages.oof)
                                         if (re) {
-                                            var sql = SqlString.format('UPDATE channels SET locked="1" WHERE id=?', [vcid]);
-                                            d.query(sql, async (er, re) => {
-                                                if (er) console.error(er);
-                                                if (!re) fn.Reply(msg, config.messages.oof)
-                                                if (re) {
-                                                    let vc = msg.guild.channels.cache.get(vcid);
-                                                    //let member = vc.guild.roles.cache.get(config.server.memberrole);
-                                                    vc.updateOverwrite(
-                                                        vc.guild.roles.everyone,
-                                                        {
-                                                            VIEW_CHANNEL: false,
-                                                            CONNECT: true
-                                                        }
-                                                    );
-                                                    if (member != null) {
-                                                        vc.updateOverwrite(
-                                                            member,
-                                                            {
-                                                                VIEW_CHANNEL: false
-                                                            }
-                                                        )
-                                                    }
-                                                    fn.Reply(msg, 'Successfully locked channel')
+                                            let vc = msg.guild.channels.cache.get(vcid);
+                                            //let member = vc.guild.roles.cache.get(config.server.memberrole);
+                                            vc.updateOverwrite(
+                                                vc.guild.roles.everyone,
+                                                {
+                                                    VIEW_CHANNEL: false,
+                                                    CONNECT: true
                                                 }
-                                            })
+                                            );
+                                            fn.Reply(msg, 'Successfully locked channel')
                                         }
                                     })
                                 }
-                                if(lockable === 0){
-                                    fn.Reply(msg, "This channel is not allowed to be locked")
-                                }
-                            }
-                        })
-                       
+                            })
+                        }
                     }
-                    
-                }
-            })
+                });
+            });
             d.release(function (err) {
                 if (err) {
                     console.error(err);

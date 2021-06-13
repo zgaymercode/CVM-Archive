@@ -1,17 +1,17 @@
 const Discord = module.require("discord.js");
-const SqlString = module.require('sqlstring')
+const SqlString = module.require('sqlstring');
 module.exports.run = async (client, msg, args) => {
     let con = client.database;
     let config = client.config;
     let fn = client.functions;
     try {
-        let bpid = args[0];
+        let bjoinchan = args[0];
         let bar = args[1];
-        let pid = bpid.toString().split(' ').join('');
+        let joinchan = bjoinchan.toString().split(' ').join('');
         let ar = bar.toString().split(' ').join('')
-        if (!isNaN(pid)) {
+        if (!isNaN(joinchan)) {
             if (!isNaN(ar)) {
-                var sql = SqlString.format('UPDATE catagory SET increment=? WHERE pid=?', [ar, pid]);
+                var sql = SqlString.format('UPDATE catagory SET increment=? WHERE joinchan=?', [ar, joinchan]);
                 con.getConnection(function (err, d) {
                     if (err) {
                         console.error("error connecting: " + err.stack);
@@ -46,8 +46,8 @@ module.exports.run = async (client, msg, args) => {
 module.exports.help = {
     name: "increment",
     //aliases: [""],
-    description: "Updates the incremental number for a category",
-    usage: "increment <categoryid> <increment_#>",
+    description: "Updates the incremental number for a joinchannel",
+    usage: "increment <joinchanid> <increment_#>",
     category: "Administrative",
     maintenancemode: 0
 }

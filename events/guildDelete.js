@@ -1,3 +1,5 @@
+const SqlString = module.require('sqlstring');
+
 module.exports = async (client, guild) => {
     let fn = client.functions;
     let config = client.config;

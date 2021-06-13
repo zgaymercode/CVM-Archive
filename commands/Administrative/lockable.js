@@ -5,20 +5,20 @@ module.exports.run = async (client, msg, args) => {
     let config = client.config;
     let fn = client.functions;
     try {
-        let pid = args[0];
-        if (!isNaN(pid)) {
+        let joinchan = args[0];
+        if (!isNaN(joinchan)) {
             if (args[1] === 'enable') {
                 con.getConnection(function (err, d) {
                     if (err) {
                         console.error("error connecting: " + err.stack);
                         return;
                     }
-                    var sql = SqlString.format('UPDATE catagory SET lockable="1" WHERE pid=?', [pid]);
+                    var sql = SqlString.format('UPDATE catagory SET lockable="1" WHERE joinchan=?', [joinchan]);
                     d.query(sql, async (er, re) => {
                         if (er) console.error(er);
                         if (!re) return;
                         if (re) {
-                            fn.Reply(msg, "Channels created in that category will now be able to be locked");
+                            fn.Reply(msg, `Channels created using <#${joinchan}> will now be able to be locked`);
                         }
                     })
                     d.release(function (err) {
@@ -37,12 +37,12 @@ module.exports.run = async (client, msg, args) => {
                         console.error("error connecting: " + err.stack);
                         return;
                     }
-                    var sql = SqlString.format('UPDATE catagory SET lockable="0" WHERE pid=?', [pid]);
+                    var sql = SqlString.format('UPDATE catagory SET lockable="0" WHERE joinchan=?', [joinchan]);
                     d.query(sql, async (er, re) => {
                         if (er) console.error(er);
                         if (!re) return;
                         if (re) {
-                            fn.Reply(msg, "Channels created in that category will no longer be able to be locked");
+                            fn.Reply(msg, `Channels created using <#${joinchan}> will no longer be able to be locked`);
                         }
                     })
                     d.release(function (err) {
@@ -54,7 +54,7 @@ module.exports.run = async (client, msg, args) => {
 
             }
         } else {
-            fn.Reply(msg, "Parent Id supplied is not numeric")
+            fn.Reply(msg, "join channel Id supplied is not numeric")
         }
     }
     catch (error) {
@@ -65,8 +65,8 @@ module.exports.run = async (client, msg, args) => {
 module.exports.help = {
     name: "lockable",
     //aliases: [""],
-    description: "Enables/Disables the ability to lock a channel within a category",
-    usage: "lockable <category_id> enable|disable",
+    description: "Enables/Disables the ability to lock a channel based on the join channel",
+    usage: "lockable <joinchan_id> enable|disable",
     category: "Administrative",
     maintenancemode: 0
 }

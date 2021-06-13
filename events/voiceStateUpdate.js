@@ -56,7 +56,7 @@ module.exports = async (client, oldState, newState) => {
                             userLimit: newState.channel.userLimit
                         })
                         newState.setChannel(newchan);
-                        var sql2 = SqlString.format('INSERT INTO channels SET id=?, oid=?, created=CURRENT_TIMESTAMP()', [newchan.id, uid]);
+                        var sql2 = SqlString.format('INSERT INTO channels SET id=?, joinchan=?, oid=?, created=CURRENT_TIMESTAMP()', [newchan.id, channelid, uid]);
                         d.query(sql2, async (er2, res2) => {
                             if (er2) console.error(er);
                             if (!res2) console.error("Bot could not insert into db");

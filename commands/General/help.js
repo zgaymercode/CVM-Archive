@@ -70,6 +70,13 @@ module.exports.run = async (client, msg, args) => {
                 }
             }
         } else {
+            let cmds = client.commands;
+            console.log(cmds)
+            /*
+            for (let i = 0; i < cmds.length; i++){
+                cmd.help.name;
+            }
+            /*
             if (msg.member.voice.channel || msg.member.hasPermission(`MANAGE_GUILD`) || msg.member.hasPermission(`ADMINISTRATOR`)) {
                 let embedcolor = config.embed.color;
                 let giturl = config.bot.giturl;
@@ -100,8 +107,8 @@ module.exports.run = async (client, msg, args) => {
                 embed.addField(`${prefix}newcat`, `Generates a new category and a join channel for that category`);
                 embed.addField(`${prefix}template`, `Updates the category's template.`);
                 embed.addField(`${prefix}blockword add|remove|list`, "Add/Remove words from your server's block list, view currently blocked words. reset will yeet all words from the list")
-                embed.addField(`${prefix}increment`, `Overrides the category's increment`);
-                embed.addField(`${prefix}lockable <category_id> enable|disable`, `Enables/Disables the ability to lock a channel within a category`);
+                embed.addField(`${prefix}increment <joinchanid> <increment_#>`, `Updates the incremental number for a joinchannel`);
+                embed.addField(`${prefix}lockable <joinchan_id> enable|disable`, `Enables/Disables the ability to lock a channel based on the join channel`);
                 embed.addField(`${prefix}debug`, `Debugs the bot's perms for the server or a channel`);
             }
             if (msg.member.voice.channel || msg.member.hasPermission(`MANAGE_GUILD`) || msg.member.hasPermission(`ADMINISTRATOR`)) {
@@ -114,6 +121,7 @@ module.exports.run = async (client, msg, args) => {
             } else {
                 fn.Reply(msg, `You are not able to run this command at this time, please try again when you're in a voice channel`)
             }
+            /* */
         }
     }
     catch (error) {
@@ -127,5 +135,5 @@ module.exports.help = {
     description: `This command shows information about other commands`,
     usage: `help`,
     category: `General`,
-    maintenancemode: 0
+    maintenancemode: 1
 }

@@ -126,5 +126,5 @@ module.exports.help = {
     description: "Add/Remove words from your server's block list, view currently blocked words. reset will yeet all words from the list",
     usage: "blockword add|remove|list word1 word2 word3 ...",
     category: "Administrative",
-    maintenancemode: 1
+    maintenancemode: 0
 }
