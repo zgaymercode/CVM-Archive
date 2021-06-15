@@ -17,4 +17,7 @@
 # save crontab and it should be automated now :3
 
 cd /home/wadmin/communityvoice/
-git fetch --all
+git stash --include-untracked
+git reset --hard
+git clean -fd
+git pull
