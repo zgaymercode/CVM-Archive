@@ -38,6 +38,8 @@ const { readdirSync } = require("fs");
 const SqlString = require("sqlstring");
 const { promisify } = require("util");
 const readdir = promisify(require("fs").readdir);
+const disbut = require('discord-buttons');
+disbut(client);
 client.functions = require('./functions.js');
 ["commands", "aliases", "slashcmds"].forEach((x) => (client[x] = new Discord.Collection()));
 const LoadFiles = async () => {
@@ -78,9 +80,7 @@ const LoadFiles = async () => {
     console.info(`Successfully loaded ${count.length} slash commands.`);
     let dir = "./commands/";
     readdirSync(dir).forEach((dirs) => {
-        const commands = readdirSync(`${dir}${sep}${dirs}${sep}`).filter((files) =>
-            files.endsWith(".js")
-        );
+        const commands = readdirSync(`${dir}${sep}${dirs}${sep}`).filter((files) => files.endsWith(".js"));
         for (const file of commands) {
             const pull = require(`${dir}/${dirs}/${file}`);
             if (pull.help && typeof pull.help.name === "string" && typeof pull.help.category === "string") {
