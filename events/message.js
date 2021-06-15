@@ -2,8 +2,7 @@ module.exports = async (client, msg) => {
     let fn = client.functions;
     let config = client.config;
     let con = client.database;
-    if (msg.author.bot) return;
-    if (!msg.guild) return;
+    if (msg.author.bot || !msg.guild || msg.webhookID) return;
     // handle the command arguments and schtuffs
     let prefix = config.bot.prefix;
     if (!msg.content.startsWith(prefix)) return;
