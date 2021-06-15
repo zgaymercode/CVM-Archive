@@ -1,3 +1,4 @@
+const { PermissionOverwrites } = require("discord.js");
 const SqlString = require("sqlstring");
 module.exports = async (client, oldState, newState) => {
     let fn = client.functions;
@@ -18,70 +19,70 @@ module.exports = async (client, oldState, newState) => {
                 var sql = SqlString.format('SELECT * FROM catagory WHERE joinchan=?', [channelid]);
                 d.query(sql, async (er, res) => {
                     if (er) console.error(er);
-                    if (!res) return;
-                    if (res.length > 0) {
-                        let guild = client.channels.cache.get(newState.channelID).guild;
-                        let u = client.users.cache.get(uid);
-                        let m = guild.members.cache.get(uid);
-                        let t = res[0].template;
-                        let inc = res[0].increment;
-                        if (t === null) {
-                            template = `${u.username}'s Room`; // use the default template
-                        } else {
-                            let game;
-                            // use the user generated template
-                            let activities = m.user.presence.activities;
-                            for (let i = 0; i < activities.length; i++) {
-                                let act = activities[i];
-                                if (act.type === "PLAYING") {
-                                    game = act.name;
-                                    break;
-                                } else {
-                                    continue;
-                                }
+                    if (!res.length) return;
+                    let guild = client.channels.cache.get(newState.channelID).guild;
+                    let u = client.users.cache.get(uid);
+                    let m = guild.members.cache.get(uid);
+                    let t = res[0].template;
+                    let inc = res[0].increment;
+                    let lockable = res[0].lockable;
+                    let stage = res[0].is_stage;
+                    if (t === null) {
+                        template = `${u.username}'s Room`; // use the default template
+                    } else {
+                        let game;
+                        // use the user generated template
+                        let activities = m.user.presence.activities;
+                        for (let i = 0; i < activities.length; i++) {
+                            let act = activities[i];
+                            if (act.type === "PLAYING") {
+                                game = act.name;
+                                break;
+                            } else {
+                                continue;
                             }
-                            if (!game) game = "No Game Detected";
-                            let PreStep = t.replace(/%GAME%/g, game);
-                            let step1 = PreStep.replace(/%USERNAME%/g, u.username)
-                            let step2 = step1.replace(/%INC%/g, inc + 1);
-                            template = step2.replace(/%NICKNAME%/g, m.nickname)
-                            d.query(`UPDATE catagory SET increment = increment + 1 WHERE joinchan='${channelid}'`, (er3, res3) => {
-                                if (er3) console.error(er3);
-                                return;
-                            })
                         }
-                        let newchan = await newState.guild.channels.create(template, {
-                            type: 'voice',
-                            parent: newState.channel.parent.id,
-                            userLimit: newState.channel.userLimit
-                        })
-                        newState.setChannel(newchan);
-                        var sql2 = SqlString.format('INSERT INTO channels SET id=?, joinchan=?, oid=?, created=CURRENT_TIMESTAMP()', [newchan.id, channelid, uid]);
-                        d.query(sql2, async (er2, res2) => {
-                            if (er2) console.error(er);
-                            if (!res2) console.error("Bot could not insert into db");
-                            if (res2) console.log("New channel created");
+                        if (!game) game = "No Game Detected";
+                        let PreStep = t.replace(/%GAME%/g, game);
+                        let step1 = PreStep.replace(/%USERNAME%/g, u.username)
+                        let step2 = step1.replace(/%INC%/g, inc + 1);
+                        template = step2.replace(/%NICKNAME%/g, m.nickname)
+                        d.query(`UPDATE catagory SET increment = increment + 1 WHERE joinchan='${channelid}'`, (er3, res3) => {
+                            if (er3) console.error(er3);
+                            return;
                         })
                     }
+                    let newchan = await newState.guild.channels.create(template, {
+                        type: 'voice',
+                        parent: newState.channel.parent.id,
+                        userLimit: newState.channel.userLimit
+                    })
+                    newchan.overwritePermissions(newState.channel.permissionOverwrites);
+                    //console.log(newState.channel.permissionOverwrites)
+                    var sql2 = SqlString.format('INSERT INTO channels SET id=?, joinchan=?, oid=?, is_stage=?, created=CURRENT_TIMESTAMP()', [newchan.id, channelid, uid, stage]);
+                    d.query(sql2, async (er2, res2) => {
+                        if (er2) console.error(er);
+                        if (!res2) console.error("Bot could not insert into db");
+                        if (res2) console.log("New channel created");
+                    })
+                    newState.setChannel(newchan);
                 })
                 //#endregion
                 //#region Temp Chan Deletes
                 var sql4 = SqlString.format('SELECT * FROM channels WHERE id=?', [oldchan]);
                 d.query(sql4, async (er, res) => {
                     if (er) console.error(er);
-                    if (!res) return;
-                    if (res.length > 0) {
-                        let vc = oldState.guild.channels.cache.get(oldState.channelID);
-                        if (vc.members.size < 1) {
-                            vc.delete()
-                            //yeet the info from the database
-                            let sqlzor = SqlString.format('DELETE FROM channels WHERE id=?', [oldchan]);
-                            d.query(sqlzor, async (er, res234) => {
-                                if (er) console.error(er);
-                                if (!res234) console.error("Could not delete entry");
-                                if (res234) console.log("Channel yeeted");
-                            })
-                        }
+                    if (!res.length) return;
+                    let vc = oldState.guild.channels.cache.get(oldState.channelID);
+                    if (vc.members.size < 1) {
+                        vc.delete()
+                        //yeet the info from the database
+                        let sqlzor = SqlString.format('DELETE FROM channels WHERE id=?', [oldchan]);
+                        d.query(sqlzor, async (er, res234) => {
+                            if (er) console.error(er);
+                            if (!res234) console.error("Could not delete entry");
+                            if (res234) console.log("Channel yeeted");
+                        })
                     }
                 })
                 //#endregion
@@ -91,9 +92,6 @@ module.exports = async (client, oldState, newState) => {
                     }
                 });
             });
-
-
-
         }
     }
 }
