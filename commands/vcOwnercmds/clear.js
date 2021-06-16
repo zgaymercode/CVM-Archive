@@ -18,25 +18,23 @@ module.exports.run = async (client, msg, args) => {
             if (stagestate === 1) {
                 let vcmembers = msg.member.voice.channel;
                 vcmembers.members.each((member) => {
-                    if (member.id === oid) return;
-                    if (member.id === client.user.id) return;
+                    if (member.id === oid) return; // ignore the owner
+                    if (member.id === client.user.id) return; // just incase the bot is in the vc
                     if (!vc.permissionOverwrites.get(member.id)) return;
-                   setTimeout(() => {
-                       vc.permissionOverwrites.get(member.id).delete();
-                       let tmpchannel = client.channels.cache.get(jcid);
-                       let tmpar = client.config.tmp.array;
-                       tmpar.push(member.id);
-                       member.voice.setChannel(tmpchannel).then(() => {
-                           setTimeout(() => {
-                               member.voice.setChannel(vc);
-                               for (var i = 0; i < tmpar.length; i++) {
-                                   if (tmpar[i] === member.id) {
-                                       tmpar.splice(i, 1);
-                                   }
-                               }
-                           }, 500);
-                       })
-                   }, 500);
+                    vc.permissionOverwrites.get(member.id).delete();
+                    let tmpchannel = client.channels.cache.get(jcid);
+                    let tmpar = client.config.tmp.array;
+                    tmpar.push(member.id);
+                    member.voice.setChannel(tmpchannel).then(() => {
+                        setTimeout(() => {
+                            member.voice.setChannel(vc);
+                            for (var i = 0; i < tmpar.length; i++) {
+                                if (tmpar[i] === member.id) {
+                                    tmpar.splice(i, 1);
+                                }
+                            }
+                        }, 1000);
+                    })
                 });
                 
                 client.functions.Reply(msg, `Voice chat has been cleared of all permission overwrites`)
