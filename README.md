@@ -23,6 +23,4 @@ These tasks run every 1.5 minutes to keep things organzied :D <br>
 ## Future Plans
 Things that will come to the bot in the near future
 - [ ] Slash Commands
-
-- [ ] Ability to create new join channel in a selected category
 - [ ] Win the game
