@@ -53,7 +53,7 @@ module.exports.run = async (client, msg, args) => {
 module.exports.help = {
     name: "grant",
     //aliases: [""],
-    description: "Grants a user the ability to speak and ",
+    description: "Grants a user the ability to speak and stream in the channel",
     usage: "grant @user",
     category: "VC Owner Command",
     maintenancemode: 0
