@@ -19,6 +19,13 @@ module.exports.run = async (client, msg, args) => {
             if (stagestate === 1) {
                 let deny = msg.mentions.members.first();
                 if (!deny) return client.functions.Reply(msg, "You must @mention a member to deny speaking/video permissions!");
+                let vcmembers = msg.member.voice.channel;
+                let vccheck;
+                vcmembers.members.each((member) => {
+                    if (member.id != deny.id) return;
+                    vccheck = 1;
+                })
+                if (vccheck != 1) return client.functions.Reply(msg, `<@${deny.id}> is not in the voice chat`);
                 vc.permissionOverwrites.get(deny.id).delete();
                 let tmpchannel = client.channels.cache.get(jcid);
                 let tmpar = client.config.tmp.array;
@@ -31,7 +38,7 @@ module.exports.run = async (client, msg, args) => {
                                 tmpar.splice(i, 1);
                             }
                         }
-                    }, 500);
+                    }, 1000);
                 })
                 client.functions.Reply(msg, `<@${deny.id}> has been denied from speaking and streaming in this channel`)
 

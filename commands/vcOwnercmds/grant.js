@@ -16,6 +16,13 @@ module.exports.run = async (client, msg, args) => {
             if (stagestate === 1) {
                 let grant = msg.mentions.members.first();
                 if (!grant) return client.functions.Reply(msg, "You must @mention a member to grant speaking/video permissions!");
+                let vcmembers = msg.member.voice.channel;
+                let vccheck;
+                vcmembers.members.each((member) => {
+                    if (member.id != grant.id) return;
+                    vccheck = 1;
+                })
+                if (vccheck != 1) return client.functions.Reply(msg, `<@${grant.id}> is not in the voice chat`);
                 vc.updateOverwrite(
                     grant,
                     {
@@ -34,7 +41,7 @@ module.exports.run = async (client, msg, args) => {
                                 tmpar.splice(i, 1);
                             }
                         }
-                    }, 500);
+                    }, 1000);
                 })
                 client.functions.Reply(msg, `<@${grant.id}> has been allowed to speak and stream in this channel`)
                 
