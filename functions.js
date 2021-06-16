@@ -27,12 +27,14 @@ function consolelog(client, maxi) {
         console.log(" ");
     }
     if (v === maxi) {
-        console.log("Maximum numbers of intervals per-session has been reached... Restarting");
-        setTimeout(() => {
-            // I use pm2 to run my bot, so process.exit will essentially restart it
-            // a way around not using pm2 is create a shardman file and use that instead
-            process.exit(); // restart electroheart <3
-        }, 500);
+        console.log("Maximum numbers of intervals per-session has been reached... Restarting and pulling from git repository to keep up to date");
+        exec('git stash --include-untracked && git reset--hard && git clean - fd && git pull', (error, stdout, stderr) => {
+            setTimeout(function () {
+                // I use pm2 to run my bot, so process.exit will essentially restart it
+                // a way around not using pm2 is create a shardman file and use that instead
+                process.exit();
+            }, 100)
+         })            
     }
 }
 function BotStatus(client) {
