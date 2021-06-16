@@ -50,10 +50,10 @@ module.exports.run = async (client, msg, args) => {
 
 }
 module.exports.help = {
-    name: "setstage",
+    name: "setactivity",
     //aliases: [""],
     description: "Sets a joinchannel to be a stage like vc (not an actual discord stage)",
-    usage: "setstage true <join_channel_id>",
+    usage: "setactivity true <join_channel_id>",
     category: "Administrative",
     maintenancemode: 1
 }
