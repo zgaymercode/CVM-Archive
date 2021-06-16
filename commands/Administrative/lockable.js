@@ -13,7 +13,7 @@ module.exports.run = async (client, msg, args) => {
                         console.error("error connecting: " + err.stack);
                         return;
                     }
-                    var sql = SqlString.format('UPDATE catagory SET lockable="1" WHERE joinchan=?', [joinchan]);
+                    var sql = SqlString.format('UPDATE joinchans SET lockable="1" WHERE joinchan=?', [joinchan]);
                     d.query(sql, async (er, re) => {
                         if (er) console.error(er);
                         if (!re) return;
@@ -37,7 +37,7 @@ module.exports.run = async (client, msg, args) => {
                         console.error("error connecting: " + err.stack);
                         return;
                     }
-                    var sql = SqlString.format('UPDATE catagory SET lockable="0" WHERE joinchan=?', [joinchan]);
+                    var sql = SqlString.format('UPDATE joinchans SET lockable="0" WHERE joinchan=?', [joinchan]);
                     d.query(sql, async (er, re) => {
                         if (er) console.error(er);
                         if (!re) return;

@@ -6,11 +6,11 @@ async function updateStage(client, msg, jcid, newval) {
             console.error("error connecting: " + err.stack);
             return;
         }
-        var sql = SqlString.format('SELECT * FROM catagory WHERE joinchan=?', [jcid]);
+        var sql = SqlString.format('SELECT * FROM joinchans WHERE joinchan=?', [jcid]);
         d.query(sql, async (er1, re1) => {
             if (er1) return client.functions.Reply(msg, "There was a glitch in the matrix, please contact bot support :3");
             if (!re1.length) return client.functions.Reply(msg, `Could not find ${jcid} in the cache of join channels. if this is an error, contact bot support`);
-            let sql1 = SqlString.format(`UPDATE catagory SET is_stage = ? WHERE joinchan=?`, [newval, jcid]);
+            let sql1 = SqlString.format(`UPDATE joinchans SET is_stage = ? WHERE joinchan=?`, [newval, jcid]);
             d.query(sql1, async (er2, re2) => {
                 if (er2) return client.functions.Reply(msg, "There was a glitch in the matrix, please contact bot support :3");
                 if (!re2) return client.functions.Reply(msg, `There was an error updating that channel, please contact bot support`)

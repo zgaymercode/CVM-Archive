@@ -36,7 +36,7 @@ module.exports.run = async (client, msg, args) => {
                         let blisted;
                         let blistwords = [];
                                                                                             // gid 0 === globally blacklisted
-                        var sql = SqlString.format('SELECT * FROM blacklistedwords WHERE gid=? OR gid="0"', [gid]);
+                        var sql = SqlString.format('SELECT * FROM forbiddonwords WHERE gid=? OR gid="0"', [gid]);
                         d.query(sql, async (errre, rre) => {
                             if (errre) console.error(errre);
                             if (rre.length < 1) {

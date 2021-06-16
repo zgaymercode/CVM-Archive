@@ -16,7 +16,7 @@ module.exports.run = async (client, msg, args) => {
                 if (erjccheck) return console.error(erjccheck);
                 if (!rejccheck) return console.log(`can't find ${vcid} in channels`);
                 let jc = rejccheck[0].joinchan;
-                var sql234 = SqlString.format('SELECT * FROM catagory WHERE joinchan=?', [jc]);
+                var sql234 = SqlString.format('SELECT * FROM joinchans WHERE joinchan=?', [jc]);
                 d.query(sql234, (er234, res234) => {
                     if (er234) console.error(er234);
                     if (!res234) console.log("cant find pid")

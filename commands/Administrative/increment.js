@@ -11,7 +11,7 @@ module.exports.run = async (client, msg, args) => {
         let ar = bar.toString().split(' ').join('')
         if (!isNaN(joinchan)) {
             if (!isNaN(ar)) {
-                var sql = SqlString.format('UPDATE catagory SET increment=? WHERE joinchan=?', [ar, joinchan]);
+                var sql = SqlString.format('UPDATE joinchans SET increment=? WHERE joinchan=?', [ar, joinchan]);
                 con.getConnection(function (err, d) {
                     if (err) {
                         console.error("error connecting: " + err.stack);

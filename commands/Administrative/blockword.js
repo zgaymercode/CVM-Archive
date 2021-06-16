@@ -22,7 +22,7 @@ exports.run = async (client, msg, args) => {
                             console.error("error connecting: " + err.stack);
                             return;
                         }
-                        var sql = SqlString.format('INSERT INTO blacklistedwords SET word=?, gid=?', [word, gid]);
+                        var sql = SqlString.format('INSERT INTO forbiddonwords SET word=?, gid=?', [word, gid]);
                         d.query(sql, (err, res) => {
                             if (err) console.error(err);
                         })
@@ -41,7 +41,7 @@ exports.run = async (client, msg, args) => {
                         console.error("error connecting: " + err.stack);
                         return;
                     }
-                    var sql = SqlString.format('SELECT * FROM blacklistedwords WHERE gid=?', [gid]);
+                    var sql = SqlString.format('SELECT * FROM forbiddonwords WHERE gid=?', [gid]);
                     d.query(sql, (err, res) => {
                         if (err) console.error(err);
                         if (res.length > 0) {
@@ -75,7 +75,7 @@ exports.run = async (client, msg, args) => {
                             console.error("error connecting: " + err.stack);
                             return;
                         }
-                        var sql = SqlString.format('DELETE FROM blacklistedwords WHERE word=? AND gid=?', [word, gid]);
+                        var sql = SqlString.format('DELETE FROM forbiddonwords WHERE word=? AND gid=?', [word, gid]);
                         d.query(sql, (err, res) => {
                             if (err) console.error(err);
                             if (!res) return;
@@ -95,14 +95,10 @@ exports.run = async (client, msg, args) => {
                         console.error("error connecting: " + err.stack);
                         return;
                     }
-                    var sql = SqlString.format('DELETE FROM blacklistedwords WHERE gid=?', [gid]);
+                    var sql = SqlString.format('DELETE FROM forbiddonwords WHERE gid=?', [gid]);
                     d.query(sql, (err, res) => {
                         if (err) console.error(err);
-                        if (res.length > 0) {
-                            fn.Reply(msg, "Successfully removed all items from the denied list");
-                        } else {
-                            fn.Reply(msg, "Could not find anything to yeet, this server's list is blank")
-                        }
+                        fn.Reply(msg, "Successfully removed all items from the denied list");
                     })
                     d.release(function (err) {
                         if (err) {

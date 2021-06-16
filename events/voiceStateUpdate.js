@@ -18,7 +18,7 @@ module.exports = async (client, oldState, newState) => {
                     return;
                 }
                 //#region Join chan's
-                var sql = SqlString.format('SELECT * FROM catagory WHERE joinchan=?', [channelid]);
+                var sql = SqlString.format('SELECT * FROM joinchans WHERE joinchan=?', [channelid]);
                 d.query(sql, async (er, res) => {
                     if (er) console.error(er);
                     if (!res.length) return;
@@ -54,7 +54,7 @@ module.exports = async (client, oldState, newState) => {
                         let step1 = PreStep.replace(/%USERNAME%/g, u.username)
                         let step2 = step1.replace(/%INC%/g, inc + 1);
                         template = step2.replace(/%NICKNAME%/g, displayname)
-                        d.query(`UPDATE catagory SET increment = increment + 1 WHERE joinchan='${channelid}'`, (er3, res3) => {
+                        d.query(`UPDATE joinchans SET increment = increment + 1 WHERE joinchan='${channelid}'`, (er3, res3) => {
                             if (er3) console.error(er3);
                             return;
                         });

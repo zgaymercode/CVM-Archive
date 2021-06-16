@@ -99,20 +99,20 @@ async function ChannelCleanup(client) {
         console.error(e);
     }
 }
-async function CatagoryCleanup(client) {
+async function JoinchanCleanup(client) {
     con.getConnection(function (err, d) {
         if (err) {
             console.error("error connecting: " + err.stack);
             return;
         }
-        d.query('SELECT * FROM catagory', async (er, re) => {
+        d.query('SELECT * FROM joinchans', async (er, re) => {
             if (er) console.error(er);
             if (re) {
                 for (let i = 0; i < re.length; i++) {
                     let id = re[i].joinchan;
                     if (!client.channels.cache.find(c => c.id === id)) {
                         // Channel does not exist anymore, Yeet it from the db
-                        let sqlGAYYY = SqlString.format(`DELETE FROM catagory WHERE joinchan=?`, [id]);
+                        let sqlGAYYY = SqlString.format(`DELETE FROM joinchans WHERE joinchan=?`, [id]);
                         d.query(sqlGAYYY, async (err, res) => {
                             if (err) console.error(err);
                             if (!res) return;
@@ -136,7 +136,7 @@ async function FilterListCleanup(client) {
             console.error("error connecting: " + err.stack);
             return;
         }
-        d.query('SELECT * FROM blacklistedwords', async (er, re) => {
+        d.query('SELECT * FROM forbiddonwords', async (er, re) => {
             if (er) console.error(er);
             if (re) {
                 for (let i = 0; i < re.length; i++) {
@@ -145,7 +145,7 @@ async function FilterListCleanup(client) {
                     if (!client.guilds.cache.find(c => c.id === id)) {
                         // Bot is no longer in this server, and on leave, the bot didn't clear everything
                         // YEEEEEEEEEEEEEEEET :>
-                        let sqlGAYYY = SqlString.format(`DELETE FROM blacklistedwords WHERE gid=?`, [id]);
+                        let sqlGAYYY = SqlString.format(`DELETE FROM forbiddonwords WHERE gid=?`, [id]);
                         d.query(sqlGAYYY, async (err, res) => {
                             if (err) console.error(err);
                             if (!res) return;
@@ -183,7 +183,7 @@ async function BlistedWordCheck(word, msg) {
     let gid = msg.guild.id;
     try {
         
-        var sql = SqlString.format('SELECT * FROM blacklistedwords WHERE word=? AND gid=?', [word, gid]);
+        var sql = SqlString.format('SELECT * FROM forbiddonwords WHERE word=? AND gid=?', [word, gid]);
         con.getConnection(function (err, d) {
             if (err) {
                 console.error("error connecting: " + err.stack);
@@ -209,7 +209,7 @@ module.exports = {
     BotStatus,
     Reply,
     ChannelCleanup,
-    CatagoryCleanup,
+    JoinchanCleanup,
     timesince,
     FilterListCleanup,
     BlistedWordCheck,

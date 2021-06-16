@@ -6,7 +6,7 @@ module.exports = async (client, guild) => {
     let con = client.database;
     console.log("Bot has left: " + guild.id);
     fn.ChannelCleanup(client);
-    fn.CatagoryCleanup(client);
+    fn.JoinchanCleanup(client);
     con.getConnection(function (err, d) {
         if (err) {
             console.error("error connecting: " + err.stack);

@@ -38,7 +38,7 @@ module.exports.run = async (client, msg, args) => {
 
         let gid = msg.guild.id;
         let joinchan = newchan.id;
-        var sql = SqlString.format('INSERT INTO catagory SET joinchan=?', [joinchan]);
+        var sql = SqlString.format('INSERT INTO joinchans SET joinchan=?', [joinchan]);
         con.getConnection(function (err, d) {
             if (err) {
                 console.error("error connecting: " + err.stack);

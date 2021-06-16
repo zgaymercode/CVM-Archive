@@ -48,10 +48,10 @@ module.exports = async (client, msg) => {
                 command.run(client, msg, args);
                 break;
             case "VC Owner Command":
+                if (!msg.member.voice.channel) return fn.Reply(msg, "You are not in a voice chat");
                 let vcid = msg.member.voice.channel.id;
                 let uid = msg.author.id
                 var sql = SqlString.format('SELECT * FROM channels WHERE id=?', [vcid]);
-                if (!vcid) return fn.Reply(msg, "You are not in a voice chat");
                 client.database.getConnection(function (err, d) {
                     if (err) {
                         console.error("error connecting: " + err.stack);
