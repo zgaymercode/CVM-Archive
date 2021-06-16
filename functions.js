@@ -169,38 +169,7 @@ async function Reply(msg, error) {
     let embed = new Discord.MessageEmbed()
         .setColor(config.embed.color)
         .setDescription(error);
-    msg.channel.send(embed).then((m) => {
-        setTimeout(() => {
-            m.delete();
-        }, 45000);
-    })
-}
-async function vcOwnerCheck(vcid, uid, msg) {
-    var sql = SqlString.format('SELECT * FROM channels WHERE id=? AND oid=?', [vcid, uid]);
-    con.getConnection(function (err, d) {
-        if (err) {
-            console.error("error connecting: " + err.stack);
-            return;
-        }
-        d.query(sql, async (er, re) => {
-            if (er) console.error(er);
-            if (!re) {
-                if (msg.member.hasPermission("MOVE_MEMBERS") || msg.member.hasPermission("ADMINISTRATOR")) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-            if (re) {
-                return true;
-            }
-        })
-        d.release(function (err) {
-            if (err) {
-                console.error(err);
-            }
-        });
-    });
+    msg.channel.send(embed);
 }
 function timesince(timestamp) {
     var CurrentDate = moment();
@@ -239,7 +208,6 @@ module.exports = {
     consolelog,
     BotStatus,
     Reply,
-    vcOwnerCheck,
     ChannelCleanup,
     CatagoryCleanup,
     timesince,

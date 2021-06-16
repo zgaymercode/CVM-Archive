@@ -1,3 +1,4 @@
+const SqlString = module.require('sqlstring')
 module.exports = async (client, msg) => {
     let fn = client.functions;
     let config = client.config;
@@ -47,16 +48,41 @@ module.exports = async (client, msg) => {
                 command.run(client, msg, args);
                 break;
             case "VC Owner Command":
-                if (!msg.member.voice.channel) return fn.Reply(msg, "You are not in a voice chat");
-                if (!fn.vcOwnerCheck(msg.member.voice.channel.id, msg.author.id, msg)) return fn.Reply(msg, config.messages.nomanager);
-                command.run(client, msg, args);
+                let vcid = msg.member.voice.channel.id;
+                let uid = msg.author.id
+                var sql = SqlString.format('SELECT * FROM channels WHERE id=?', [vcid]);
+                if (!vcid) return fn.Reply(msg, "You are not in a voice chat");
+                client.database.getConnection(function (err, d) {
+                    if (err) {
+                        console.error("error connecting: " + err.stack);
+                        return;
+                    }
+                    d.query(sql, async (er, re) => {
+                        if (er) console.error(er);
+                        if (re.length > 0) {
+                            let owner = re[0].oid;
+                            if (msg.member.hasPermission("MOVE_MEMBERS") || msg.member.hasPermission("ADMINISTRATOR")) {
+                                command.run(client, msg, args);
+                            } else if (uid === owner) {
+                                command.run(client, msg, args);
+                            } else {
+                                fn.Reply(msg, config.messages.notowner)
+                            }
+
+                        }
+
+                    })
+
+                    d.release(function (err) {
+                        if (err) {
+                            console.error(err);
+                        }
+                    });
+                });
                 break;
             default:
                 command.run(client, msg, args);
                 break;
         }
-        // get in to the perms and fun stuff
-        
-
     }
 }

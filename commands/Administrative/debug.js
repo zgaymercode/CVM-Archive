@@ -26,6 +26,11 @@ module.exports.run = async (client, msg, args) => {
             } else {
                 embed.addField("Manage Channels", "❌ I do not have this permission! I use this to Create and Manage voice chats")
             }
+            if (pbits.MANAGE_ROLES) {
+                embed.addField("Manage Roles", "✅ Good!", true)
+            } else {
+                embed.addField("Manage Roles", "❌ I do not have this permission! I use this to Create and Manage voice chats")
+            }
             if (pbits.MANAGE_MESSAGES) {
                 embed.addField("Manage Messages", "✅ Good!", true)
             } else {
@@ -36,11 +41,7 @@ module.exports.run = async (client, msg, args) => {
             } else {
                 embed.addField("Move Members", "❌ I do not have this permission! I use this when members create a new channel")
             }
-            msg.channel.send(embed).then((m) => {
-                setTimeout(() => {
-                    m.delete()
-                }, 10000);
-            })
+            msg.channel.send(embed)
         } else {
             let embed = new Discord.MessageEmbed()
                 .setColor(config.embed.color)

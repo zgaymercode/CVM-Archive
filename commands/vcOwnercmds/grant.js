@@ -24,12 +24,19 @@ module.exports.run = async (client, msg, args) => {
                     }
                 )
                 let tmpchannel = client.channels.cache.get(client.config.tmp.vcid);
-                if (!tmpchannel) return client.functions.Reply(msg, "This server is not configured with the temporary channel, please contact bot support");
+                let tmpar = client.config.tmp.array;
+                tmpar.push(grant.id);
                 grant.voice.setChannel(tmpchannel).then(() => {
                     setTimeout(() => {
                         grant.voice.setChannel(vc);
+                        for (var i = 0; i < tmpar.length; i++) {
+                            if (tmpar[i] === grant.id) {
+                                tmpar.splice(i, 1);
+                            }
+                        }
                     }, 500);
                 })
+                client.functions.Reply(msg, `<@${grant.id}> has been allowed to speak and stream in this channel`)
                 
             } else {
                 client.functions.Reply(msg, "Sorry, this is a Activity Voice feature. You must be in a voice chat with this enabled")

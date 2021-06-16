@@ -1,5 +1,6 @@
 const { PermissionOverwrites } = require("discord.js");
 const SqlString = require("sqlstring");
+const { consolelog } = require("../functions");
 module.exports = async (client, oldState, newState) => {
     let fn = client.functions;
     let config = client.config;
@@ -7,6 +8,7 @@ module.exports = async (client, oldState, newState) => {
     if (oldState.id === newState.id) {
         if (oldState.channelID != newState.channelID) {
             let uid = oldState.id;
+            if (client.config.tmp.array.includes(uid)) return;
             let channelid = newState.channelID;
             let oldchan = oldState.channelID;
             if (oldchan === channelid) return;
@@ -28,7 +30,7 @@ module.exports = async (client, oldState, newState) => {
                     let lockable = res[0].lockable;
                     let stage = res[0].is_stage;
                     if (t === null) {
-                        template = `${u.username}'s Room`; // use the default template
+                        template = `${u.username}'s Room`;
                     } else {
                         let game;
                         // use the user generated template
@@ -42,31 +44,46 @@ module.exports = async (client, oldState, newState) => {
                                 continue;
                             }
                         }
+                        if (!m.nickname) {
+                            displayname = u.username;
+                        } else {
+                            displayname = m.nickname;
+                        }
                         if (!game) game = "No Game Detected";
                         let PreStep = t.replace(/%GAME%/g, game);
                         let step1 = PreStep.replace(/%USERNAME%/g, u.username)
                         let step2 = step1.replace(/%INC%/g, inc + 1);
-                        template = step2.replace(/%NICKNAME%/g, m.nickname)
+                        template = step2.replace(/%NICKNAME%/g, displayname)
                         d.query(`UPDATE catagory SET increment = increment + 1 WHERE joinchan='${channelid}'`, (er3, res3) => {
                             if (er3) console.error(er3);
                             return;
-                        })
+                        });
                     }
                     let newchan = await newState.guild.channels.create(template, {
                         type: 'voice',
                         parent: newState.channel.parent.id,
-                        userLimit: newState.channel.userLimit
-                    })
-                    newchan.overwritePermissions(newState.channel.permissionOverwrites);
-                    //console.log(newState.channel.permissionOverwrites)
+                        userLimit: newState.channel.userLimit,
+                        permissionOverwrites: newState.channel.permissionOverwrites
+                    });
+                    if (stage === 1) {
+                        newchan.updateOverwrite(
+                            u.id,
+                            {
+                                STREAM: true,
+                                SPEAK: true
+                            }
+                        )
+                    }
                     var sql2 = SqlString.format('INSERT INTO channels SET id=?, joinchan=?, oid=?, is_stage=?, created=CURRENT_TIMESTAMP()', [newchan.id, channelid, uid, stage]);
                     d.query(sql2, async (er2, res2) => {
                         if (er2) console.error(er);
                         if (!res2) console.error("Bot could not insert into db");
                         if (res2) console.log("New channel created");
-                    })
-                    newState.setChannel(newchan);
-                })
+                    });
+                    setTimeout(() => {
+                        newState.setChannel(newchan);
+                    }, 500);
+                });
                 //#endregion
                 //#region Temp Chan Deletes
                 var sql4 = SqlString.format('SELECT * FROM channels WHERE id=?', [oldchan]);

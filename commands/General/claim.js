@@ -37,8 +37,7 @@ module.exports.run = async (client, msg, args) => {
                             }
                         }
                         if (v === 1) {
-                            let checkperm = fn.vcOwnerCheck(vc.id, uid, msg);
-                            if (checkperm) {
+                            if (msg.member.hasPermission("MOVE_MEMBERS") || msg.member.hasPermission("ADMINISTRATOR")) {
                                 UpdateOwner(d, msg, fn, vc)
                             } else {
                                 fn.Reply(msg, config.messages.ownerstillpresent)
