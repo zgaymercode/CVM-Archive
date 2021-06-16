@@ -29,6 +29,7 @@ module.exports = async (client, oldState, newState) => {
                     let inc = res[0].increment;
                     let lockable = res[0].lockable;
                     let stage = res[0].is_stage;
+                    let limit = res[0].adjust_limit;
                     if (t === null) {
                         template = `${u.username}'s Room`;
                     } else {
@@ -74,10 +75,10 @@ module.exports = async (client, oldState, newState) => {
                             }
                         )
                     }
-                    var sql2 = SqlString.format('INSERT INTO channels SET id=?, joinchan=?, oid=?, is_stage=?, created=CURRENT_TIMESTAMP()', [newchan.id, channelid, uid, stage]);
+                    var sql2 = SqlString.format('INSERT INTO channels SET id=?, joinchan=?, oid=?, is_stage=?, adjust_limit=?, created=CURRENT_TIMESTAMP()', [newchan.id, channelid, uid, stage, limit]);
                     d.query(sql2, async (er2, res2) => {
                         if (er2) console.error(er);
-                        if (!res2) console.error("Bot could not insert into db");
+                        if (!res2) console.error(er2);
                         if (res2) console.log("New channel created");
                     });
                     setTimeout(() => {
