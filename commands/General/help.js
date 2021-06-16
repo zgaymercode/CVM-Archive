@@ -52,7 +52,8 @@ module.exports.run = async (client, msg, args) => {
                     }
                     send(msg, embed, client.functions);
 
-                } catch {
+                } catch (e) {
+                    console.error(e)
                     let embed = new Discord.MessageEmbed()
                         .setColor(client.config.embed.color)
                         .setDescription(`Could not find that command`);
