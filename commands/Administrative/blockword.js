@@ -119,7 +119,7 @@ exports.run = async (client, msg, args) => {
 module.exports.help = {
     name: "blockword",
     aliases: ["blist"],
-    description: "Add/Remove words from your server's block list, view currently blocked words. reset will yeet all words from the list",
+    description: "Add/Remove words from your server's block list, view currently blocked words. reset will yeet all words from the list. The block list will prevent users from renaming their channels with words including whats on the list.",
     usage: "blockword add|remove|list word1 word2 word3 ...",
     category: "Administrative",
     maintenancemode: 0
