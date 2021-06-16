@@ -67,7 +67,7 @@ module.exports.run = async (client, msg, args) => {
 module.exports.help = {
     name: "lock",
     //aliases: [""],
-    description: "locks a channel  if member is a staff, they can append memberrole @mention_role and this will set that category to lock out that role as well",
+    description: "prevents @everyone from connecting to the channel assuming current channel is allowed to be locked",
     usage: "lock",
     category: "VC Owner Command",
     maintenancemode: 0
