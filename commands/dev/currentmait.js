@@ -6,8 +6,8 @@ exports.run = (client, msg, args) => {
     let prefix = client.config.bot.prefix;
     let embed = new Discord.MessageEmbed()
         .setColor(client.config.embed.color)
-        .setDescription("These commands are currently in Maitenance Mode")
-        .setTitle("Maitenance Mode Commands")
+        .setDescription("These commands are currently in Maintenance Mode")
+        .setTitle("Maintenance Mode Commands")
     let cmds = client.commands.values();
     for (var cm of cmds) {
         let name = cm.help.name;
