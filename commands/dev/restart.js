@@ -3,17 +3,21 @@ const fs = require("fs");
 const mysql = module.require("mysql");
 
 exports.run = (client, msg, args) => {
-    let con = client.database;
-    let config = client.config;
-    let fn = client.functions;
-    msg.channel.send("RESTARTING NOW!!!").then((m) => {
-        setTimeout(() => {
-            m.delete();
-            setTimeout(function () {
-                process.exit(1);
-            }, 100)
-        }, 2000);
-    });   
+    const { exec } = require('child_process');
+    exec('git stash --include-untracked && git reset--hard && git clean - fd && git pull', (error, stdout, stderr) => {
+        msg.channel.send(`Git Pull response: ${stdout}    Restarting now`).then((m) => {
+            setTimeout(() => {
+                m.delete();
+                setTimeout(function () {
+                    process.exit(1);
+                }, 100)
+            }, 5000);
+        });
+        if (error !== null) {
+            console.log(`exec error: ${error}`);
+        }
+    });
+       
 };
 module.exports.help = {
     name: "restart",
