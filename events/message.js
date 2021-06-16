@@ -6,7 +6,7 @@ module.exports = async (client, msg) => {
     if (msg.author.bot || !msg.guild || msg.webhookID) return;
     // handle the command arguments and schtuffs
     let prefix = config.bot.prefix;
-    if (!msg.content.startsWith(prefix)) return;
+    if (!msg.content.toLowerCase().startsWith(prefix)) return;
     const args = msg.content.slice(prefix.length).trim().split(/ +/g);
     const cmd = args.shift().toLowerCase();
 
