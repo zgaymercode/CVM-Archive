@@ -25,9 +25,6 @@ async function updateStage(client, msg, jcid, newval) {
     });
 }
 module.exports.run = async (client, msg, args) => {
-    let con = client.database;
-    let config = client.config;
-    let fn = client.functions;
     try {
         let jcid = args[1];
         switch (args[0]) {
@@ -55,5 +52,5 @@ module.exports.help = {
     description: "Sets a joinchannel to be a stage like vc (not an actual discord stage)",
     usage: "setactivity true <join_channel_id>",
     category: "Administrative",
-    maintenancemode: 1
+    maintenancemode: 0
 }
