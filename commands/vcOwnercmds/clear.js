@@ -26,17 +26,20 @@ module.exports.run = async (client, msg, args) => {
                     let tmpar = client.config.tmp.array;
                     tmpar.push(member.id);
                     member.voice.setChannel(tmpchannel).then(() => {
-                        setTimeout(() => {
-                            member.voice.setChannel(vc);
-                            for (var i = 0; i < tmpar.length; i++) {
-                                if (tmpar[i] === member.id) {
-                                    tmpar.splice(i, 1);
+                        tmpchannel.members.each((memberintmp) => {
+                            if (memberintmp.id != member.id) return;
+                            setTimeout(() => {
+                                member.voice.setChannel(vc);
+                                for (var i = 0; i < tmpar.length; i++) {
+                                    if (tmpar[i] === member.id) {
+                                        tmpar.splice(i, 1);
+                                    }
                                 }
-                            }
-                        }, 1000);
+                            }, 1000);
+                        })
                     })
                 });
-                
+
                 client.functions.Reply(msg, `Voice chat has been cleared of all permission overwrites`)
 
             } else {

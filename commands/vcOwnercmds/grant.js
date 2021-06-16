@@ -16,6 +16,7 @@ module.exports.run = async (client, msg, args) => {
             if (stagestate === 1) {
                 let grant = msg.mentions.members.first();
                 if (!grant) return client.functions.Reply(msg, "You must @mention a member to grant speaking/video permissions!");
+                let jcid = re[0].joinchan; // join channel id 
                 let vcmembers = msg.member.voice.channel;
                 let vccheck;
                 vcmembers.members.each((member) => {
@@ -30,21 +31,25 @@ module.exports.run = async (client, msg, args) => {
                         SPEAK: true
                     }
                 )
-                let tmpchannel = client.channels.cache.get(client.config.tmp.vcid);
+                let tmpchannel = client.channels.cache.get(jcid);
                 let tmpar = client.config.tmp.array;
                 tmpar.push(grant.id);
                 grant.voice.setChannel(tmpchannel).then(() => {
-                    setTimeout(() => {
-                        grant.voice.setChannel(vc);
-                        for (var i = 0; i < tmpar.length; i++) {
-                            if (tmpar[i] === grant.id) {
-                                tmpar.splice(i, 1);
+                    tmpchannel.members.each((memberintmp) => {
+                        if (memberintmp.id != grant.id) return;
+                        setTimeout(() => {
+                            grant.voice.setChannel(vc);
+                            for (var i = 0; i < tmpar.length; i++) {
+                                if (tmpar[i] === grant.id) {
+                                    tmpar.splice(i, 1);
+                                }
                             }
-                        }
-                    }, 1000);
+                        }, 1000);
+                    })
+
                 })
                 client.functions.Reply(msg, `<@${grant.id}> has been allowed to speak and stream in this channel`)
-                
+
             } else {
                 client.functions.Reply(msg, "Sorry, this is a Activity Voice feature. You must be in a voice chat with this enabled")
             }

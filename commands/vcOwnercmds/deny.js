@@ -26,19 +26,25 @@ module.exports.run = async (client, msg, args) => {
                     vccheck = 1;
                 })
                 if (vccheck != 1) return client.functions.Reply(msg, `<@${deny.id}> is not in the voice chat`);
-                vc.permissionOverwrites.get(deny.id).delete();
+                let overwrites = vc.permissionOverwrites.get(deny.id);
+                if (!overwrites) return client.functions.Reply(msg, `<@${deny.id}> is not currently granted speak/stream permissions`);
+                overwrites.delete();
                 let tmpchannel = client.channels.cache.get(jcid);
                 let tmpar = client.config.tmp.array;
                 tmpar.push(deny.id);
                 deny.voice.setChannel(tmpchannel).then(() => {
-                    setTimeout(() => {
-                        deny.voice.setChannel(vc);
-                        for (var i = 0; i < tmpar.length; i++){
-                            if (tmpar[i] === deny.id) {
-                                tmpar.splice(i, 1);
+                    tmpchannel.members.each((memberintmp) => {
+                        if (memberintmp.id != deny.id) return;
+                        setTimeout(() => {
+                            deny.voice.setChannel(vc);
+                            for (var i = 0; i < tmpar.length; i++) {
+                                if (tmpar[i] === deny.id) {
+                                    tmpar.splice(i, 1);
+                                }
                             }
-                        }
-                    }, 1000);
+                        }, 1000);
+                    })
+
                 })
                 client.functions.Reply(msg, `<@${deny.id}> has been denied from speaking and streaming in this channel`)
 
