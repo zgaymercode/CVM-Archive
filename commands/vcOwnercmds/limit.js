@@ -6,11 +6,6 @@ module.exports.run = async (client, msg, args) => {
     let fn = client.functions;
     try {
         let vcid = msg.member.voice.channel.id;
-        let vc = msg.guild.channels.cache.get(vcid);
-        let newlim = args[0];
-        if (isNaN(newlim)) return fn.Reply(msg, "The limit provided is not an number!");
-        if (newlim < 2) return fn.Reply(msg, "The limit must be at least 2");
-        if (newlim > 99) return fn.Reply(msg, "The limit must be less than 100");
         var sql = SqlString.format('SELECT * FROM channels WHERE id=?', [vcid]);
         con.getConnection(function (err, d) {
             if (err) {
@@ -19,11 +14,16 @@ module.exports.run = async (client, msg, args) => {
             }
             d.query(sql, async (er, re) => {
                 if (er) console.error(er);
-                if (!re) fn.Reply(msg, config.messages.oof)
-                if (re) {
-                    vc.setUserLimit(newlim)
-                    fn.Reply(msg, `Successfully updated channel's limit to: ${newlim}`)
-                }
+                if (re.length<1) fn.Reply(msg, config.messages.oof)
+                let adjustLimitAllowed = re[0].adjust_limit;
+                if(adjustLimitAllowed != 1) return client.functions.Reply(msg, `<#${vcid}> does not permit voice channel limits from being edited`)
+                let vc = msg.guild.channels.cache.get(vcid);
+                let newlim = args[0];
+                if (isNaN(newlim)) return fn.Reply(msg, "The limit provided is not an number!");
+                if (newlim < 2) return fn.Reply(msg, "The limit must be at least 2");
+                if (newlim > 99) return fn.Reply(msg, "The limit must be less than 100");
+                vc.setUserLimit(newlim)
+                fn.Reply(msg, `Successfully updated channel's limit to: ${newlim}`)
             })
             d.release(function (err) {
                 if (err) {
