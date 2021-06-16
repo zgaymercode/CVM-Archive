@@ -19,7 +19,7 @@ module.exports.run = (client, msg, args) => {
 				client.commands.delete(commandName);
 				const pull = require(file);
 				client.commands.set(commandName, pull);
-				return msg.channel.send(`Successfully reloaded ${commandName}.js!`);
+				return msg.channel.send(`Successfully reloaded the ${commandName} command`);
 			}
 			catch (err) {
 				msg.channel.send(`Could not reload: ${args[0].toUpperCase()}\``);
