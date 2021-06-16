@@ -1,11 +1,7 @@
-const Discord = require("discord.js")
-const fs = require("fs");
-const mysql = module.require("mysql");
-
 exports.run = (client, msg, args) => {
     const { exec } = require('child_process');
     exec('git stash --include-untracked && git reset--hard && git clean - fd && git pull', (error, stdout, stderr) => {
-        msg.channel.send(`Git Pull response: ${stdout}    Restarting now`).then((m) => {
+        msg.channel.send(`Pulling from GitHub main branch and than Restarting`).then((m) => {
             setTimeout(() => {
                 m.delete();
                 setTimeout(function () {
