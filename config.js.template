@@ -1,6 +1,7 @@
 module.exports = {
     bot: {
-        cmds_enabled: 1,
+        cmds_enabled: 1, // if set to 0, all commands are disabled to non-botstaff
+        isdevbuild = 1, // set this to 1 if client is a develeper build, it disables gitpull automation
         renamecooldown: 5, // this is in minutes
         prefix: "cv",
         startstatus: /* PLAYING */ "cvhelp for help!",
@@ -26,11 +27,12 @@ module.exports = {
         database: "DB_NAME"
     },
     embed: {
-        ver: "0.5",
+        ver: "v0.1",
         footer: "Bot created by the WolfTribe",
         color: '#1F85DE'
     },
     staff: [
-        "BOTSTAFF_USERID" // when commands are disabled, users in this array are still allowed to use the bot
+        "BOTSTAFF_USERID", // when commands are disabled, users in this array are still allowed to use the bot. 
+        "BOTSTAFF_USERID2" // this also allows use of dev commands and commands in maintenance mode
     ]
 }
