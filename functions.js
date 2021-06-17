@@ -26,6 +26,7 @@ function consolelog(client, maxi) {
         console.log("intervals ran this session: " + v)
         console.log(" ");
     }
+    if (client.config.bot.isdevbuild === 1) return;
     if (v === maxi) {
         console.log("Maximum numbers of intervals per-session has been reached... Restarting and pulling from git repository to keep up to date");
         exec('git stash --include-untracked && git reset--hard && git clean - fd && git pull', (error, stdout, stderr) => {

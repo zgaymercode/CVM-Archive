@@ -1,7 +1,7 @@
 module.exports = {
     bot: {
         cmds_enabled: 1, // if set to 0, all commands are disabled to non-botstaff
-        isdevbuild = 1, // set this to 1 if client is a develeper build, it disables gitpull automation
+        isdevbuild: 1, // set this to 1 if client is a develeper build, it disables gitpull automation
         renamecooldown: 5, // this is in minutes
         prefix: "cv",
         startstatus: /* PLAYING */ "cvhelp for help!",
