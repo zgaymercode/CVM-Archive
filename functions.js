@@ -206,9 +206,91 @@ async function BlistedWordCheck(word, msg) {
         console.error(e);
    }
 }
+async function serverDataCheck(client, msg, callback) {
+    
+    client.database.getConnection(async (err, d) => {
+        if (err) {
+            console.error("error connecting: " + err.stack);
+            return;
+        }
+        let sql = SqlString.format(`SELECT * FROM servers WHERE id=?`, [msg.guild.id]);
+        d.query(sql, async (error, results) => {
+            let prefix;
+            let modlog;
+
+            if (error) return console.error(error);
+            if (results.length > 0) {
+                client.config.tmp.var = [];
+                prefix = results[0].prefix;
+                modlog = results[0].modlog;
+                if (prefix === null) prefix = client.config.bot.prefix;
+            } else {
+                guildID = msg.guild.id;
+                prefix = client.config.bot.prefix;
+                modlog = null;
+                let sql2 = SqlString.format(`INSERT INTO servers SET id=?, prefix=?`, [guildID, prefix])
+                d.query(sql2, (error2, result2) => {
+                    if (error2) return console.error(error2);
+                    if (result2) {
+                        prefix = client.config.bot.prefix;
+                        modlog = null;
+                    }
+                    
+                })
+            };
+            callback({
+                prefix, // Server's Prefix
+                modlog // Modlog channel ID
+            })            
+        })
+        d.release(function (err) {
+            
+        });
+    });
+    
+}
+async function AddModLog(client, msg, embed, callback){
+    client.database.getConnection(async (err, d) => {
+        if (err) {
+            console.error("error connecting: " + err.stack);
+            return;
+        }
+        let sql = SqlString.format(`SELECT * FROM servers WHERE id=?`, [msg.guild.id]);
+        d.query(sql, async (error, results) => {
+            if (error) return console.error(error);
+            if (results.length > 0) {
+                let modlogid = results[0].modlog;
+                if (!modlogid) {
+                    Reply(msg, `This server's modlog is not configured`)
+                    callback(false);
+                }
+                let logchannel = client.channels.cache.get(modlogid);
+
+                let embed = new Discord.MessageEmbed()
+                    .setColor(client.config.embed.color)
+                    .setAuthor("CVE Mod Logs", '', giturl)
+                    .setDescription(``)
+                    .setThumbnail(client.user.avatarURL({ dynamic: true }))
+                    .setFooter(client.config.embed.footer + ` | ` + client.config.embed.ver, client.user.avatarURL({ dynamic: true }));
+                
+                    
+                
+                
+            } else {
+                Reply(msg, `This server's modlog is not configured`)
+                callback(false);
+            };
+            
+        })
+        d.release(function (err) {
+
+        });
+    });
+}
 //#endregion
 module.exports = {
     consolelog,
+    AddModLog,
     BotStatus,
     Reply,
     ChannelCleanup,
@@ -216,4 +298,5 @@ module.exports = {
     timesince,
     FilterListCleanup,
     BlistedWordCheck,
+    serverDataCheck
 }

@@ -8,7 +8,7 @@ const moment = require("moment");
 const { MessageButton, MessageActionRow } = require("discord-buttons")
 exports.run = async (client, msg, args) => {
     try {
-        client.functions.Reply(msg, `This command is empty at the moment :3`)
+
     } catch (e) {
         console.error(e);
         client.functions.Reply(msg, "There was an error in the matrix")
