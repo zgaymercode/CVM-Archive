@@ -1,7 +1,21 @@
 exports.run = (client, msg, args) => {
-    const { exec } = require('child_process');
-    exec('git stash --include-untracked && git reset--hard && git clean - fd && git pull', (error, stdout, stderr) => {
-        msg.channel.send(`Pulling from GitHub main branch and than Restarting`).then((m) => {
+    if (client.config.bot.isdevbuild === 0) {
+        const { exec } = require('child_process');
+        exec('git stash --include-untracked && git reset--hard && git clean - fd && git pull', (error, stdout, stderr) => {
+            msg.channel.send(`Pulling from GitHub main branch and than Restarting`).then((m) => {
+                setTimeout(() => {
+                    m.delete();
+                    setTimeout(function () {
+                        process.exit(1);
+                    }, 100)
+                }, 5000);
+            });
+            if (error !== null) {
+                console.log(`exec error: ${error}`);
+            }
+        });
+    } else {
+        msg.channel.send(`Bot is in Dev mode, Pull from github has been canceled. Restarting now`).then((m) => {
             setTimeout(() => {
                 m.delete();
                 setTimeout(function () {
@@ -9,16 +23,14 @@ exports.run = (client, msg, args) => {
                 }, 100)
             }, 5000);
         });
-        if (error !== null) {
-            console.log(`exec error: ${error}`);
-        }
-    });
+    }
+    
        
 };
 module.exports.help = {
     name: "restart",
     //aliases: [""],
-    description: "restarts the bot",
+    description: "forces a pull from github and restarts the bot, setting all the code to what is on the git repository",
     usage: "restart",
     category: "Dev",
     maintenancemode: 0
