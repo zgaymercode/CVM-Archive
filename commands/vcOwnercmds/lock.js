@@ -35,12 +35,10 @@ module.exports.run = async (client, msg, args) => {
                                         if (!re) fn.Reply(msg, config.messages.oof)
                                         if (re) {
                                             let vc = msg.guild.channels.cache.get(vcid);
-                                            //let member = vc.guild.roles.cache.get(config.server.memberrole);
-                                            vc.updateOverwrite(
+                                            await vc.updateOverwrite(
                                                 vc.guild.roles.everyone,
                                                 {
-                                                    VIEW_CHANNEL: false,
-                                                    CONNECT: true
+                                                    CONNECT: false
                                                 }
                                             );
                                             fn.Reply(msg, 'Successfully locked channel')
@@ -70,5 +68,5 @@ module.exports.help = {
     description: "prevents @everyone from connecting to the channel assuming current channel is allowed to be locked",
     usage: "lock",
     category: "VC Owner Command",
-    maintenancemode: 0
+    maintenancemode: 1
 }

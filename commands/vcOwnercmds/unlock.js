@@ -32,7 +32,7 @@ module.exports.run = async (client, msg, args) => {
                                 if (!re) fn.Reply(msg, config.messages.oof)
                                 if (re) {
                                     let vc = msg.guild.channels.cache.get(vcid);
-                                    vc.lockPermissions().then(() => {
+                                    await vc.lockPermissions().then(() => {
                                         fn.Reply(msg, "Successfully unlocked channel");
                                     });
                                 }
