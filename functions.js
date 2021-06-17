@@ -26,16 +26,20 @@ function consolelog(client, maxi) {
         console.log("intervals ran this session: " + v)
         console.log(" ");
     }
-    if (client.config.bot.isdevbuild === 1) return;
+    
     if (v === maxi) {
         console.log("Maximum numbers of intervals per-session has been reached... Restarting and pulling from git repository to keep up to date");
-        exec('git stash --include-untracked && git reset--hard && git clean - fd && git pull', (error, stdout, stderr) => {
-            setTimeout(function () {
-                // I use pm2 to run my bot, so process.exit will essentially restart it
-                // a way around not using pm2 is create a shardman file and use that instead
-                process.exit();
-            }, 100)
-         })            
+        if (client.config.bot.isdevbuild === 1) {
+            process.exit();
+        } else {
+            exec('git stash --include-untracked && git reset--hard && git clean - fd && git pull', (error, stdout, stderr) => {
+                setTimeout(function () {
+                    // I use pm2 to run my bot, so process.exit will essentially restart it
+                    // a way around not using pm2 is create a shardman file and use that instead
+                    process.exit();
+                }, 100)
+            })
+        }                   
     }
 }
 function BotStatus(client) {
@@ -206,41 +210,43 @@ async function BlistedWordCheck(word, msg) {
         console.error(e);
    }
 }
-async function serverDataCheck(client, msg, callback) {
+async function serverDataCheck(client, guildID, callback) {
     
     client.database.getConnection(async (err, d) => {
         if (err) {
             console.error("error connecting: " + err.stack);
             return;
         }
-        let sql = SqlString.format(`SELECT * FROM servers WHERE id=?`, [msg.guild.id]);
+        let sql = SqlString.format(`SELECT * FROM servers WHERE id=?`, [guildID]);
         d.query(sql, async (error, results) => {
             let prefix;
             let modlog;
+            let adminlog;
 
             if (error) return console.error(error);
             if (results.length > 0) {
                 client.config.tmp.var = [];
                 prefix = results[0].prefix;
                 modlog = results[0].modlog;
+                adminlog = results[0].adminlog;
                 if (prefix === null) prefix = client.config.bot.prefix;
             } else {
-                guildID = msg.guild.id;
                 prefix = client.config.bot.prefix;
-                modlog = null;
                 let sql2 = SqlString.format(`INSERT INTO servers SET id=?, prefix=?`, [guildID, prefix])
                 d.query(sql2, (error2, result2) => {
                     if (error2) return console.error(error2);
                     if (result2) {
                         prefix = client.config.bot.prefix;
                         modlog = null;
+                        adminlog = null;
                     }
                     
                 })
             };
             callback({
                 prefix, // Server's Prefix
-                modlog // Modlog channel ID
+                modlog, // Modlog channel ID
+                adminlog, // Admin Log Channel ID
             })            
         })
         d.release(function (err) {
@@ -249,42 +255,61 @@ async function serverDataCheck(client, msg, callback) {
     });
     
 }
-async function AddModLog(client, msg, embed, callback){
-    client.database.getConnection(async (err, d) => {
-        if (err) {
-            console.error("error connecting: " + err.stack);
-            return;
-        }
-        let sql = SqlString.format(`SELECT * FROM servers WHERE id=?`, [msg.guild.id]);
-        d.query(sql, async (error, results) => {
-            if (error) return console.error(error);
-            if (results.length > 0) {
-                let modlogid = results[0].modlog;
-                if (!modlogid) {
-                    Reply(msg, `This server's modlog is not configured`)
-                    callback(false);
-                }
-                let logchannel = client.channels.cache.get(modlogid);
-
+async function AddModLog(client, guildid, memberid, action, vc, type) {
+    /*
+        Type clearification:
+        type = meaning
+        0 = deleted
+        1 = created
+        2 = perms edited
+        3 = activity specific
+        
+    */
+    client.database.getConnection(async (connection_error, d) => {
+        if (connection_error) return console.error(connection_error.stack);
+        serverDataCheck(client, guildid, (serverdata) => {
+            let modlog = serverdata.modlog;
+            if (!modlog) return;
+            let insertSql = SqlString.format(`INSERT INTO modlog SET guild_id=?, channel_id=?, member_id=?, action=?, type=?, timestamp=CURRENT_TIMESTAMP()`, [guildid, vc.id, memberid, action, type]);
+            d.query(insertSql, (inserterror, results) => {
+                if (inserterror) return console.error(inserterror);
+                if (!results) return console.error(`Could not add ${action} to the modlog`);
+                return;
+            })
+        })
+        d.release(function (releaseerror) { if (releaseerror) console.error(releaseerror); });
+    });
+}
+async function SendModLog(client, guildID, channelID) {
+    console.log(`Channel Yeeted`);
+    return; // This is temporary since This needs to be pushed to prod
+    client.database.getConnection(async (connection_error, d) => {
+        if (connection_error) return console.error(connection_error.stack);
+        serverDataCheck(client, guildID, (serverdata) => {
+            let modlog = serverdata.modlog;
+            let logchannel = client.channels.cache.get(modlog);
+            if (!modlog || !logchannel) return; // if the bot can't find the channel, or if it's not configured, stop here
+            let findEntries = SqlString.format(`SELECT * FROM modlog WHERE channel=? ORDER BY timestamp ASC`, [channelID]);
+            d.query(findEntries, (error, results) => {
+                if (error) return console.error(error);
+                let resultl = results.length;
+                if (!resultl) return console.error(`No results found for ${channelID}`);
+                
                 let embed = new Discord.MessageEmbed()
                     .setColor(client.config.embed.color)
-                    .setAuthor("CVE Mod Logs", '', giturl)
-                    .setDescription(``)
+                    .setAuthor(`${client.user.username} Mod Log`, '', client.config.bot.giturl)
+                    .setDescription(`Welcome to the Community Voice Manager Help menu. If you need more information about a specific command, you can run ${prefix}help <commandname>`)
+                    .addField("General", "Opens the menu for General Commands")
+                    .addField("VC", "Opens the help menu for Voice Chat commands")
                     .setThumbnail(client.user.avatarURL({ dynamic: true }))
-                    .setFooter(client.config.embed.footer + ` | ` + client.config.embed.ver, client.user.avatarURL({ dynamic: true }));
-                
-                    
-                
-                
-            } else {
-                Reply(msg, `This server's modlog is not configured`)
-                callback(false);
-            };
-            
+                    .setFooter(``, client.user.avatarURL({ dynamic: true }));
+                for (let i = 0; i < resultl; i++){
+                    let type = results[i].type;
+                    let timestamp = results[i].timestamp;
+                }
+            });
         })
-        d.release(function (err) {
-
-        });
+        d.release(function (releaseerror) { if (releaseerror) console.error(releaseerror); });
     });
 }
 //#endregion
@@ -298,5 +323,6 @@ module.exports = {
     timesince,
     FilterListCleanup,
     BlistedWordCheck,
+    SendModLog,
     serverDataCheck
 }
