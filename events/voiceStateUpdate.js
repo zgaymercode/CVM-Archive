@@ -80,6 +80,13 @@ module.exports = async (client, oldState, newState) => {
                         if (er2) console.error(er);
                         if (!res2) console.error(er2);
                         if (res2) console.log("New channel created");
+                        if (newState.channel.userLimit != 0) {
+                            // if the channel is anything other than 0 we need to log it, otherwise, we don't need it :3
+                            client.functions.AddModLog(client, guild.id, m.id, `Created "${newchan.name}" Limit: "${newState.channel.userLimit}"`, newchan, '1')
+                        } else {
+                            client.functions.AddModLog(client, guild.id, m.id, `Created "${newchan.name}"`, newchan, '1')
+                        }
+                        
                     });
                     setTimeout(() => {
                         newState.setChannel(newchan);
@@ -94,13 +101,20 @@ module.exports = async (client, oldState, newState) => {
                     let vc = oldState.guild.channels.cache.get(oldState.channelID);
                     if (vc.members.size < 1) {
                         vc.delete()
+                        if (oldState.channel.userLimit != 0) {
+                            // if the channel is anything other than 0 we need to log it, otherwise, we don't need it :3
+                            client.functions.AddModLog(client, oldState.guild.id, uid, `Created "${vc.name}" Limit: "${oldState.channel.userLimit}"`, vc, '1')
+                        } else {
+                            client.functions.AddModLog(client, oldState.guild.id, uid, `Created "${vc.name}"`, newchan, '1')
+                        }
                         //yeet the info from the database
                         let sqlzor = SqlString.format('DELETE FROM channels WHERE id=?', [oldchan]);
                         d.query(sqlzor, async (er, res234) => {
                             if (er) console.error(er);
                             if (!res234) console.error("Could not delete entry");
-                            if (res234) console.log("Channel yeeted");
+                            if (res234) client.functions.SendModLog(client, oldState.guild.id, vc.id);
                         })
+                        
                     }
                 })
                 //#endregion

@@ -2,7 +2,7 @@ const SqlString = module.require('sqlstring')
 module.exports = async (client, msg) => {
     if (msg.author.bot || !msg.guild || msg.webhookID) return;
     // Get the server's data to see which server and what it's config is
-    client.functions.serverDataCheck(client, msg, (serverConfig) => {
+    client.functions.serverDataCheck(client, msg.guild.id, (serverConfig) => {
         // handle the command arguments and schtuffs
         let prefix = serverConfig.prefix;
         if (!msg.content.toLowerCase().startsWith(prefix)) return;
