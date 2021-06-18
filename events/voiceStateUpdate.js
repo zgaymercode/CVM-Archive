@@ -103,16 +103,18 @@ module.exports = async (client, oldState, newState) => {
                         vc.delete()
                         if (oldState.channel.userLimit != 0) {
                             // if the channel is anything other than 0 we need to log it, otherwise, we don't need it :3
-                            client.functions.AddModLog(client, oldState.guild.id, uid, `Created "${vc.name}" Limit: "${oldState.channel.userLimit}"`, vc, '1')
+                            client.functions.AddModLog(client, oldState.guild.id, uid, `Deleted "${vc.name}" Limit: "${oldState.channel.userLimit}"`, vc, '0')
                         } else {
-                            client.functions.AddModLog(client, oldState.guild.id, uid, `Created "${vc.name}"`, newchan, '1')
+                            client.functions.AddModLog(client, oldState.guild.id, uid, `Deleted "${vc.name}"`, vc, '0')
                         }
-                        //yeet the info from the database
+                        client.functions.SendModLog(client, oldState.guild.id, vc.id);
+                        // yeet the info from the database
                         let sqlzor = SqlString.format('DELETE FROM channels WHERE id=?', [oldchan]);
                         d.query(sqlzor, async (er, res234) => {
                             if (er) console.error(er);
                             if (!res234) console.error("Could not delete entry");
-                            if (res234) client.functions.SendModLog(client, oldState.guild.id, vc.id);
+                            
+                            
                         })
                         
                     }

@@ -261,8 +261,8 @@ async function AddModLog(client, guildid, memberid, action, vc, type) {
         type = meaning
         0 = deleted
         1 = created
-        2 = perms edited
-        3 = activity specific
+        2 = Channel edited
+        3 = Permissions edited (ie: grant/deny/clear leader added/removed)
         
     */
     client.database.getConnection(async (connection_error, d) => {
@@ -282,31 +282,84 @@ async function AddModLog(client, guildid, memberid, action, vc, type) {
 }
 async function SendModLog(client, guildID, channelID) {
     console.log(`Channel Yeeted`);
-    return; // This is temporary since This needs to be pushed to prod
     client.database.getConnection(async (connection_error, d) => {
         if (connection_error) return console.error(connection_error.stack);
         serverDataCheck(client, guildID, (serverdata) => {
             let modlog = serverdata.modlog;
             let logchannel = client.channels.cache.get(modlog);
+            
             if (!modlog || !logchannel) return; // if the bot can't find the channel, or if it's not configured, stop here
-            let findEntries = SqlString.format(`SELECT * FROM modlog WHERE channel=? ORDER BY timestamp ASC`, [channelID]);
+            let findEntries = SqlString.format(`SELECT * FROM modlog WHERE channel_id=?`, [channelID]);
             d.query(findEntries, (error, results) => {
                 if (error) return console.error(error);
                 let resultl = results.length;
                 if (!resultl) return console.error(`No results found for ${channelID}`);
-                
-                let embed = new Discord.MessageEmbed()
+
+                // form the embed
+                embed = new Discord.MessageEmbed()
                     .setColor(client.config.embed.color)
-                    .setAuthor(`${client.user.username} Mod Log`, '', client.config.bot.giturl)
-                    .setDescription(`Welcome to the Community Voice Manager Help menu. If you need more information about a specific command, you can run ${prefix}help <commandname>`)
-                    .addField("General", "Opens the menu for General Commands")
-                    .addField("VC", "Opens the help menu for Voice Chat commands")
+                    .setAuthor(`${client.user.username} Channel Log`, '', client.config.bot.giturl)
                     .setThumbnail(client.user.avatarURL({ dynamic: true }))
-                    .setFooter(``, client.user.avatarURL({ dynamic: true }));
-                for (let i = 0; i < resultl; i++){
-                    let type = results[i].type;
-                    let timestamp = results[i].timestamp;
+                    .setTimestamp()
+                    .setFooter(`${client.config.embed.footer} | ${client.config.embed.ver}`, client.user.avatarURL({ dynamic: true }));
+                if (client.config.bot.isdevbuild === 1) {
+                    embed.setDescription("Warning: Times are actually UTC, they are showing Central due to the bot being ran on my local machine, all times are updated and created using the server, and the code doesn't know that ;3")
                 }
+                // form the query for searching for types of logs
+                let findtype0 = SqlString.format(`SELECT * FROM modlog WHERE channel_id=? AND type='0' ORDER BY timestamp desc`, [channelID]);
+                let findtype1 = SqlString.format(`SELECT * FROM modlog WHERE channel_id=? AND type='1' ORDER BY timestamp desc`, [channelID]);
+                let findtype2 = SqlString.format(`SELECT * FROM modlog WHERE channel_id=? AND type='2' ORDER BY timestamp desc`, [channelID]);
+                let findtype3 = SqlString.format(`SELECT * FROM modlog WHERE channel_id=? AND type='3' ORDER BY timestamp desc`, [channelID]);
+                // get type 1 data (refer to AddModLog() for type clearifications)
+                d.query(findtype1, (findtype1error, findtype1results) => {
+                    if (findtype1error) return console.error(findtype1error)
+                    let type1resultslength = findtype1results.length;
+                    if (type1resultslength < 1) return;
+                    
+                    let timestamp = findtype1results[0].timestamp;
+                    let action = findtype1results[0].action;
+                    let last_owner = findtype1results[0].member_id;
+                    embed.addField(`Owner:`, `<@${last_owner}>`)
+                    embed.addField(`${action}`, `${timestamp}`)
+                    d.query(findtype2, (findtype2error, findtype2results) => {
+                        if (findtype2error) return console.error(findtype2error)
+                        let type2resultslength = findtype2results.length;
+                        
+                        if (type2resultslength > 0) {
+                            actionArray = [];
+                            for (let i2 = 0; i2 < type2resultslength; i2++) {
+                                let action = findtype2results[i2].action;
+                                let timestamp = findtype2results[i2].timestamp;
+                                actionArray.push(`${timestamp}: ${action} \n`);
+                            }
+                            if (actionArray.length > 0) embed.addField(`Actions:`, `${actionArray}.`);
+                        }                        
+                        d.query(findtype3, (findtype3error, findtype3results) => {
+                            if (findtype3error) return console.error(findtype3error)
+                            let type3resultslength = findtype3results.length;
+                            if (type3resultslength < 1) {
+                                PermsactionArray = [];
+                                for (let i3 = 0; i3 < type3resultslength; i3++) {
+                                    let action = findtype3results[i3].action;
+                                    let timestamp = findtype2results[i3].timestamp;
+                                    PermsactionArray.push(`${timestamp}: ${action} \n`);
+                                }
+                                if (PermsactionArray.length > 0) console.log(PermsactionArray)//embed.addField(`Actions:`, `${PermsactionArray}.`);
+                            }
+                            d.query(findtype0, (findtype0error, findtype0results) => {
+                                if (findtype0error) return console.error(findtype0error)
+                                let type0resultslength = findtype0results.length;
+                                if (type0resultslength < 1) return logchannel.send(embed);;
+                                let action = findtype0results[0].action;
+                                
+                                let timestamp = findtype0results[0].timestamp;
+                                embed.addField(`${action}`, `${timestamp}`);
+                                logchannel.send(embed);
+                            })
+
+                        })
+                    })
+                })
             });
         })
         d.release(function (releaseerror) { if (releaseerror) console.error(releaseerror); });
