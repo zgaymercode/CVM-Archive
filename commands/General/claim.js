@@ -28,6 +28,7 @@ module.exports.run = async (client, msg, args) => {
                     if (!re) return;
                     if (re) {
                         let oid = re[0].oid;
+                        let v;
                         for (const [memberID] of vc.members) {
                             if (memberID === oid) {
                                 v = 1;
