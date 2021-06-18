@@ -23,13 +23,15 @@ module.exports.run = async (client, msg, args) => {
                             fn.Reply(msg, "That channel is not locked");
                             return;
                         }
-                        member.voice.kick();
-                        client.functions.AddModLog(client, msg.guild.id, msg.author.id, `<@${member.id}> kicked from VC`, vc, '3')
-                        msg.channel.send("Successfully kicked <@" + member.id + "> from the channel").then((m) => {
-                            setTimeout(() => {
-                                m.delete()
-                            }, 5000);
+                        let vccheck;
+                        msg.member.voice.channel.members.each((memberinvc) => {
+                            if (member.id != memberinvc.id) return;
+                            vccheck = 1;
                         })
+                        if (vccheck != 1) return client.functions.Reply(msg, `<@${member.id}> is not in the voice channel`);
+                        member.voice.kick();
+                        client.functions.AddModLog(client, msg.guild.id, msg.author.id, `<@${member.id}> kicked from VC`, msg.member.voice.channel, '3')
+                        client.functions.Reply(msg, `Successfully kicked <@${member.id}> from the channel`);
                     }
                 })
                 d.release(function (err) {
