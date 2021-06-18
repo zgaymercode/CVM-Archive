@@ -322,9 +322,6 @@ async function SendModLog(client, guildID, channelID) {
                     .setThumbnail(client.user.avatarURL({ dynamic: true }))
                     .setTimestamp()
                     .setFooter(`${client.config.embed.footer} | ${client.config.embed.ver}`, client.user.avatarURL({ dynamic: true }));
-                if (client.config.bot.isdevbuild === 1) {
-                    embed.setDescription("Warning: Times are actually UTC, they are showing Central due to the bot being ran on my local machine, all times are updated and created using the server, and the code doesn't know that ;3")
-                }
                 // form the query for searching for types of logs
                 let findtype0 = SqlString.format(`SELECT * FROM modlog WHERE channel_id=? AND type='0' ORDER BY timestamp desc`, [channelID]);
                 let findtype1 = SqlString.format(`SELECT * FROM modlog WHERE channel_id=? AND type='1' ORDER BY timestamp desc`, [channelID]);
@@ -337,10 +334,11 @@ async function SendModLog(client, guildID, channelID) {
                     if (type1resultslength < 1) return;
                     
                     let timestamp = findtype1results[0].timestamp;
+                    let formattedTimestamp1 = moment(timestamp).format("MM-D-YY h:mm:ss a UTC")
                     let action = findtype1results[0].action;
                     let last_owner = findtype1results[0].member_id;
                     embed.addField(`Owner:`, `<@${last_owner}>`)
-                    embed.addField(`${action}`, `${timestamp}`)
+                    embed.addField(`${action}`, `${formattedTimestamp1}`)
                     d.query(findtype2, (findtype2error, findtype2results) => {
                         if (findtype2error) return console.error(findtype2error)
                         let type2resultslength = findtype2results.length;
@@ -350,9 +348,11 @@ async function SendModLog(client, guildID, channelID) {
                             for (let i2 = 0; i2 < type2resultslength; i2++) {
                                 let action = findtype2results[i2].action;
                                 let timestamp = findtype2results[i2].timestamp;
-                                actionArray.push(`${timestamp}: ${action} \n`);
+                                let formattedTimestamp2 = moment(timestamp).format("MM-D-YY h:mm:ss a UTC")
+                                actionArray.push(`${formattedTimestamp2} : ${action} \n`);
                             }
-                            if (actionArray.length > 0) embed.addField(`Actions:`, `${actionArray}`);
+                            let formattedactionArray = actionArray.join(" ");
+                            if (actionArray.length > 0) embed.addField(`Channel Actions:`, `${formattedactionArray}`);
                         }                        
                         d.query(findtype3, (findtype3error, findtype3results) => {
                             if (findtype3error) return console.error(findtype3error)
@@ -362,9 +362,11 @@ async function SendModLog(client, guildID, channelID) {
                                 for (let i3 = 0; i3 < type3resultslength; i3++) {
                                     let action = findtype3results[i3].action;
                                     let timestamp = findtype2results[i3].timestamp;
-                                    PermsactionArray.push(`${timestamp}: ${action} \n`);
+                                    let formattedTimestamp3 = moment(timestamp).format("MM-D-YY h:mm:ss a UTC")
+                                    PermsactionArray.push(`${formattedTimestamp3}: ${action} \n`);
                                 }
-                                if (PermsactionArray.length > 0) embed.addField(`Actions:`, `${PermsactionArray}.`);
+                                let FormattedPermsactionArray = PermsactionArray.join(" ");
+                                if (PermsactionArray.length > 0) embed.addField(`Permission Actions:`, `${FormattedPermsactionArray}.`);
                             }
                             d.query(findtype0, (findtype0error, findtype0results) => {
                                 if (findtype0error) return console.error(findtype0error)
@@ -373,7 +375,8 @@ async function SendModLog(client, guildID, channelID) {
                                 let action = findtype0results[0].action;
                                 
                                 let timestamp = findtype0results[0].timestamp;
-                                embed.addField(`${action}`, `${timestamp}`);
+                                let formattedTimestamp4 = moment(timestamp).format("MM-D-YY, h:mm:ss a UTC")
+                                embed.addField(`${action}`, `${formattedTimestamp4}`);
                                 logchannel.send(embed);
                             })
 
