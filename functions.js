@@ -179,6 +179,7 @@ async function Reply(msg, error) {
     msg.channel.send(embed);
 }
 function timesince(timestamp) {
+    // helper function to check difference in time (used in rename command)
     var CurrentDate = moment();
     var startDate = moment(CurrentDate, 'YYYY-M-DD HH:mm:ss')
     var endDate = moment(timestamp, 'YYYY-M-DD HH:mm:ss')
@@ -256,6 +257,14 @@ async function serverDataCheck(client, guildID, callback) {
     
 }
 async function AddAdminLog(client, guildid, memberid, action) {
+    /*
+        this script executes anytime an administrative command
+        is ran, it first checks if admin logs are enabled, and 
+        if not, it looks for mod logs
+        assuming admin logs are enabled, 
+        the script sends a brief log of who sent what command into
+        the admin log of the server
+    */
     serverDataCheck(client, guildid, (serverdata) => {
         let adminlog = serverdata.adminlog;
         let modlog = serverdata.modlog;
@@ -283,6 +292,17 @@ async function AddModLog(client, guildid, memberid, action, vc, type) {
         1 = created
         2 = Channel edited
         3 = Permissions edited (ie: grant/deny/clear leader added/removed)
+
+        this script is called upon anytime a channel's state is changed in any way
+        ie: renamed, limit changed, owner changed, someone's granted, deleted, created etc.. 
+
+        what this script will do is 1st check to see if modlog is defined in the serverDataCheck
+        if it's not, the bot acts as that is the feature being disabled and doesn't continue
+        assuming that's good, it will take the guildid, executing member's id, action (defined in the individual
+        command files), the vc object (for manipulation here) and the type. 
+        it will insert all of this data into the database, and return errors if any occur, otherwise
+        it silently returns
+
         
     */
     client.database.getConnection(async (connection_error, d) => {
@@ -301,6 +321,28 @@ async function AddModLog(client, guildid, memberid, action, vc, type) {
     });
 }
 async function SendModLog(client, guildID, channelID) {
+    /*
+        This function is called on the deletion of a tmp voice channel
+        how it works: 
+        first, we create a database connection looking for everything in modlogs where 
+        the channel id's match the given channel id
+        this allows us to filter out bad calls before getting into the nitty gritty, 
+        
+        if results were found, it goes into creating an embed and defining the sql queries
+        for the next few runs
+        the 1st sql query, looks for when the channel was created (using type 1)
+        the 2nd sql query, looks for any records of the channel being edited (ie: renames, limit changes, lock/unlocks)
+        the 3rd sql query, looks for permission edits (ie: grant/deny/clear leader added/removed ect)
+        the 4th and final query, looks for the channel deletion record, if this hasn't happened yet, it just sends the log
+        
+        the sending of the log after delete is in anticipation of new code when it's implemented
+        Plan is to send a mod log on owner change, then this function will be refined to search for channel_id & owner ID pairs
+
+        once it has all the data it needs to send the log, 
+        it sends it into the mod log defined by the serverDataCheck(), if the data check didn't bring back a modlog id, 
+        or if it can't find the modlog id using the client.channels.cache object, 
+        The script will not make it the execution of the 1st query
+   */
     console.log(`Channel Yeeted`);
     client.database.getConnection(async (connection_error, d) => {
         if (connection_error) return console.error(connection_error.stack);
@@ -388,8 +430,30 @@ async function SendModLog(client, guildID, channelID) {
         d.release(function (releaseerror) { if (releaseerror) console.error(releaseerror); });
     });
 }
+async function vcPermsCheck(client, msg, callback) {
+    /*
+        this checks to see if the member is either a leader or a owner of their current channel
+        it sends a call back as a js object, but pulls a json object from the db
+        format: 
+        dbresults = {
+            {
+                "user":"Owner_ID",
+                "accesslvl": 2
+            },
+            {
+                "user":"Leader_ID",
+                "accesslvl": 1
+            }
+        }
+        script: connects to db, grabs the leaders column, and return it, formats as json, and for loop on it
+        until it finds the msg.author.id, once it does, it ends the loop, and sends a callback of the user's access
+        level
+    */
+}
+
 //#endregion
 module.exports = {
+    vcPermsCheck,
     consolelog,
     AddModLog,
     AddAdminLog,
