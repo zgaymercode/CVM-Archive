@@ -38,11 +38,14 @@ module.exports.run = async (client, msg, args) => {
                         }
                         if (v === 1) {
                             if (msg.member.hasPermission("MOVE_MEMBERS") || msg.member.hasPermission("ADMINISTRATOR")) {
+                                client.functions.AddModLog(client, msg.guild.id, msg.author.id, 'Force Claimed channel', vc, '2')
+                                client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Force Claimed vc: '${vc.name}'`)
                                 UpdateOwner(d, msg, fn, vc)
                             } else {
                                 fn.Reply(msg, config.messages.ownerstillpresent)
                             }
                         } else {
+                            client.functions.AddModLog(client, msg.guild.id, msg.author.id, 'Claimed channel', vc, '2')
                             UpdateOwner(d, msg, fn, vc)
                         }
                     }

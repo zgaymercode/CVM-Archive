@@ -22,6 +22,7 @@ module.exports.run = async (client, msg, args) => {
                         if (!re) return;
                         if (re) {
                             fn.Reply(msg, "Increment Successfully Updated");
+                            client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Updated <#${joinchan}>'s increment to ${ar}`)
                         }
                     })
                     d.release(function (err) {

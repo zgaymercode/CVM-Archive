@@ -255,6 +255,26 @@ async function serverDataCheck(client, guildID, callback) {
     });
     
 }
+async function AddAdminLog(client, guildid, memberid, action) {
+    serverDataCheck(client, guildid, (serverdata) => {
+        let adminlog = serverdata.adminlog;
+        let modlog = serverdata.modlog;
+        if (adminlog === null) log = modlog;
+        if (adminlog != null) log = adminlog;
+        if (log === null) return;
+        embed = new Discord.MessageEmbed()
+            .setColor(client.config.embed.color)
+            .setAuthor(`${client.user.username} Admin Log`, '', client.config.bot.giturl)
+            .setThumbnail(client.user.avatarURL({ dynamic: true }))
+            .setTimestamp()
+            .addField(`Member`, `<@${memberid}>`)
+            .addField(`Action`, `${action}`)
+            .setFooter(`${client.config.embed.footer} | ${client.config.embed.ver}`, client.user.avatarURL({ dynamic: true }));
+        client.channels.cache.get(log).send(embed);
+
+
+    })
+}
 async function AddModLog(client, guildid, memberid, action, vc, type) {
     /*
         Type clearification:
@@ -369,6 +389,7 @@ async function SendModLog(client, guildID, channelID) {
 module.exports = {
     consolelog,
     AddModLog,
+    AddAdminLog,
     BotStatus,
     Reply,
     ChannelCleanup,

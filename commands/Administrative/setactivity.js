@@ -15,6 +15,8 @@ async function updateStage(client, msg, jcid, newval) {
                 if (er2) return client.functions.Reply(msg, "There was a glitch in the matrix, please contact bot support :3");
                 if (!re2) return client.functions.Reply(msg, `There was an error updating that channel, please contact bot support`)
                 client.functions.Reply(msg, `Successfully updated <#${jcid}>`);
+                
+            
             })
         })        
         d.release(function (err) {
@@ -31,10 +33,12 @@ module.exports.run = async (client, msg, args) => {
             case "true":
                 if (isNaN(jcid)) return client.functions.Reply(msg, "supplied join channel id is not numeric");
                 updateStage(client, msg, jcid, 1);
+                client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `set <#${jcid}> as an activity join channel`)
                 break;
             case 'false':
                 if (isNaN(jcid)) return client.functions.Reply(msg, "supplied join channel id is not numeric");
                 updateStage(client, msg, jcid, 0);
+                client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `set <#${jcid}> as no longer an activity join channel`)
                 break;
             default:
                 client.functions.Reply(msg, "You must select true or false as the first argument");

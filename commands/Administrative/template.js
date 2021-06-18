@@ -19,6 +19,7 @@ module.exports.run = async (client, msg, args) => {
                     if (!re) return;
                     if (re) {
                         fn.Reply(msg, "Template Successfully Updated");
+                        client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `reset <#${pid}>'s template`)
                     }
                 })
                 d.release(function (err) {
@@ -45,6 +46,7 @@ module.exports.run = async (client, msg, args) => {
                     if (!re) return;
                     if (re) {
                         fn.Reply(msg, "Template Successfully Updated");
+                        client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `set <#${pid}>'s template to '${ar}'`);
                     }
                 })
                 d.release(function (err) {
@@ -66,7 +68,7 @@ module.exports.help = {
     name: "template",
     //aliases: [""],
     description: "Updates the Channel's template. instead of <new_template> you can put reset to reset to default. %INC% = Increment %USERNAME% = username   %NICKNAME% = nickname",
-    usage: "template <category_id> <new_template>",
+    usage: "template <join_channel_id> <new_template>",
     category: "Administrative",
     maintenancemode: 0
 }

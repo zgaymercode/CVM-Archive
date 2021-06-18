@@ -12,9 +12,11 @@ module.exports.run = async (client, msg, args) => {
             switch (args[1]) {
                 case 'allow':
                     sql = SqlString.format(`UPDATE joinchans SET adjust_limit='1' WHERE joinchan=?`, [joinchan]);
+                    client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `allowed adjusting limits for channels created using <#${joinchan}>`)
                     break;
                 case 'deny':
                     sql = SqlString.format(`UPDATE joinchans SET adjust_limit='0' WHERE joinchan=?`, [joinchan]);
+                    client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `disallowed adjusting limits for channels created using <#${joinchan}>`)
                     break;
                 default:
                     sql = 0;
@@ -27,6 +29,7 @@ module.exports.run = async (client, msg, args) => {
                         if (er2) return client.functions.Reply(msg, "There was a glitch in the matrix, please contact bot support :3");
                         if (!re2) return client.functions.Reply(msg, `There was an error updating that channel, please contact bot support`)
                         client.functions.Reply(msg, `Successfully updated <#${joinchan}>`);
+                        
                     })
                     d.release((error2) => {
                         if (error2) return console.error(error2);

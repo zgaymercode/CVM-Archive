@@ -15,6 +15,7 @@ exports.run = async (client, msg, args) => {
         switch (args[0]){
             case "add":
                 args.splice('add', 1); // remove add from the args
+                client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `added "${args}" to server's blocked word list`)
                 for (let i = 0; i < args.length; i++) {
                     let word = args[i].toLowerCase();
                     con.getConnection(function (err, d) {
@@ -68,6 +69,7 @@ exports.run = async (client, msg, args) => {
                 break;
             case 'remove':
                 args.splice('remove', 1); // remove remove from the args
+                client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `removed "${args}" from server's blocked word list`)
                 for (let i = 0; i < args.length; i++) {
                     let word = args[i].toLowerCase();
                     con.getConnection(function (err, d) {
@@ -99,6 +101,7 @@ exports.run = async (client, msg, args) => {
                     d.query(sql, (err, res) => {
                         if (err) console.error(err);
                         fn.Reply(msg, "Successfully removed all items from the denied list");
+                        client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Cleared server's blocked word list`)
                     })
                     d.release(function (err) {
                         if (err) {

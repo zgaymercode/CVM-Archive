@@ -19,6 +19,7 @@ module.exports.run = async (client, msg, args) => {
                         if (!re) return;
                         if (re) {
                             fn.Reply(msg, `Channels created using <#${joinchan}> will now be able to be locked`);
+                            client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `allowed channels created using <#${joinchan}> to be locked`)
                         }
                     })
                     d.release(function (err) {
@@ -43,6 +44,7 @@ module.exports.run = async (client, msg, args) => {
                         if (!re) return;
                         if (re) {
                             fn.Reply(msg, `Channels created using <#${joinchan}> will no longer be able to be locked`);
+                            client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `disallowed channels created using <#${joinchan}> to be locked`)
                         }
                     })
                     d.release(function (err) {

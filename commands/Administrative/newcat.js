@@ -53,6 +53,7 @@ module.exports.run = async (client, msg, args) => {
                 }
                 if (results) {
                     fn.Reply(msg, "New category has been created");
+                    client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Created join channel <#${joinchan}>`)
                 }
             })
             d.release(function (err) {
