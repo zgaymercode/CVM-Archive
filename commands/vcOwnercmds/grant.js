@@ -34,6 +34,7 @@ module.exports.run = async (client, msg, args) => {
                 let tmpchannel = client.channels.cache.get(jcid);
                 let tmpar = client.config.tmp.array;
                 tmpar.push(grant.id);
+                client.functions.AddModLog(client, msg.guild.id, msg.author.id, `<@${grant.id}> Granted`, vc, '3')
                 grant.voice.setChannel(tmpchannel).then(() => {
                     tmpchannel.members.each((memberintmp) => {
                         if (memberintmp.id != grant.id) return;

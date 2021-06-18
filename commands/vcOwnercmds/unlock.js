@@ -32,6 +32,7 @@ module.exports.run = async (client, msg, args) => {
                                 if (!re) fn.Reply(msg, config.messages.oof)
                                 if (re) {
                                     let vc = msg.guild.channels.cache.get(vcid);
+                                    client.functions.AddModLog(client, msg.guild.id, msg.author.id, `Channel Unlocked`, vc, '3')
                                     await vc.lockPermissions().then(() => {
                                         fn.Reply(msg, "Successfully unlocked channel");
                                     });

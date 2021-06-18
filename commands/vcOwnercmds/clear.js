@@ -16,6 +16,7 @@ module.exports.run = async (client, msg, args) => {
             let jcid = re[0].joinchan; // join channel id 
             let oid = re[0].oid; // owner id
             if (stagestate === 1) {
+                client.functions.AddModLog(client, msg.guild.id, msg.author.id, 'Permissions Cleared', vc, '3')
                 let vcmembers = msg.member.voice.channel;
                 vcmembers.members.each((member) => {
                     if (member.id === oid) return; // ignore the owner

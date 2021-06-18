@@ -41,6 +41,7 @@ module.exports.run = async (client, msg, args) => {
                                                     CONNECT: false
                                                 }
                                             );
+                                            client.functions.AddModLog(client, msg.guild.id, msg.author.id, `Channel Locked`, vc, '3')
                                             fn.Reply(msg, 'Successfully locked channel')
                                         }
                                     })

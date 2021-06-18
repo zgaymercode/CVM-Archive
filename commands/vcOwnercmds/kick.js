@@ -24,6 +24,7 @@ module.exports.run = async (client, msg, args) => {
                             return;
                         }
                         member.voice.kick();
+                        client.functions.AddModLog(client, msg.guild.id, msg.author.id, `<@${member.id}> kicked from VC`, vc, '3')
                         msg.channel.send("Successfully kicked <@" + member.id + "> from the channel").then((m) => {
                             setTimeout(() => {
                                 m.delete()

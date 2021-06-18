@@ -32,7 +32,7 @@ module.exports.run = async (client, msg, args) => {
                                 VIEW_CHANNEL: true
                             }
                         )
-
+                        client.functions.AddModLog(client, msg.guild.id, msg.author.id, `<@${member.id}> Invited`, vc, '3');
                         msg.channel.send("Successfully invited <@" + member.id + "> to the channel").then((m) => {
                             setTimeout(() => {
                                 m.delete()

@@ -29,6 +29,7 @@ module.exports.run = async (client, msg, args) => {
                 let overwrites = vc.permissionOverwrites.get(deny.id);
                 if (!overwrites) return client.functions.Reply(msg, `<@${deny.id}> is not currently granted speak/stream permissions`);
                 overwrites.delete();
+                client.functions.AddModLog(client, msg.guild.id, msg.author.id, `<@${deny.id}> Denied`, vc, '3')
                 let tmpchannel = client.channels.cache.get(jcid);
                 let tmpar = client.config.tmp.array;
                 tmpar.push(deny.id);

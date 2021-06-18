@@ -24,6 +24,7 @@ module.exports.run = async (client, msg, args) => {
                 if (newlim > 99) return fn.Reply(msg, "The limit must be less than 100");
                 vc.setUserLimit(newlim)
                 fn.Reply(msg, `Successfully updated channel's limit to: ${newlim}`)
+                client.functions.AddModLog(client, msg.guild.id, msg.author.id, `Channel Limit changed to ${newlim}`, vc, '2')
             })
             d.release(function (err) {
                 if (err) {

@@ -332,7 +332,7 @@ async function SendModLog(client, guildID, channelID) {
                                 let timestamp = findtype2results[i2].timestamp;
                                 actionArray.push(`${timestamp}: ${action} \n`);
                             }
-                            if (actionArray.length > 0) embed.addField(`Actions:`, `${actionArray}.`);
+                            if (actionArray.length > 0) embed.addField(`Actions:`, `${actionArray}`);
                         }                        
                         d.query(findtype3, (findtype3error, findtype3results) => {
                             if (findtype3error) return console.error(findtype3error)
@@ -344,7 +344,7 @@ async function SendModLog(client, guildID, channelID) {
                                     let timestamp = findtype2results[i3].timestamp;
                                     PermsactionArray.push(`${timestamp}: ${action} \n`);
                                 }
-                                if (PermsactionArray.length > 0) console.log(PermsactionArray)//embed.addField(`Actions:`, `${PermsactionArray}.`);
+                                if (PermsactionArray.length > 0) embed.addField(`Actions:`, `${PermsactionArray}.`);
                             }
                             d.query(findtype0, (findtype0error, findtype0results) => {
                                 if (findtype0error) return console.error(findtype0error)
