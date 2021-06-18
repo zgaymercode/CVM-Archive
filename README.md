@@ -23,4 +23,11 @@ These tasks run every 1.5 minutes to keep things organzied :D <br>
 ## Future Plans
 Things that will come to the bot in the near future
 - [ ] Slash Commands
+- [ ] Auto-Locking channel (on create, channel locked (allows invite cmd to be used, but not lock/unlock))
+- [ ] Suggestions command (for bot use only, sends suggestions to dev server)
+- [ ] Addition of Leaders, full perms of owners except adding new leaders
+- [ ] Hand raise Queue (request to talk for the activity channels)
+- [ ] setup guide (maybe a website?)
+- [ ] unchangable channel prefix's (addition to server settings `prefix`new channel name)
+- [ ] lock emoji added to all locked rooms
 - [ ] Win the game
