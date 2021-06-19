@@ -21,6 +21,8 @@ These tasks run every 1.5 minutes to keep things organzied :D <br>
 -**AutoPull** : Keeps this repository as the current live code running on the bot (restarts happen every X intervals, check ready listener)
 
 ## Self-Hosting requirements / guide
+
+### Requirements
 [ubuntu 18.04 server](https://releases.ubuntu.com/18.04/) - incase you need the iso for it<br>
 [MariaDB Server](https://mariadb.com/kb/en/installing-mariadb-deb-files/) - (focus on installing with APT for ease of install) <br>
 [node 14.x](https://github.com/nvm-sh/nvm) - I am using node 14.17.0, nvm will install it using [ nvm install 14.17.0 ] <br>
@@ -29,8 +31,8 @@ These tasks run every 1.5 minutes to keep things organzied :D <br>
 once the bot is ready, these commands will get the bot online and running on startup using pm2 <br>
 ### get the db setup
 sudo apt-get install mariadb-server <br>
-set up credentials for the bot - DO NOT USE ROOT CREDENTIALS <br>
 add the [bot's database](https://github.com/zgaymercode/CommunityVoiceManager/blob/main/schema.sql) as a new db <br>
+set up credentials for the bot - DO NOT USE ROOT CREDENTIALS <br>
 add that new database to the bot's user so the bot can access. It's going to need permission to UPDATE, SELECT, DELETE, and INSERT with that database. (i usually give the bot full perms on it's db (other than GRANT), but i run a local install with no outside access, do how you please with your install)
 
 
