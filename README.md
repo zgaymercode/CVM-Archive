@@ -27,14 +27,14 @@ These tasks run every 1.5 minutes to keep things organzied :D <br>
 [pm2](https://pm2.io/docs/runtime/guide/installation/) - you can install pm2 using npm, [npm install pm2 -g] this is used to keep the bot online <br>
 [the bot](https://github.com/zgaymercode/CommunityVoiceManager) - fork this repository (or use master branch here!) gh repo clone zgaymercode/CommunityVoiceManager <br>
 once the bot is ready, these commands will get the bot online and running on startup using pm2 <br>
-# get the db setup
+### get the db setup
 sudo apt-get install mariadb-server <br>
 set up credentials for the bot - DO NOT USE ROOT CREDENTIALS <br>
 add the [bot's database](https://github.com/zgaymercode/CommunityVoiceManager/blob/main/schema.sql) as a new db <br>
 add that new database to the bot's user so the bot can access. It's going to need permission to UPDATE, SELECT, DELETE, and INSERT with that database. (i usually give the bot full perms on it's db (other than GRANT), but i run a local install with no outside access, do how you please with your install)
 
 
-# install the bot
+### install the bot
 (as root)<br>
 cd /path/to/voicemanager.js<br>
 pm2 start voicemanager.js<br>
