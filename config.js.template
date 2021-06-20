@@ -6,7 +6,7 @@ module.exports = {
         ownerleavecooldown: 3, // minutes
         prefix: "cv",
         startstatus: /* PLAYING */ "cvhelp for help!",
-        giturl: "https://github.com/zgaymercode/CommunityVoiceManager", // if your bot is using this repo, keep this here, otherwise, link it to your fork of this repo
+        giturl: "https://github.com/zgaymercode/CommunityVoiceManager", // Please keep this here for credit (it's not used other than in author tags)
         
         token: "TOKEN_HERE"
     },
