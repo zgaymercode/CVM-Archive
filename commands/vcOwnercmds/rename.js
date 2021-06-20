@@ -11,12 +11,14 @@ module.exports.run = async (client, msg, args) => {
                 console.error("error connecting: " + err.stack);
                 return;
             }
+
             d.query(sql, async (er, re) => {
                 if (er) console.error(er);
                 if (!re) return;
                 if (re) {
                     let vc = msg.member.voice.channel;
                     let rename = re[0].last_rename;
+                    let joinchan = re[0].joinchan;
                     let cooldown = config.bot.renamecooldown;
                     let timesincelast = fn.timesince(rename);
                     let text = args.toString().split(/,/).join(' ');
@@ -24,58 +26,62 @@ module.exports.run = async (client, msg, args) => {
                         let timeleft = cooldown - timesincelast;
                         fn.Reply(msg, "You must wait another " + timeleft + " minutes before renaming this channel again")
                     } else {
-                        /*
-                        word Filter fn.BlistedWordCheck(word, msg);
-                        */
-                        let cmd = config.bot.prefix + 'rename';
-                        text = msg.content.slice(cmd.length);
-                        let gid = msg.guild.id
-                        let blisted;
-                        let blistwords = [];
-                                                                                            // gid 0 === globally blacklisted
-                        var sql = SqlString.format('SELECT * FROM forbiddonwords WHERE gid=? OR gid="0"', [gid]);
-                        d.query(sql, async (errre, rre) => {
-                            if (errre) console.error(errre);
-                            if (rre.length < 1) {
-                                var sql2 = SqlString.format('UPDATE channels SET last_rename=CURRENT_TIMESTAMP() WHERE id=?', [vcid]);
-                                d.query(sql2, async (er2, re2) => {
-                                    if (er2) console.error(er2);
-                                    client.functions.AddModLog(client, msg.guild.id, msg.author.id, `Channel renamed to ${text}`, vc, '2')
-                                    vc.setName(text, "Channel Rename Command used by: " + msg.author.id);
-                                    fn.Reply(msg, "Successfully renamed channel")
-                                    if (!re2) console.log('Channel renamed, but could not update db for last rename');
-                                })
-                            }
-                            if (rre.length > 0) {
-                                
-                                for (i = 0; i < rre.length; i++){
-                                    word = rre[i].word;
-                                    blistwords.push(word);
-                                }
-                                for (let i = 0; i < args.length; i++) {
-                                    let word = args[i];
-                                    let w = word.replace(' ', '');
-                                    if (blistwords.includes(w.toLowerCase())) {
-                                        blisted = 1;
-                                    }
-                                }
-                                
-                                if (blisted === 1) {
-                                    fn.Reply(msg, "Prohibited Word detected, Please try a different name");
-                                } else {
+                        let searchPrefix = SqlString.format(`SELECT * FROM joinchans WHERE joinchan=?`, [joinchan]);
+                        d.query(searchPrefix, (error_prefixcheck, results_prefixcheck) => {
+                            if (error_prefixcheck) console.error(error_prefixcheck);
+                            if (results_prefixcheck.length < 1) return client.functions.Reply(msg, "An error occured");
+                            let prefix = results_prefixcheck[0].prefix;
+                            if (prefix === null) prefix = '';
+
+                            let text = args.toString().split(/,/).join(' ');
+                            let gid = msg.guild.id
+                            let blisted;
+                            let blistwords = [];
+                            // gid 0 === globally blacklisted
+                            var sql = SqlString.format('SELECT * FROM forbiddonwords WHERE gid=? OR gid="0"', [gid]);
+                            d.query(sql, async (errre, rre) => {
+                                if (errre) console.error(errre);
+                                if (rre.length < 1) {
                                     var sql2 = SqlString.format('UPDATE channels SET last_rename=CURRENT_TIMESTAMP() WHERE id=?', [vcid]);
                                     d.query(sql2, async (er2, re2) => {
                                         if (er2) console.error(er2);
-
-                                        vc.setName(text, "Channel Rename Command used by: " + msg.author.id);
+                                        client.functions.AddModLog(client, msg.guild.id, msg.author.id, `Channel renamed to ${text}`, vc, '2')
+                                        vc.setName(prefix + text, "Channel Rename Command used by: " + msg.author.id);
                                         fn.Reply(msg, "Successfully renamed channel")
                                         if (!re2) console.log('Channel renamed, but could not update db for last rename');
                                     })
                                 }
-                                /* */
-                            }
+                                if (rre.length > 0) {
+
+                                    for (i = 0; i < rre.length; i++) {
+                                        word = rre[i].word;
+                                        blistwords.push(word);
+                                    }
+                                    for (let i = 0; i < args.length; i++) {
+                                        let word = args[i];
+                                        let w = word.replace(' ', '');
+                                        if (blistwords.includes(w.toLowerCase())) {
+                                            blisted = 1;
+                                        }
+                                    }
+
+                                    if (blisted === 1) {
+                                        fn.Reply(msg, "Prohibited Word detected, Please try a different name");
+                                    } else {
+                                        var sql2 = SqlString.format('UPDATE channels SET last_rename=CURRENT_TIMESTAMP() WHERE id=?', [vcid]);
+                                        d.query(sql2, async (er2, re2) => {
+                                            if (er2) console.error(er2);
+
+                                            vc.setName(text, "Channel Rename Command used by: " + msg.author.id);
+                                            fn.Reply(msg, "Successfully renamed channel")
+                                            if (!re2) console.log('Channel renamed, but could not update db for last rename');
+                                        })
+                                    }
+                                    /* */
+                                }
+                            })
                         })
-                       
+
                     }
                 }
             })

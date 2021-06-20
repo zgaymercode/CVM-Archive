@@ -19,7 +19,7 @@ CREATE TABLE `channels` (
   `adjust_limit` int(11) DEFAULT '0',
   PRIMARY KEY (`num`),
   KEY `created` (`created`)
-) ENGINE=InnoDB AUTO_INCREMENT=314 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=368 DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS forbiddonwords;
 CREATE TABLE `forbiddonwords` (
@@ -33,13 +33,14 @@ DROP TABLE IF EXISTS joinchans;
 CREATE TABLE `joinchans` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `joinchan` varchar(50) DEFAULT NULL,
-  `template` varchar(50) DEFAULT NULL,
+  `template` varchar(50) CHARACTER SET utf8mb4 DEFAULT NULL,
+  `prefix` varchar(100) CHARACTER SET utf8mb4 DEFAULT NULL,
   `increment` int(11) DEFAULT '0',
   `lockable` int(11) DEFAULT '0',
   `is_stage` int(11) DEFAULT '0',
   `adjust_limit` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1 COMMENT='?';
 
 DROP TABLE IF EXISTS modlog;
 CREATE TABLE `modlog` (
@@ -48,10 +49,10 @@ CREATE TABLE `modlog` (
   `member_id` varchar(50) DEFAULT NULL,
   `guild_id` varchar(50) DEFAULT NULL,
   `type` int(11) DEFAULT NULL,
-  `action` varchar(120) DEFAULT NULL,
+  `action` varchar(120) CHARACTER SET utf8mb4 DEFAULT NULL,
   `timestamp` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=135 DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS servers;
 CREATE TABLE `servers` (

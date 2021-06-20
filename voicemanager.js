@@ -113,6 +113,7 @@ client.database = mysql.createPool({
     user: client.config.db.user,
     password: client.config.db.pass,
     database: client.config.db.database,
+    charset: "utf8mb4"
 });
 client.ws.on('INTERACTION_CREATE', async interaction => {
     let cmdname = interaction.data.name;

@@ -1,9 +1,6 @@
 const { readdirSync } = require("fs");
 const { join } = require("path");
 module.exports.run = (client, msg, args) => {
-	let con = client.database;
-	let config = client.config;
-	let fn = client.functions;
 	if (!args[0]) return msg.channel.send("Please provide a command to reload!");
 	const commandName = args[0].toLowerCase();
 	const command = client.commands.get(commandName) || client.commands.get(client.aliases.get(commandName));
@@ -17,7 +14,7 @@ module.exports.run = (client, msg, args) => {
 				client.commands.delete(commandName);
 				const pull = require(file);
 				client.commands.set(commandName, pull);
-				return msg.channel.send(`Successfully reloaded the ${commandName} command`);
+				return msg.channel.send(`Successfully reloaded command: ${commandName}`);
 			}
 			catch (err) {
 				msg.channel.send(`Could not reload: ${args[0].toUpperCase()}\``);
@@ -32,5 +29,5 @@ module.exports.help = {
 	description: "reloads the specified command",
 	usage: "reload <commandname>",
 	category: "Dev",
-	maintenancemode: 0
+	maintenancemode: 1
 };

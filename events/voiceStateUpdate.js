@@ -23,19 +23,20 @@ module.exports = async (client, oldState, newState) => {
                     if (er) console.error(er);
                     if (!res.length) return;
                     let guild = client.channels.cache.get(newState.channelID).guild;
-                    let u = client.users.cache.get(uid);
-                    let m = guild.members.cache.get(uid);
-                    let t = res[0].template;
+                    let userObject = client.users.cache.get(uid);
+                    let memberObject = guild.members.cache.get(uid);
+                    let template = res[0].template;
+                    let prefix = res[0].prefix;
                     let inc = res[0].increment;
                     let lockable = res[0].lockable;
                     let stage = res[0].is_stage;
                     let limit = res[0].adjust_limit;
-                    if (t === null) {
-                        template = `${u.username}'s Room`;
+                    if (template === null) {
+                        template = `${userObject.username}'s Room`;
                     } else {
                         let game;
                         // use the user generated template
-                        let activities = m.user.presence.activities;
+                        let activities = memberObject.user.presence.activities;
                         for (let i = 0; i < activities.length; i++) {
                             let act = activities[i];
                             if (act.type === "PLAYING") {
@@ -45,22 +46,25 @@ module.exports = async (client, oldState, newState) => {
                                 continue;
                             }
                         }
-                        if (!m.nickname) {
-                            displayname = u.username;
+                        if (!memberObject.nickname) {
+                            displayname = userObject.username;
                         } else {
-                            displayname = m.nickname;
+                            displayname = memberObject.nickname;
                         }
                         if (!game) game = "No Game Detected";
-                        let PreStep = t.replace(/%GAME%/g, game);
-                        let step1 = PreStep.replace(/%USERNAME%/g, u.username)
+                        let PreStep = template.replace(/%GAME%/g, game);
+                        let step1 = PreStep.replace(/%USERNAME%/g, userObject.username)
                         let step2 = step1.replace(/%INC%/g, inc + 1);
                         template = step2.replace(/%NICKNAME%/g, displayname)
+                        if (prefix === null) prefix = '';
+                        VoiceChannelName = `${prefix} ${template}`;
+                        console.log(VoiceChannelName)
                         d.query(`UPDATE joinchans SET increment = increment + 1 WHERE joinchan='${channelid}'`, (er3, res3) => {
                             if (er3) console.error(er3);
                             return;
                         });
                     }
-                    let newchan = await newState.guild.channels.create(template, {
+                    let newchan = await newState.guild.channels.create(VoiceChannelName, {
                         type: 'voice',
                         parent: newState.channel.parent.id,
                         userLimit: newState.channel.userLimit,
@@ -68,7 +72,7 @@ module.exports = async (client, oldState, newState) => {
                     });
                     if (stage === 1) {
                         newchan.updateOverwrite(
-                            u.id,
+                            userObject.id,
                             {
                                 STREAM: true,
                                 SPEAK: true
@@ -83,9 +87,9 @@ module.exports = async (client, oldState, newState) => {
                         if (res2) console.log("New channel created");
                         if (newState.channel.userLimit != 0) {
                             // if the channel is anything other than 0 we need to log it, otherwise, we don't need it :3
-                            client.functions.AddModLog(client, guild.id, m.id, `Created "${newchan.name}" Limit: "${newState.channel.userLimit}"`, newchan, '1')
+                            client.functions.AddModLog(client, guild.id, memberObject.id, `Created "${newchan.name}" Limit: "${newState.channel.userLimit}"`, newchan, '1')
                         } else {
-                            client.functions.AddModLog(client, guild.id, m.id, `Created "${newchan.name}"`, newchan, '1')
+                            client.functions.AddModLog(client, guild.id, memberObject.id, `Created "${newchan.name}"`, newchan, '1')
                         }
                         
                     });

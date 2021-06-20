@@ -6,20 +6,7 @@ const moment = require("moment");
 const { MessageButton, MessageActionRow } = require("discord-buttons");
 exports.run = async (client, msg, args) => {
     try {
-        switch (args[0]) {
-            case 'check':
-                client.functions.vcPermsCheck(client, msg, (response) => {
-                    if (response === 0) client.functions.Reply(msg, "You are not an owner or leader of this channel");
-                    if (response === 1) client.functions.Reply(msg, "You are a leader of this channel")
-                    client.functions.Reply(msg, "You are an owner of this channel")
-                })
-                break;
-            case 'addleader':
-
-                break;
-            default:
-                msg.channel.send("options are addleader or check");
-        }
+       
     } catch (e) {
         console.error(e);
         client.functions.Reply(msg, "There was an error in the matrix")
