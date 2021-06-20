@@ -29,7 +29,7 @@ These tasks run every 1.5 minutes to keep things organzied :D <br>
 [node 14.x](https://github.com/nvm-sh/nvm) - I am using node 14.17.0, nvm will install it using [ nvm install 14.17.0 ] <br>
 [pm2](https://pm2.io/docs/runtime/guide/installation/) - you can install pm2 using npm, [npm install pm2 -g] this is used to keep the bot online <br>
 [the bot](https://github.com/zgaymercode/CommunityVoiceManager) - fork this repository (or use master branch here!) gh repo clone zgaymercode/CommunityVoiceManager <br>
-once the bot is ready, these commands will get the bot online and running on startup using pm2 <br>
+once the bot is ready, these steps to get the bot goin :3<br>
 ### get the db setup
 sudo apt-get install mariadb-server <br>
 add the [bot's database](https://github.com/zgaymercode/CommunityVoiceManager/blob/main/schema.sql) as a new db <br>
