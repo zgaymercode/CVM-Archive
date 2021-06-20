@@ -1,4 +1,3 @@
-const Discord = module.require("discord.js");
 const SqlString = module.require('sqlstring')
 async function updateStage(client, msg, jcid, newval) {
     client.database.getConnection(function (err, d) {

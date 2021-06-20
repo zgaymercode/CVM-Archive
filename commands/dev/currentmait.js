@@ -1,7 +1,4 @@
 const Discord = require("discord.js")
-const fs = require("fs");
-const mysql = module.require("mysql");
-
 exports.run = (client, msg, args) => {
     let prefix = client.config.bot.prefix;
     let embed = new Discord.MessageEmbed()

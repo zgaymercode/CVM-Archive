@@ -1,4 +1,3 @@
-const Discord = module.require("discord.js");
 const SqlString = module.require('sqlstring');
 async function UpdateOwner(d, msg, fn, vc) {
     var sql = SqlString.format(`UPDATE channels SET oid=? WHERE id=?`, [msg.author.id, vc.id]);

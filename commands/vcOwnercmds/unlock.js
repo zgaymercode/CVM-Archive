@@ -1,4 +1,3 @@
-const Discord = module.require("discord.js");
 const SqlString = module.require('sqlstring');
 module.exports.run = async (client, msg, args) => {
     let con = client.database;

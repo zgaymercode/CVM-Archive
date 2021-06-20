@@ -1,7 +1,5 @@
 const { readdirSync } = require("fs");
 const { join } = require("path");
-const mysql = module.require("mysql");
-
 module.exports.run = (client, msg, args) => {
 	let con = client.database;
 	let config = client.config;

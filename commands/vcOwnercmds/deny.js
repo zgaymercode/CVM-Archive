@@ -1,6 +1,5 @@
 const config = require("../../config");
 
-const Discord = module.require("discord.js");
 const SqlString = module.require('sqlstring');
 module.exports.run = async (client, msg, args) => {
     client.database.getConnection(function (err, d) {
