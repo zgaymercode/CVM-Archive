@@ -29,22 +29,15 @@ module.exports.run = async (client, msg, args) => {
                                 if (er) console.error(er);
                                 if (!re) fn.Reply(msg, config.messages.oof)
                                 if (re) {
-                                    var sql = SqlString.format('UPDATE channels SET locked="1" WHERE id=?', [vcid]);
-                                    d.query(sql, async (er, re) => {
-                                        if (er) console.error(er);
-                                        if (!re) fn.Reply(msg, config.messages.oof)
-                                        if (re) {
-                                            let vc = msg.guild.channels.cache.get(vcid);
-                                            await vc.updateOverwrite(
-                                                vc.guild.roles.everyone,
-                                                {
-                                                    CONNECT: false
-                                                }
-                                            );
-                                            client.functions.AddModLog(client, msg.guild.id, msg.author.id, `Channel Locked`, vc, '3')
-                                            fn.Reply(msg, 'Successfully locked channel')
+                                    let vc = msg.guild.channels.cache.get(vcid);
+                                    await vc.updateOverwrite(
+                                        vc.guild.roles.everyone,
+                                        {
+                                            CONNECT: false
                                         }
-                                    })
+                                    );
+                                    client.functions.AddModLog(client, msg.guild.id, msg.author.id, `Channel Locked`, vc, '3')
+                                    fn.Reply(msg, 'Successfully locked channel')
                                 }
                             })
                         }

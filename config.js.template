@@ -5,7 +5,8 @@ module.exports = {
         renamecooldown: 5, // this is in minutes
         prefix: "cv",
         startstatus: /* PLAYING */ "cvhelp for help!",
-        giturl: "https://github.com/zgaymercode/CommunityVoiceManager",
+        giturl: "https://github.com/zgaymercode/CommunityVoiceManager", // if your bot is using this repo, keep this here, otherwise, link it to your fork of this repo
+        
         token: "TOKEN_HERE"
     },
     tmp: {

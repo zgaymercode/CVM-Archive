@@ -31,9 +31,8 @@ module.exports.run = async (client, msg, args) => {
 
             return;
         } else {
-            let cmd = config.bot.prefix + "template 843676276794458152 ";
-            let input = msg.content.slice(cmd.length);
-            let ar = input.toString().split(/[ ,]+/).join(' ');
+            args.splice(0, 1)
+            let ar = args.toString().split(/,/).join(' ');
             
             var sql = SqlString.format('UPDATE joinchans SET template=? WHERE joinchan=?', [ar, pid]);
             con.getConnection(function (err, d) {

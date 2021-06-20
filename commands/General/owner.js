@@ -55,7 +55,7 @@ module.exports.run = async (client, msg, args) => {
 module.exports.help = {
     name: "owner",
     //aliases: [""],
-    description: "Shows who the current owner is",
+    description: "Shows who the current Owner and Co-Owners are",
     usage: "owner",
     category: "General",
     maintenancemode: 0

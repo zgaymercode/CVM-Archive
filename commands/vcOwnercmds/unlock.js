@@ -21,10 +21,10 @@ module.exports.run = async (client, msg, args) => {
                 var sql234 = SqlString.format('SELECT * FROM joinchans WHERE joinchan=?', [jc]);
                 d.query(sql234, (er234, res234) => {
                     if (er234) console.error(er234);
-                    if (!res234) console.log("cant find pid")
+                    if (!res234) console.log("cant find joinchannel on unlock command")
                     if (res234) {
                         let lockable = res234[0].lockable;
-                        if (lockable === 0) fn.Reply(msg, "This channel is not allowed to be locked")
+                        if (lockable === 0) fn.Reply(msg, "This channel is not allowed to be unlocked")
                         if (lockable === 1) {
                             var sql = SqlString.format('UPDATE channels SET locked="0" WHERE id=?', [vcid]);
                             d.query(sql, async (er, re) => {

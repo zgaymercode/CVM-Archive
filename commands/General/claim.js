@@ -27,17 +27,17 @@ module.exports.run = async (client, msg, args) => {
                     if (er) console.error(er);
                     if (!re) return;
                     if (re) {
-                        let oid = re[0].oid;
-                        let v;
+                        let OwnerID = re[0].oid;
+                        let isownerstillinchat;
                         for (const [memberID] of vc.members) {
-                            if (memberID === oid) {
-                                v = 1;
+                            if (memberID === OwnerID) {
+                                isownerstillinchat = 1;
                                 break;
                             } else {
                                 continue;
                             }
                         }
-                        if (v === 1) {
+                        if (isownerstillinchat === 1) {
                             if (msg.member.hasPermission("MOVE_MEMBERS") || msg.member.hasPermission("ADMINISTRATOR")) {
                                 client.functions.AddModLog(client, msg.guild.id, msg.author.id, 'Force Claimed channel', vc, '2')
                                 client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Force Claimed vc: '${vc.name}'`)
@@ -71,7 +71,7 @@ module.exports.run = async (client, msg, args) => {
 module.exports.help = {
     name: "claim",
     //aliases: [""],
-    description: "Claims a voice chat when the owner has left",
+    description: "Claims a voice chat when the owner has left. Members with Move Members or Administrator will bypass all checks in this command and claim by force",
     usage: "claim",
     category: "General",
     maintenancemode: 0
