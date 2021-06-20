@@ -48,6 +48,7 @@ function BotStatus(client) {
         'Multiple Voice chats at once. cvhelp for more info',
         'cvhelp for more info',
         'All the channels get created. cvhelp for more info',
+        '@me for my current prefix in your server!'
     ];
     const index = Math.floor(Math.random() * (activities_list.length - 1) + 1); // generates a random number between 1 and the length of the activities array list (in this case 5).
     client.user.setActivity(activities_list[index], { type: "WATCHING" }); // sets bot's activities to one of the phrases in the arraylist.
