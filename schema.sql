@@ -1,54 +1,65 @@
--- THIS IS NOT UPDATED
--- PLEASE WAIT FOR A FUTURE UPDATE 
--- PRIOR TO RUNNING THIS SCRIPT, THE
--- BOT DOES NOT USE SOME OF THESE TABLES,
--- AND SOME OF THEM ARE STRUCTURED INCORRECTLY
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
-/*!50503 SET NAMES utf8mb4 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
--- Dumping database structure for vcbot
-CREATE DATABASE IF NOT EXISTS `vcbot`
-/*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `vcbot`;
--- Dumping structure for table vcbot.blacklistedwords
-CREATE TABLE IF NOT EXISTS `blacklistedwords` (
+/*!40014 SET FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET SQL_NOTES=0 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ vcbot /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
+USE vcbot;
+
+DROP TABLE IF EXISTS channels;
+CREATE TABLE `channels` (
+  `num` int(11) NOT NULL AUTO_INCREMENT,
+  `id` varchar(50) DEFAULT NULL,
+  `joinchan` varchar(50) DEFAULT NULL,
+  `oid` varchar(50) DEFAULT NULL,
+  `coowner` varchar(500) DEFAULT NULL,
+  `locked` int(1) DEFAULT '0',
+  `created` timestamp NULL DEFAULT NULL,
+  `last_rename` timestamp NULL DEFAULT NULL,
+  `is_stage` int(11) DEFAULT '0',
+  `adjust_limit` int(11) DEFAULT '0',
+  PRIMARY KEY (`num`),
+  KEY `created` (`created`)
+) ENGINE=InnoDB AUTO_INCREMENT=314 DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS forbiddonwords;
+CREATE TABLE `forbiddonwords` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `word` varchar(50) DEFAULT NULL,
   `gid` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE = InnoDB DEFAULT CHARSET = latin1;
--- Data exporting was unselected.
--- Dumping structure for table vcbot.catagory
-CREATE TABLE IF NOT EXISTS `catagory` (
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS joinchans;
+CREATE TABLE `joinchans` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `gid` varchar(50) DEFAULT NULL,
-  `pid` varchar(50) DEFAULT NULL,
   `joinchan` varchar(50) DEFAULT NULL,
   `template` varchar(50) DEFAULT NULL,
   `increment` int(11) DEFAULT '0',
   `lockable` int(11) DEFAULT '0',
   `is_stage` int(11) DEFAULT '0',
+  `adjust_limit` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE = InnoDB DEFAULT CHARSET = latin1;
--- Data exporting was unselected.
--- Dumping structure for table vcbot.channels
-CREATE TABLE IF NOT EXISTS `channels` (
-  `num` int(11) NOT NULL AUTO_INCREMENT,
-  `id` varchar(50) DEFAULT NULL,
-  `oid` varchar(50) DEFAULT NULL,
-  `locked` int(1) DEFAULT '0',
-  `created` timestamp NULL DEFAULT NULL,
-  `last_rename` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`num`),
-  KEY `created` (`created`)
-) ENGINE = InnoDB DEFAULT CHARSET = latin1;
--- Data exporting was unselected.
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS modlog;
+CREATE TABLE `modlog` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `channel_id` varchar(50) DEFAULT NULL,
+  `member_id` varchar(50) DEFAULT NULL,
+  `guild_id` varchar(50) DEFAULT NULL,
+  `type` int(11) DEFAULT NULL,
+  `action` varchar(120) DEFAULT NULL,
+  `timestamp` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS servers;
+CREATE TABLE `servers` (
+  `inc` int(11) NOT NULL AUTO_INCREMENT,
+  `id` varchar(50) NOT NULL DEFAULT '0',
+  `prefix` varchar(5) NOT NULL DEFAULT '0',
+  `modlog` varchar(50) DEFAULT NULL,
+  `adminlog` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`inc`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
