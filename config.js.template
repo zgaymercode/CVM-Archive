@@ -3,6 +3,7 @@ module.exports = {
         cmds_enabled: 1, // if set to 0, all commands are disabled to non-botstaff
         isdevbuild: 1, // set this to 1 if client is a develeper build, it disables gitpull automation
         renamecooldown: 5, // this is in minutes
+        ownerleavecooldown: 3, // minutes
         prefix: "cv",
         startstatus: /* PLAYING */ "cvhelp for help!",
         giturl: "https://github.com/zgaymercode/CommunityVoiceManager", // if your bot is using this repo, keep this here, otherwise, link it to your fork of this repo

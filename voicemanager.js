@@ -84,7 +84,6 @@ const LoadFiles = async () => {
         for (const file of commands) {
             const pull = require(`${dir}/${dirs}/${file}`);
 
-            if (pull.help.name === "template" && pull.help.category === "Dev") return;
             if (pull.help && typeof pull.help.name === "string" && typeof pull.help.category === "string") {
                 if (client.commands.get(pull.help.name))
                     return console.warn(`Two or more commands have the same name ${pull.help.name}.`);

@@ -1,3 +1,4 @@
+const Discord = module.require("discord.js");
 const SqlString = module.require('sqlstring');
 async function UpdateDB(client, connect, msg, channel_id, db_insert) {
     let NewDBOwnerObject = `{"coowners": [${db_insert}]}`

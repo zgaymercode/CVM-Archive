@@ -29,5 +29,5 @@ module.exports.help = {
 	description: "reloads the specified command",
 	usage: "reload <commandname>",
 	category: "Dev",
-	maintenancemode: 1
+	maintenancemode: 0
 };

@@ -15,23 +15,41 @@ module.exports.run = async (client, msg, args) => {
                 d.query(sql, async (er, re) => {
                     if (er) console.error(er);
                     if (!re) return;
-                    if (re) {
+                    if (re.length > 0) {
                         let ownerid = re[0].oid;
+                        let ownerleavetimestamp = re[0].ownerleavetimestamp || false;
                         let retrieveCoOwnersObj = re[0].coowner;
                         let jsonObjectFromDB = JSON.parse(retrieveCoOwnersObj)
                         let CurrentOwnersArray = jsonObjectFromDB.coowners || [];
-
+                        
+                        let timesinceleave = client.functions.timesince(ownerleavetimestamp);
+                        let cooldown = config.bot.ownerleavecooldown;
+                        let timeleftuntilclaimable = cooldown - timesinceleave;
+                        if (timeleftuntilclaimable < 0) {
+                            timeleftuntilclaimable = timeleftuntilclaimable * -1;
+                        }
+                        ClaimableStatus = ''
+                        if (ownerleavetimestamp) {
+                            if (timeleftuntilclaimable > cooldown) {
+                                ClaimableStatus = '\n **Claim Status**:\n Claimable';
+                            } else {
+                                ClaimableStatus = `\n **Claim Status**:\n ${timeleftuntilclaimable} Minutes Left until claimable`;
+                            }
+                        }
                         ArrayofCoOwnerTags = [];
                         for (let i = 0; i < CurrentOwnersArray.length; i++) {
                             ArrayofCoOwnerTags.push(`<@${CurrentOwnersArray[i]}>`);
                         }
                         let CoOwnerTags = ArrayofCoOwnerTags.toString().replace(/,/g, ' \n')
                         if (CoOwnerTags.length < 1) {
-                            client.functions.Reply(msg, `**Current Owner**: <@${ownerid}>`)
+                            client.functions.Reply(msg, `**Current Owner**: <@${ownerid}> ${ClaimableStatus}`)
                         } else {
-                            client.functions.Reply(msg, `**Current Owner**: <@${ownerid}> \n \n**Current Co-Owners:**\n ${CoOwnerTags}`)
+                            client.functions.Reply(msg, `**Current Owner**: <@${ownerid}> \n \n**Current Co-Owners:**\n ${CoOwnerTags} ${ClaimableStatus}`)
                         }
                         
+                        
+                    } else {
+                        client.functions.Reply(msg, `The channel you're currently in is not a temporary channel`)
                     }
                 })
                 d.release(function (err) {

@@ -1,10 +1,23 @@
 const SqlString = module.require('sqlstring');
 async function UpdateOwner(d, msg, fn, vc) {
-    var sql = SqlString.format(`UPDATE channels SET oid=? WHERE id=?`, [msg.author.id, vc.id]);
+    var sql = SqlString.format(`UPDATE channels SET oid=?, ownerleavetimestamp=null WHERE id=?`, [msg.author.id, vc.id]);
     d.query(sql, async (er, ro) => {
         if (er) console.error(er);
         if (!ro) fn.Reply(msg, "Could not claim channel");
         if (ro) fn.Reply(msg, "you have successfully claimed this channel");
+    })
+}            
+async function removeCoOwnerfromCoOwnerList(d, NewOwnerId, CurrentOwnersArray, channel_id) {
+    ArrayofModifiedCoOwners = [];
+    for (let i = 0; i < CurrentOwnersArray.length; i++) {
+        if (CurrentOwnersArray[i] === NewOwnerId) continue;
+        ArrayofModifiedCoOwners.push(`"${CurrentOwnersArray[i]}"`);
+    }
+
+    let NewDBOwnerObject = `{"coowners": [${ArrayofModifiedCoOwners}]}`
+    let sql = SqlString.format(`UPDATE channels SET coowner=? where id=?`, [NewDBOwnerObject, channel_id])
+    d.query(sql, (error, results) => {
+        if (error || results.length < 1) return console.error("There was an error updating the co-owner array on claim command");
     })
 }
 module.exports.run = async (client, msg, args) => {
@@ -26,28 +39,46 @@ module.exports.run = async (client, msg, args) => {
                     if (er) console.error(er);
                     if (!re) return;
                     if (re) {
-                        let OwnerID = re[0].oid;
-                        let isownerstillinchat;
-                        for (const [memberID] of vc.members) {
-                            if (memberID === OwnerID) {
-                                isownerstillinchat = 1;
-                                break;
-                            } else {
-                                continue;
-                            }
-                        }
-                        if (isownerstillinchat === 1) {
-                            if (msg.member.hasPermission("MOVE_MEMBERS") || msg.member.hasPermission("ADMINISTRATOR")) {
-                                client.functions.AddModLog(client, msg.guild.id, msg.author.id, 'Force Claimed channel', vc, '2')
-                                client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Force Claimed vc: '${vc.name}'`)
-                                UpdateOwner(d, msg, fn, vc)
-                            } else {
-                                fn.Reply(msg, config.messages.ownerstillpresent)
-                            }
-                        } else {
-                            client.functions.AddModLog(client, msg.guild.id, msg.author.id, 'Claimed channel', vc, '2')
+                        let ownerleavetimestamp = re[0].ownerleavetimestamp
+                        let retrieveCoOwnersObj = re[0].coowner;
+                        let jsonObjectFromDB = JSON.parse(retrieveCoOwnersObj)
+                        let CurrentOwnersArray = jsonObjectFromDB.coowners || [];
+
+                        if (msg.member.hasPermission("MOVE_MEMBERS") || msg.member.hasPermission("ADMINISTRATOR")) {
+                            client.functions.AddModLog(client, msg.guild.id, msg.author.id, 'Force Claimed channel', vc, '2')
+                            client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Force Claimed vc: '${vc.name}'`)
                             UpdateOwner(d, msg, fn, vc)
+                        } else {
+                            if (ownerleavetimestamp != null) {
+                                let timesinceleave = client.functions.timesince(ownerleavetimestamp);
+                                let cooldown = config.bot.ownerleavecooldown;
+                            
+                                if (timesinceleave < cooldown) {
+                                    // Time Since owner is less than the cooldown
+                                    let timeleft = cooldown - timesinceleave;
+                                    if (timeleft < 0) {
+                                        timeleft = timeleft * -1;
+                                    }
+                                    fn.Reply(msg, `Sorry, But there is still ${timeleft} Minutes left before you can claim this channel`);
+                                
+                                } else {
+                                    // Check for Co-Owners first before allowing anyone to claim
+                                    if (CurrentOwnersArray.length < 1) {
+                                        client.functions.AddModLog(client, msg.guild.id, msg.author.id, 'Claimed channel', vc, '2')
+                                        UpdateOwner(d, msg, fn, vc)
+                                    } else {
+                                        if (CurrentOwnersArray.includes(msg.author.id)) {
+                                            client.functions.AddModLog(client, msg.guild.id, msg.author.id, 'Claimed channel', vc, '2')
+                                            removeCoOwnerfromCoOwnerList(d, msg.author.id, CurrentOwnersArray, vc.id);
+                                            UpdateOwner(d, msg, fn, vc)
+                                        } else {
+                                            client.functions.Reply(msg, `Sorry, This channel has Co-Owners configured, Please ask one of them to claim the channel`)
+                                        }
+                                    }
+                                }
+                            }
                         }
+                        
                     }
                 })
                 d.release(function (err) {

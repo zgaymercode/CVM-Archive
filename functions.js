@@ -28,10 +28,11 @@ function consolelog(client, maxi) {
     }
     
     if (v === maxi) {
-        console.log("Maximum numbers of intervals per-session has been reached... Restarting and pulling from git repository to keep up to date");
+        console.log("Maximum numbers of intervals per-session has been reached... Restarting");
         if (client.config.bot.isdevbuild === 1) {
             process.exit();
         } else {
+            console.log("Current bot is in Prod environment, pulling from git repository to keep up to date prior to restarting");
             exec('git stash --include-untracked && git reset--hard && git clean - fd && git pull', (error, stdout, stderr) => {
                 setTimeout(function () {
                     // I use pm2 to run my bot, so process.exit will essentially restart it
@@ -186,6 +187,9 @@ function timesince(timestamp) {
     var endDate = moment(timestamp, 'YYYY-M-DD HH:mm:ss')
     var minDiff = endDate.diff(startDate, 'minutes')
 
+    if (minDiff < 0) {
+        minDiff = minDiff * -1;
+    }
     return minDiff;
 }
 async function BlistedWordCheck(word, msg) {

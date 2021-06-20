@@ -34,6 +34,9 @@ module.exports.run = async (client, msg, args) => {
                             if (prefix === null) prefix = '';
 
                             let text = args.toString().split(/,/).join(' ');
+                            if (text.includes(prefix)) {
+                                prefix = '';
+                            }
                             let gid = msg.guild.id
                             let blisted;
                             let blistwords = [];
@@ -45,7 +48,7 @@ module.exports.run = async (client, msg, args) => {
                                     var sql2 = SqlString.format('UPDATE channels SET last_rename=CURRENT_TIMESTAMP() WHERE id=?', [vcid]);
                                     d.query(sql2, async (er2, re2) => {
                                         if (er2) console.error(er2);
-                                        client.functions.AddModLog(client, msg.guild.id, msg.author.id, `Channel renamed to ${text}`, vc, '2')
+                                        client.functions.AddModLog(client, msg.guild.id, msg.author.id, `Channel renamed to ${prefix}${text}`, vc, '2')
                                         vc.setName(prefix + text, "Channel Rename Command used by: " + msg.author.id);
                                         fn.Reply(msg, "Successfully renamed channel")
                                         if (!re2) console.log('Channel renamed, but could not update db for last rename');

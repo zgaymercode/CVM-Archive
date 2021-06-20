@@ -58,7 +58,6 @@ module.exports = async (client, oldState, newState) => {
                         template = step2.replace(/%NICKNAME%/g, displayname)
                         if (prefix === null) prefix = '';
                         VoiceChannelName = `${prefix} ${template}`;
-                        console.log(VoiceChannelName)
                         d.query(`UPDATE joinchans SET increment = increment + 1 WHERE joinchan='${channelid}'`, (er3, res3) => {
                             if (er3) console.error(er3);
                             return;
@@ -91,56 +90,31 @@ module.exports = async (client, oldState, newState) => {
                         } else {
                             client.functions.AddModLog(client, guild.id, memberObject.id, `Created "${newchan.name}"`, newchan, '1')
                         }
-                        
+
                     });
                     setTimeout(() => {
                         newState.setChannel(newchan);
                     }, 500);
                 });
                 //#endregion
-                //#region Co-Owner Demotions / Auto-Assign New Owner
+                //#region Input Timestamp for OwnerLeave
                 let findstatus = SqlString.format(`SELECT * FROM channels WHERE id=?`, [oldchan]);
                 d.query(findstatus, (find_Error, channelsresults) => {
                     if (find_Error) return console.error(find_Error);
                     if (channelsresults.length < 1) return;
-                    let retrieveCoOwnersObj = channelsresults[0].coowner;
-                    let ChannelOwnerID = channelsresults[0].oid;
-                    let jsonObjectFromDB = JSON.parse(retrieveCoOwnersObj)
-                    let CurrentOwnersArray = jsonObjectFromDB.coowners;
-                    if (uid === ChannelOwnerID) {
-                        if (CurrentOwnersArray.length < 1) return;
-                        let newowner = CurrentOwnersArray[0];
-                        let newOwnerSql = SqlString.format(`UPDATE channels SET oid=? WHERE id=?`, [newowner, oldchan])
-                        d.query(newOwnerSql, (newOwnerError, NewOwnerSuccess) => {
-                            if (newOwnerError) console.error(newOwnerError);
-                            if (!NewOwnerSuccess) return;
-                            let ArrayofModifiedCoOwners = [];
+                    let addtimestamp = SqlString.format(`UPDATE channels SET ownerleavetimestamp=CURRENT_TIMESTAMP()`);
+                    d.query(addtimestamp, (errorTimeStampEntry, resultsTimeStampEntry) => {
+                        if (errorTimeStampEntry) console.log(errorTimeStampEntry);
+                    })
 
-                            for (let i = 0; i < CurrentOwnersArray.length; i++) {
-                                if (CurrentOwnersArray[i] === newowner) continue;
-                                ArrayofModifiedCoOwners.push(`"${CurrentOwnersArray[i]}"`);
-                            }
-                            let NewDBOwnerObject = `{"coowners": [${ArrayofModifiedCoOwners}]}`
-                            let updatecoownerssql2 = SqlString.format(`UPDATE channels SET coowner=? where id=?`, [NewDBOwnerObject, oldchan])
-                            d.query(updatecoownerssql2, (errorupdatingcoowners, results) => {
-                                if (errorupdatingcoowners || results.length < 1) return console.error(`Error Removing ${uid} from Co-Owners of ${oldchan}`);
-                            })
-                        })
-                    } else {
-                        if (!CurrentOwnersArray.includes(uid)) return;
-                        let ArrayofModifiedCoOwners = [];
-
-                        for (let i = 0; i < CurrentOwnersArray.length; i++) {
-                            if (CurrentOwnersArray[i] === uid) continue;
-                            ArrayofModifiedCoOwners.push(`"${CurrentOwnersArray[i]}"`);
-                        }
-                        let NewDBOwnerObject = `{"coowners": [${ArrayofModifiedCoOwners}]}`
-                        let updatecoownerssql = SqlString.format(`UPDATE channels SET coowner=? where id=?`, [NewDBOwnerObject, oldchan])
-                        d.query(updatecoownerssql, (errorupdatingcoowners, results) => {
-                            if (errorupdatingcoowners || results.length < 1) return console.error(`Error Removing ${uid} from Co-Owners of ${oldchan}`);
-                        })
-                    }
-
+                })
+                //#endregion
+                //#region Owner leave reset
+                /* if the owner returns before the timestamp is set to null, this set's it to null */
+                let setNullTimestamp = SqlString.format(`UPDATE channels SET ownerleavetimestamp=null WHERE oid=? AND id=?`, [uid, channelid]);
+                d.query(setNullTimestamp, (setNullError, setNullResults) => {
+                    if (setNullError) console.error(setNullError);
+                    if (setNullResults) return;
                 })
                 //#endregion
                 //#region Temp Chan Deletes
@@ -163,10 +137,10 @@ module.exports = async (client, oldState, newState) => {
                         d.query(sqlzor, async (er, res234) => {
                             if (er) console.error(er);
                             if (!res234) console.error("Could not delete entry");
-                            
-                            
+
+
                         })
-                        
+
                     }
                 })
                 //#endregion
