@@ -14,6 +14,7 @@ Community Voice Manager is a Discord.js Bot made to create temporary voice chann
 - [x] New channels copy join channel's permissions
 - [x] Temporary stage-like channels ( controlable voice chats with video :3 )
 - [x] Addition of Co-Owners, full perms of owners except adding new Co-Owners
+- [x] configurable Channel prefix's
 
 ## Automated Tasks
 These tasks run every 1.5 minutes to keep things organzied :D <br>
@@ -51,7 +52,6 @@ Things that will come to the bot in the near future
 - [ ] Suggestions command (for bot use only, sends suggestions to dev server)
 - [ ] Hand raise Queue (request to talk for the activity channels)
 - [ ] unchangable channel prefix's (addition to server settings `prefix`new channel name)
-- [ ] lock emoji added to all locked rooms
 - [ ] setup guide (maybe a website?)
 - [ ] Admin Panel (pending Discord bot UI update)
 - [ ] Win the game
