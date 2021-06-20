@@ -393,7 +393,7 @@ async function SendModLog(client, guildID, channelID) {
                                 let formattedTimestamp2 = moment(timestamp).format("MM-D-YY h:mm:ss a UTC")
                                 actionArray.push(`${formattedTimestamp2} : ${action} \n`);
                             }
-                            let formattedactionArray = actionArray.join(" ");
+                            let formattedactionArray = actionArray.join(" ").replace(/,/g, '\n');
                             if (actionArray.length > 0) embed.addField(`Channel Actions:`, `${formattedactionArray}`);
                         }                        
                         d.query(findtype3, (findtype3error, findtype3results) => {
@@ -405,10 +405,10 @@ async function SendModLog(client, guildID, channelID) {
                                     let action = findtype3results[i3].action;
                                     let timestamp = findtype2results[i3].timestamp;
                                     let formattedTimestamp3 = moment(timestamp).format("MM-D-YY h:mm:ss a UTC")
-                                    PermsactionArray.push(`${formattedTimestamp3}: ${action} \n`);
+                                    PermsactionArray.push(`${formattedTimestamp3}: ${action}`);
                                 }
-                                let FormattedPermsactionArray = PermsactionArray.join(" ");
-                                if (PermsactionArray.length > 0) embed.addField(`Permission Actions:`, `${FormattedPermsactionArray}.`);
+                                let FormattedPermsactionArray = PermsactionArray.join(" ").replace(/,/g, '\n');
+                                if (PermsactionArray.length > 0) embed.addField(`Permission Actions:`, `${FormattedPermsactionArray}`);
                             }
                             d.query(findtype0, (findtype0error, findtype0results) => {
                                 if (findtype0error) return console.error(findtype0error)
@@ -434,21 +434,32 @@ async function vcPermsCheck(client, msg, callback) {
     /*
         this checks to see if the member is either a leader or a owner of their current channel
         it sends a call back as a js object, but pulls a json object from the db
-        format: 
-        dbresults = {
-            {
-                "user":"Owner_ID",
-                "accesslvl": 2
-            },
-            {
-                "user":"Leader_ID",
-                "accesslvl": 1
-            }
-        }
-        script: connects to db, grabs the leaders column, and return it, formats as json, and for loop on it
+        
+        script: connects to db, grabs the coowner column, and return it, formats as json, and for loop on it
         until it finds the msg.author.id, once it does, it ends the loop, and sends a callback of the user's access
         level
     */
+    
+    client.database.getConnection(async (connection_error, d) => {
+        if (connection_error) return console.error(connection_error.stack);
+        let vcid = msg.member.voice.channel.id;
+        let insertSql = SqlString.format(`SELECT * FROM channels WHERE id=?`, [vcid]);
+        d.query(insertSql, (inserterror, results) => {
+            if (inserterror) return console.error(inserterror);
+            if (results.length < 1) return Reply(msg, `There was an error in the matrix, couldn't find current voice channel in my database ;3`);
+            let VCOwnerID = results[0].oid;
+            let retrieveCoOwnersObj = results[0].coowner;
+            let jsonObjectFromDB = JSON.parse(retrieveCoOwnersObj)
+            let CurrentOwnersArray = jsonObjectFromDB.coowners || [];
+            if (msg.author.id === VCOwnerID || CurrentOwnersArray.includes(msg.author.id) || msg.member.hasPermission("MOVE_MEMBERS") || msg.member.hasPermission("ADMINISTRATOR")) {
+                callback(true);
+            } else {
+                callback(false);
+            }
+
+        })
+        d.release(function (releaseerror) { if (releaseerror) console.error(releaseerror); });
+    });
 }
 
 //#endregion
