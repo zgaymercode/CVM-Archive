@@ -18,7 +18,7 @@ Community Voice Manager is a Discord.js Bot made to create temporary voice chann
 ## Automated Tasks
 These tasks run every 1.5 minutes to keep things organzied :D <br>
 -**ChannelCleanup** : Deletes Empty channels that didn't get deleted when the last member left, and removes stale db entries<br><br>
--**CatagoryCleanup** : Deletes stale catagory entries from the database.<br><br>
+-**JoinChannelCleanup** : Deletes stale Join Channel entries from the database.<br><br>
 -**AutoPull** : Keeps this repository as the current live code running on the bot (restarts happen every X intervals, check ready listener)
 
 ## Self-Hosting requirements / guide
