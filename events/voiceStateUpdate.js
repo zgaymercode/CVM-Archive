@@ -75,7 +75,8 @@ module.exports = async (client, oldState, newState) => {
                             }
                         )
                     }
-                    var sql2 = SqlString.format('INSERT INTO channels SET id=?, joinchan=?, oid=?, is_stage=?, adjust_limit=?, created=CURRENT_TIMESTAMP()', [newchan.id, channelid, uid, stage, limit]);
+                    let obj = '{"coowners": []}';
+                    var sql2 = SqlString.format('INSERT INTO channels SET id=?, joinchan=?, oid=?, is_stage=?, adjust_limit=?, coowner=?, created=CURRENT_TIMESTAMP()', [newchan.id, channelid, uid, stage, limit, obj]);
                     d.query(sql2, async (er2, res2) => {
                         if (er2) console.error(er);
                         if (!res2) console.error(er2);
@@ -92,6 +93,51 @@ module.exports = async (client, oldState, newState) => {
                         newState.setChannel(newchan);
                     }, 500);
                 });
+                //#endregion
+                //#region Co-Owner Demotions / Auto-Assign New Owner
+                let findstatus = SqlString.format(`SELECT * FROM channels WHERE id=?`, [oldchan]);
+                d.query(findstatus, (find_Error, channelsresults) => {
+                    if (find_Error) return console.error(find_Error);
+                    if (channelsresults.length < 1) return;
+                    let retrieveCoOwnersObj = channelsresults[0].coowner;
+                    let ChannelOwnerID = channelsresults[0].oid;
+                    let jsonObjectFromDB = JSON.parse(retrieveCoOwnersObj)
+                    let CurrentOwnersArray = jsonObjectFromDB.coowners;
+                    if (uid === ChannelOwnerID) {
+                        if (CurrentOwnersArray.length < 1) return;
+                        let newowner = CurrentOwnersArray[0];
+                        let newOwnerSql = SqlString.format(`UPDATE channels SET oid=? WHERE id=?`, [newowner, oldchan])
+                        d.query(newOwnerSql, (newOwnerError, NewOwnerSuccess) => {
+                            if (newOwnerError) console.error(newOwnerError);
+                            if (!NewOwnerSuccess) return;
+                            let ArrayofModifiedCoOwners = [];
+
+                            for (let i = 0; i < CurrentOwnersArray.length; i++) {
+                                if (CurrentOwnersArray[i] === newowner) continue;
+                                ArrayofModifiedCoOwners.push(`"${CurrentOwnersArray[i]}"`);
+                            }
+                            let NewDBOwnerObject = `{"coowners": [${ArrayofModifiedCoOwners}]}`
+                            let updatecoownerssql2 = SqlString.format(`UPDATE channels SET coowner=? where id=?`, [NewDBOwnerObject, oldchan])
+                            d.query(updatecoownerssql2, (errorupdatingcoowners, results) => {
+                                if (errorupdatingcoowners || results.length < 1) return console.error(`Error Removing ${uid} from Co-Owners of ${oldchan}`);
+                            })
+                        })
+                    } else {
+                        if (!CurrentOwnersArray.includes(uid)) return;
+                        let ArrayofModifiedCoOwners = [];
+
+                        for (let i = 0; i < CurrentOwnersArray.length; i++) {
+                            if (CurrentOwnersArray[i] === uid) continue;
+                            ArrayofModifiedCoOwners.push(`"${CurrentOwnersArray[i]}"`);
+                        }
+                        let NewDBOwnerObject = `{"coowners": [${ArrayofModifiedCoOwners}]}`
+                        let updatecoownerssql = SqlString.format(`UPDATE channels SET coowner=? where id=?`, [NewDBOwnerObject, oldchan])
+                        d.query(updatecoownerssql, (errorupdatingcoowners, results) => {
+                            if (errorupdatingcoowners || results.length < 1) return console.error(`Error Removing ${uid} from Co-Owners of ${oldchan}`);
+                        })
+                    }
+
+                })
                 //#endregion
                 //#region Temp Chan Deletes
                 var sql4 = SqlString.format('SELECT * FROM channels WHERE id=?', [oldchan]);
