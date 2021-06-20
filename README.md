@@ -49,7 +49,6 @@ DONE!! The bot will now run on startup and restart on failure/restart command
 Things that will come to the bot in the near future
 - [ ] Slash Commands
 - [ ] Auto-Locking channel (on create, channel locked (allows invite cmd to be used, but not lock/unlock))
-- [ ] Suggestions command (for bot use only, sends suggestions to dev server)
 - [ ] Hand raise Queue (request to talk for the activity channels)
 - [ ] unchangable channel prefix's (addition to server settings `prefix`new channel name)
 - [ ] setup guide (maybe a website?)
