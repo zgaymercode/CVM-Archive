@@ -17,9 +17,10 @@ CREATE TABLE `channels` (
   `last_rename` timestamp NULL DEFAULT NULL,
   `is_stage` int(11) DEFAULT '0',
   `adjust_limit` int(11) DEFAULT '0',
+  `ownerleavetimestamp` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`num`),
   KEY `created` (`created`)
-) ENGINE=InnoDB AUTO_INCREMENT=368 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=401 DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS forbiddonwords;
 CREATE TABLE `forbiddonwords` (
@@ -35,10 +36,11 @@ CREATE TABLE `joinchans` (
   `joinchan` varchar(50) DEFAULT NULL,
   `template` varchar(50) CHARACTER SET utf8mb4 DEFAULT NULL,
   `prefix` varchar(100) CHARACTER SET utf8mb4 DEFAULT NULL,
-  `increment` int(11) DEFAULT '0',
-  `lockable` int(11) DEFAULT '0',
-  `is_stage` int(11) DEFAULT '0',
-  `adjust_limit` int(11) DEFAULT '0',
+  `increment` int(1) DEFAULT '0',
+  `lockable` int(1) DEFAULT '0',
+  `is_stage` int(1) DEFAULT '0',
+  `adjust_limit` int(1) DEFAULT '0',
+  `autolock` int(1) DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1 COMMENT='?';
 
@@ -52,7 +54,17 @@ CREATE TABLE `modlog` (
   `action` varchar(120) CHARACTER SET utf8mb4 DEFAULT NULL,
   `timestamp` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=135 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=282 DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS queue;
+CREATE TABLE `queue` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` varchar(30) DEFAULT NULL,
+  `vcid` varchar(30) DEFAULT NULL,
+  `created` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `userid` (`userid`)
+) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS servers;
 CREATE TABLE `servers` (
