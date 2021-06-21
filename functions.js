@@ -456,20 +456,32 @@ async function vcPermsCheck(client, msg, callback) {
             let retrieveCoOwnersObj = results[0].coowner;
             let jsonObjectFromDB = JSON.parse(retrieveCoOwnersObj)
             let CurrentOwnersArray = jsonObjectFromDB.coowners || [];
-            if (msg.author.id === VCOwnerID || CurrentOwnersArray.includes(msg.author.id) || msg.member.hasPermission("MOVE_MEMBERS") || msg.member.hasPermission("ADMINISTRATOR")) {
-                callback(true);
-            } else {
-                callback(false);
-            }
-
+            ModPermsCheck(msg, (modcheck) => {
+                if (msg.author.id === VCOwnerID || CurrentOwnersArray.includes(msg.author.id) || modcheck) {
+                    callback(true);
+                } else {
+                    callback(false);
+                }
+            })
         })
         d.release(function (releaseerror) { if (releaseerror) console.error(releaseerror); });
     });
 }
-
+async function ModPermsCheck(msg, callback) {
+    if (
+        msg.member.hasPermission("MOVE_MEMBERS") ||
+        msg.member.hasPermission("MANAGE_GUILD") ||
+        msg.member.hasPermission("ADMINISTRATOR")
+    ) {
+        callback(true)
+    } else {
+        callback(false)
+    }
+}
 //#endregion
 module.exports = {
     vcPermsCheck,
+    ModPermsCheck,
     consolelog,
     AddModLog,
     AddAdminLog,
