@@ -70,11 +70,11 @@ exports.run = async (client, msg, args) => {
                 let giturl = client.config.bot.giturl;
 
                 let general = new MessageButton()
-                    .setLabel("General")
+                    .setLabel("General / VC")
                     .setStyle("green")
                     .setID("GENERAL")
                 let vc = new MessageButton()
-                    .setLabel("VC")
+                    .setLabel("VC Owner Cmds")
                     .setStyle("blurple")
                     .setID("VC")
                 let Administrative = new MessageButton()
@@ -88,7 +88,8 @@ exports.run = async (client, msg, args) => {
                     .setID("DEV")
                 let row = new MessageActionRow()
                     .addComponent(general)
-                    .addComponent(vc);
+                    .addComponent(vc)
+                    //.addComponent(activity);
 
 
                 let homee = new Discord.MessageEmbed()
@@ -97,6 +98,7 @@ exports.run = async (client, msg, args) => {
                     .setDescription(`Welcome to the Community Voice Manager Help menu. If you need more information about a specific command, you can run ${prefix}help <commandname>`)
                     .addField("General", "Opens the menu for General Commands")
                     .addField("VC", "Opens the help menu for Voice Chat commands")
+                    .addField("Activity VC", "Opens the help menu for Activity VC commands")
                     .setThumbnail(client.user.avatarURL({ dynamic: true }))
 
                     .setFooter(client.config.embed.footer + ` | ` + client.config.embed.ver, client.user.avatarURL({ dynamic: true }));
@@ -118,11 +120,11 @@ exports.run = async (client, msg, args) => {
 
                 let vce = new Discord.MessageEmbed()
                     .setColor(client.config.embed.color)
-                    .setAuthor("VC Commands", '', giturl)
-                    .setDescription("These are all the commands that you can use while you're in the voice chats")
+                    .setAuthor("VC Owner Commands", '', giturl)
+                    .setDescription("These are all the commands that you can use while you're the owner of voice chats")
                     .setThumbnail(client.user.avatarURL({ dynamic: true }))
                     .setFooter(client.config.embed.footer + ` | ` + client.config.embed.ver, client.user.avatarURL({ dynamic: true }));
-
+                
                 let Administrativee = new Discord.MessageEmbed()
                     .setColor(client.config.embed.color)
                     .setAuthor("Setup Commands", '', giturl)
