@@ -59,10 +59,10 @@ module.exports.run = async (client, msg, args) => {
     });
 }
 module.exports.help = {
-    name: "deny",
+    name: "partyremove",
     //aliases: [""],
     description: "revokes a users ability to speak and use video in stage channels",
-    usage: "deny @user",
+    usage: "partyremove @user",
     category: "VC Owner Command",
     maintenancemode: 0
 }

@@ -69,10 +69,10 @@ module.exports.run = async (client, msg, args) => {
     });
 }
 module.exports.help = {
-    name: "grant",
+    name: "partyadd",
     //aliases: [""],
     description: "Grants a user the ability to speak and stream in the channel",
-    usage: "grant @user",
+    usage: "partyadd @user",
     category: "VC Owner Command",
     maintenancemode: 0
 }
