@@ -28,6 +28,7 @@ module.exports = async (client, oldState, newState) => {
                     let template = res[0].template;
                     let prefix = res[0].prefix;
                     let inc = res[0].increment;
+                    let autolock = res[0].autolock;
                     let lockable = res[0].lockable;
                     let stage = res[0].is_stage;
                     let limit = res[0].adjust_limit;
@@ -79,7 +80,7 @@ module.exports = async (client, oldState, newState) => {
                         )
                     }
                     let obj = '{"coowners": []}';
-                    var sql2 = SqlString.format('INSERT INTO channels SET id=?, joinchan=?, oid=?, is_stage=?, adjust_limit=?, coowner=?, created=CURRENT_TIMESTAMP()', [newchan.id, channelid, uid, stage, limit, obj]);
+                    var sql2 = SqlString.format('INSERT INTO channels SET id=?, joinchan=?, oid=?, is_stage=?, adjust_limit=?, coowner=?, locked=?, created=CURRENT_TIMESTAMP()', [newchan.id, channelid, uid, stage, limit, obj, autolock]);
                     d.query(sql2, async (er2, res2) => {
                         if (er2) console.error(er);
                         if (!res2) console.error(er2);

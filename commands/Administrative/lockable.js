@@ -37,12 +37,12 @@ module.exports.run = async (client, msg, args) => {
                         console.error("error connecting: " + err.stack);
                         return;
                     }
-                    var sql = SqlString.format('UPDATE joinchans SET lockable="0" WHERE joinchan=?', [joinchan]);
+                    var sql = SqlString.format('UPDATE joinchans SET lockable="0", autolock="0" WHERE joinchan=?', [joinchan]);
                     d.query(sql, async (er, re) => {
                         if (er) console.error(er);
                         if (!re) return;
                         if (re) {
-                            fn.Reply(msg, `Channels created using <#${joinchan}> will no longer be able to be locked`);
+                            fn.Reply(msg, `Channels created using <#${joinchan}> will no longer be able to be locked and will no longer be autolocked`);
                             client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `disallowed channels created using <#${joinchan}> to be locked`)
                         }
                     })
@@ -53,6 +53,28 @@ module.exports.run = async (client, msg, args) => {
                     });
                 });
 
+            }
+            if (args[1] === 'auto') {
+                con.getConnection(function (err, d) {
+                    if (err) {
+                        console.error("error connecting: " + err.stack);
+                        return;
+                    }
+                    var sql = SqlString.format('UPDATE joinchans SET autolock="1" WHERE joinchan=?', [joinchan]);
+                    d.query(sql, async (er, re) => {
+                        if (er) console.error(er);
+                        if (!re) return;
+                        if (re) {
+                            fn.Reply(msg, `Channels created using <#${joinchan}> will be auto locked`);
+                            client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `disallowed channels created using <#${joinchan}> to be locked`)
+                        }
+                    })
+                    d.release(function (err) {
+                        if (err) {
+                            console.error(err);
+                        }
+                    });
+                });
             }
         } else {
             fn.Reply(msg, "join channel Id supplied is not numeric")
@@ -66,8 +88,8 @@ module.exports.run = async (client, msg, args) => {
 module.exports.help = {
     name: "lockable",
     //aliases: [""],
-    description: "Enables/Disables the ability to lock a channel based on the join channel",
-    usage: "lockable <joinchan_id> enable|disable",
+    description: "Enables/Disables/auto the ability to lock a channel based on the join channel. if auto is selected, the channel is locked upon creation. You must also select enable if you'd like the users to be able to unlock that channel",
+    usage: "lockable <joinchan_id> enable|disable|auto",
     category: "Administrative",
     maintenancemode: 0
 }
