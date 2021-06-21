@@ -170,8 +170,8 @@ exports.run = async (client, msg, args) => {
 
                 const filter = (button) => button.clicker.user.id === msg.author.id;
                 const collector = m.createButtonCollector(filter, {
-                    time: 120000
-                }); //collector for 60 seconds
+                    time: 120000 // collector lasts 2 minutes
+                });
 
                 collector.on('collect', async (b) => {
                     if (b.clicker.member.id != msg.author.id) {
