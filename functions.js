@@ -54,8 +54,48 @@ function BotStatus(client) {
     const index = Math.floor(Math.random() * (activities_list.length - 1) + 1); // generates a random number between 1 and the length of the activities array list (in this case 5).
     client.user.setActivity(activities_list[index], { type: "WATCHING" }); // sets bot's activities to one of the phrases in the arraylist.
 }
+async function intervals(client) {
+    m = 50; // max intervals before restart
+    client.user.setActivity(client.config.bot.startstatus, { type: "PLAYING" });
+    consolelog(client, m);
+    ChannelCleanup(client);
+    QCleanup(client);
+    JoinchanCleanup(client);
+    FilterListCleanup(client);
+    setInterval(() => {
+        BotStatus(client);
+        ChannelCleanup(client);
+        QCleanup(client);
+        JoinchanCleanup(client);
+        FilterListCleanup(client);
+        consolelog(client, m);
+    }, 150000); // every 2.5 minutes
+}
 //#endregion
 //#region Cron Jobs
+async function QCleanup(client) {
+    client.database.getConnection(function (error, d) {
+        if (error) console.error(`error Connecting to db: ${error.stack}`);
+        d.query(`SELECT * FROM queue`, (error, results) => {
+            if (error) console.error(error);
+            if (results.length < 1) return;
+            for (let i = 0; i < results.length; i++){
+                let vcid = results[i].vcid;
+                let sql = SqlString.format(`SELECT * FROM channels WHERE id=?`, [vcid]);
+                d.query(sql, (er, re) => {
+                    if (er) console.error(er);
+                    if (re.length > 0) return; // if the channel exists, ignore
+                    let yeetSQL = SqlString.format(`DELETE FROM queue WHERE vcid=?`, [vcid]);
+                    d.query(yeetSQL, (err, ree) => {
+                        if (err) console.error(err);
+                        if (ree) return;
+                    })
+                })
+            }
+        })
+        d.release(function (error) { if (er) console.error(er) });
+    })
+}
 async function ChannelCleanup(client) {
     try {
         con.getConnection(function (err, d) {
@@ -552,21 +592,18 @@ async function DeleteFromQueue(client, id) {
 }
 //#endregion
 module.exports = {
-    vcPermsCheck,
-    ModPermsCheck,
-    consolelog,
+    AddAdminLog,
     AddModLog,
+    BlistedWordCheck,
     DeleteFromQueue,
+    intervals,
     isActivityVC,
     isTmpVC,
-    AddAdminLog,
-    BotStatus,
+    ModPermsCheck,
     Reply,
-    ChannelCleanup,
-    JoinchanCleanup,
-    timesince,
-    FilterListCleanup,
-    BlistedWordCheck,
     SendModLog,
-    serverDataCheck
+    serverDataCheck,
+    timesince,
+    vcPermsCheck,
 }
+ 
