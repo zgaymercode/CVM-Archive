@@ -37,48 +37,51 @@ module.exports.run = async (client, msg, args) => {
                 }
                 d.query(sql, async (er, re) => {
                     if (er) console.error(er);
-                    if (!re) return;
-                    if (re) {
-                        let ownerleavetimestamp = re[0].ownerleavetimestamp
-                        let retrieveCoOwnersObj = re[0].coowner;
-                        let jsonObjectFromDB = JSON.parse(retrieveCoOwnersObj)
-                        let CurrentOwnersArray = jsonObjectFromDB.coowners || [];
-
-                        if (msg.member.hasPermission("MOVE_MEMBERS") || msg.member.hasPermission("ADMINISTRATOR")) {
-                            client.functions.AddModLog(client, msg.guild.id, msg.author.id, 'Force Claimed channel', vc, '2')
-                            client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Force Claimed vc: '${vc.name}'`)
-                            UpdateOwner(d, msg, fn, vc)
-                        } else {
-                            if (ownerleavetimestamp != null) {
-                                let timesinceleave = client.functions.timesince(ownerleavetimestamp);
-                                let cooldown = config.bot.ownerleavecooldown;
-                            
-                                if (timesinceleave < cooldown) {
-                                    // Time Since owner is less than the cooldown
-                                    let timeleft = cooldown - timesinceleave;
-                                    if (timeleft < 0) {
-                                        timeleft = timeleft * -1;
-                                    }
-                                    fn.Reply(msg, `Sorry, But there is still ${timeleft} Minutes left before you can claim this channel`);
+                    if (re.length > 0) {
+                        client.functions.ModPermsCheck(msg, (modperms) => {
+                            if (modperms) {
+                                client.functions.AddModLog(client, msg.guild.id, msg.author.id, 'Force Claimed channel', vc, '2')
+                                client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Force Claimed vc: '${vc.name}'`)
+                                UpdateOwner(d, msg, fn, vc)
+                            } else {
+                                let ownerleavetimestamp = re[0].ownerleavetimestamp
+                                let retrieveCoOwnersObj = re[0].coowner;
+                                let jsonObjectFromDB = JSON.parse(retrieveCoOwnersObj)
+                                let CurrentOwnersArray = jsonObjectFromDB.coowners || [];
+                                if (ownerleavetimestamp != null) {
+                                    let timesinceleave = client.functions.timesince(ownerleavetimestamp);
+                                    let cooldown = config.bot.ownerleavecooldown;
                                 
-                                } else {
-                                    // Check for Co-Owners first before allowing anyone to claim
-                                    if (CurrentOwnersArray.length < 1) {
-                                        client.functions.AddModLog(client, msg.guild.id, msg.author.id, 'Claimed channel', vc, '2')
-                                        UpdateOwner(d, msg, fn, vc)
+                                    if (timesinceleave < cooldown) {
+                                        // Time Since owner is less than the cooldown
+                                        let timeleft = cooldown - timesinceleave;
+                                        if (timeleft < 0) {
+                                            timeleft = timeleft * -1;
+                                        }
+                                        fn.Reply(msg, `Sorry, But there is still ${timeleft} Minutes left before you can claim this channel`);
+                                    
                                     } else {
-                                        if (CurrentOwnersArray.includes(msg.author.id)) {
+                                        // Check for Co-Owners first before allowing anyone to claim
+                                        if (CurrentOwnersArray.length < 1) {
                                             client.functions.AddModLog(client, msg.guild.id, msg.author.id, 'Claimed channel', vc, '2')
-                                            removeCoOwnerfromCoOwnerList(d, msg.author.id, CurrentOwnersArray, vc.id);
                                             UpdateOwner(d, msg, fn, vc)
                                         } else {
-                                            client.functions.Reply(msg, `Sorry, This channel has Co-Owners configured, Please ask one of them to claim the channel`)
+                                            if (CurrentOwnersArray.includes(msg.author.id)) {
+                                                client.functions.AddModLog(client, msg.guild.id, msg.author.id, 'Claimed channel', vc, '2')
+                                                removeCoOwnerfromCoOwnerList(d, msg.author.id, CurrentOwnersArray, vc.id);
+                                                UpdateOwner(d, msg, fn, vc)
+                                            } else {
+                                                client.functions.Reply(msg, `Sorry, This channel has Co-Owners configured, Please ask one of them to claim the channel`)
+                                            }
                                         }
                                     }
+                                } else {
+                                    client.functions.Reply(msg, `This channel is not claimable`)
                                 }
                             }
-                        }
-                        
+                        })
+                    } else {
+                        client.functions.Reply(msg, `The channel you are currently in is not a temp channel`)
                     }
                 })
                 d.release(function (err) {
