@@ -444,7 +444,6 @@ async function vcPermsCheck(client, msg, callback) {
         until it finds the msg.author.id, once it does, it ends the loop, and sends a callback of the user's access
         level
     */
-    console.log("VCPermsCheck")
     client.database.getConnection(async (connection_error, d) => {
         if (connection_error) return console.error(connection_error.stack);
         let vcid = msg.member.voice.channel.id;
@@ -460,17 +459,13 @@ async function vcPermsCheck(client, msg, callback) {
 
                 if (msg.author.id === VCOwnerID || CurrentOwnersArray.includes(msg.author.id) || modcheck) {
                     callback(true);
-                    console.log("ModPerms Check: Passed");
                 } else {
                     if (CurrentOwnersArray.includes(msg.author.id)) {
                         callback(true);
-                        console.log("Co-Owner check: Passed")
                     } else if (VCOwnerID === msg.author.id) {
                         callback(true);
-                        console.log("VC Owner check: Passed")
                     } else {
                         callback(false)
-                        console.log("VC Perms Check: Failed")
                     }
                 }
             })
@@ -543,12 +538,25 @@ async function isTmpVC(client, msg, callback) {
         });
     });
 }
+async function DeleteFromQueue(client, id) {
+    client.database.getConnection(async (connection_error, d) => {
+        if (connection_error) return console.error(connection_error.stack);
+        let insertSql = SqlString.format(`DELETE FROM queue WHERE userid=?`, [id]);
+        d.query(insertSql, (inserterror, results) => {
+            if (inserterror) return console.error(inserterror);
+            if (results.length < 1) return false;
+            return true;
+        })
+        d.release(function (releaseerror) { if (releaseerror) console.error(releaseerror); });
+    });
+}
 //#endregion
 module.exports = {
     vcPermsCheck,
     ModPermsCheck,
     consolelog,
     AddModLog,
+    DeleteFromQueue,
     isActivityVC,
     isTmpVC,
     AddAdminLog,

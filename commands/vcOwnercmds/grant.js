@@ -5,6 +5,7 @@ module.exports.run = async (client, msg, args) => {
             console.error("error connecting: " + err.stack);
             return;
         }
+        
         let cid = msg.member.voice.channel.id;
         let vc = msg.member.voice.channel;
         var sql = SqlString.format('SELECT * FROM channels WHERE id=?', [cid]);
@@ -23,6 +24,11 @@ module.exports.run = async (client, msg, args) => {
                     vccheck = 1;
                 })
                 if (vccheck != 1) return client.functions.Reply(msg, `<@${grant.id}> is not in the voice chat`);
+                
+                // delete any entries for the queue that may exists
+                client.functions.DeleteFromQueue(client, grant.id);
+
+                //grant the perms in the channel
                 vc.updateOverwrite(
                     grant,
                     {

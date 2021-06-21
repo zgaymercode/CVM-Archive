@@ -50,8 +50,8 @@ module.exports.run = async (client, msg, args) => {
                                 if (CreateQueueSQL_error) console.error(CreateQueueSQL_error);
                             })
                             break;
-                        case 'queue':
-                            let queueCheckSQL = SqlString.format(`SELECT * FROM queue WHERE vcid=? ORDER BY created DESC`, [vcid]);
+                        case 'status':
+                            let queueCheckSQL = SqlString.format(`SELECT * FROM queue WHERE vcid=? ORDER BY created ASC`, [vcid]);
                             d.query(queueCheckSQL, (queueCheckSQL_error, queueCheckSQL_results) => {
                                 if (queueCheckSQL_error) console.error(queueCheckSQL_error);
                                 if (queueCheckSQL_results.length > 0) {
@@ -93,7 +93,7 @@ module.exports.help = {
     name: "hand",
     //aliases: [""],
     description: 'allows you to add/remove yourself from the queue, also allows you to check the queue of speakers',
-    usage: "hand raise | lower | queue",
+    usage: "hand raise | lower | status",
     category: "General",
-    maintenancemode: 0
+    maintenancemode: 1
 }

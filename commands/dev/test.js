@@ -6,9 +6,8 @@ const moment = require("moment");
 const { MessageButton, MessageActionRow } = require("discord-buttons");
 exports.run = async (client, msg, args) => {
     try {
-        const currentTime = new Date();
 
-        msg.channel.send(currentTime)
+
     } catch (e) {
         console.error(e);
         client.functions.Reply(msg, "There was an error in the matrix")

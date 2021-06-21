@@ -57,7 +57,7 @@ module.exports.run = async (client, msg, args) => {
 module.exports.help = {
     name: "unlock",
     //aliases: [""],
-    description: "unlocks a channel",
+    description: "resets the channel to the join channel's permissions. assuming the channel is allowed to be unlocked",
     usage: "unlock",
     category: "VC Owner Command",
     maintenancemode: 0
