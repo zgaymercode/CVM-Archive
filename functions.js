@@ -26,7 +26,7 @@ function consolelog(client, maxi) {
         console.log("intervals ran this session: " + v)
         console.log(" ");
     }
-    
+
     if (v === maxi) {
         console.log("Maximum numbers of intervals per-session has been reached... Restarting");
         if (client.config.bot.isdevbuild === 1) {
@@ -40,7 +40,7 @@ function consolelog(client, maxi) {
                     process.exit();
                 }, 100)
             })
-        }                   
+        }
     }
 }
 function BotStatus(client) {
@@ -57,7 +57,7 @@ function BotStatus(client) {
 //#endregion
 //#region Cron Jobs
 async function ChannelCleanup(client) {
-    try{
+    try {
         con.getConnection(function (err, d) {
             if (err) {
                 console.error("error connecting: " + err.stack);
@@ -104,7 +104,7 @@ async function ChannelCleanup(client) {
                 }
             });
         });
-    }catch (e) {
+    } catch (e) {
         console.error(e);
     }
 }
@@ -195,7 +195,7 @@ function timesince(timestamp) {
 async function BlistedWordCheck(word, msg) {
     let gid = msg.guild.id;
     try {
-        
+
         var sql = SqlString.format('SELECT * FROM forbiddonwords WHERE word=? AND gid=?', [word, gid]);
         con.getConnection(function (err, d) {
             if (err) {
@@ -204,7 +204,7 @@ async function BlistedWordCheck(word, msg) {
             }
             d.query(sql, (er, re) => {
                 if (re.length > 0) return true;
-                return false;                
+                return false;
             })
             d.release(function (err) {
                 if (err) {
@@ -214,10 +214,10 @@ async function BlistedWordCheck(word, msg) {
         });
     } catch (e) {
         console.error(e);
-   }
+    }
 }
 async function serverDataCheck(client, guildID, callback) {
-    
+
     client.database.getConnection(async (err, d) => {
         if (err) {
             console.error("error connecting: " + err.stack);
@@ -246,20 +246,20 @@ async function serverDataCheck(client, guildID, callback) {
                         modlog = null;
                         adminlog = null;
                     }
-                    
+
                 })
             };
             callback({
                 prefix, // Server's Prefix
                 modlog, // Modlog channel ID
                 adminlog, // Admin Log Channel ID
-            })            
+            })
         })
         d.release(function (err) {
-            
+
         });
     });
-    
+
 }
 async function AddAdminLog(client, guildid, memberid, action) {
     /*
@@ -354,7 +354,7 @@ async function SendModLog(client, guildID, channelID) {
         serverDataCheck(client, guildID, (serverdata) => {
             let modlog = serverdata.modlog;
             let logchannel = client.channels.cache.get(modlog);
-            
+
             if (!modlog || !logchannel) return; // if the bot can't find the channel, or if it's not configured, stop here
             let findEntries = SqlString.format(`SELECT * FROM modlog WHERE channel_id=?`, [channelID]);
             d.query(findEntries, (error, results) => {
@@ -379,7 +379,7 @@ async function SendModLog(client, guildID, channelID) {
                     if (findtype1error) return console.error(findtype1error)
                     let type1resultslength = findtype1results.length;
                     if (type1resultslength < 1) return;
-                    
+
                     let timestamp = findtype1results[0].timestamp;
                     let formattedTimestamp1 = moment(timestamp).format("MM-D-YY h:mm:ss a UTC")
                     let action = findtype1results[0].action;
@@ -389,7 +389,7 @@ async function SendModLog(client, guildID, channelID) {
                     d.query(findtype2, (findtype2error, findtype2results) => {
                         if (findtype2error) return console.error(findtype2error)
                         let type2resultslength = findtype2results.length;
-                        
+
                         if (type2resultslength > 0) {
                             actionArray = [];
                             for (let i2 = 0; i2 < type2resultslength; i2++) {
@@ -400,7 +400,7 @@ async function SendModLog(client, guildID, channelID) {
                             }
                             let formattedactionArray = actionArray.join(" ").replace(/,/g, '\n');
                             if (actionArray.length > 0) embed.addField(`Channel Actions:`, `${formattedactionArray}`);
-                        }                        
+                        }
                         d.query(findtype3, (findtype3error, findtype3results) => {
                             if (findtype3error) return console.error(findtype3error)
                             let type3resultslength = findtype3results.length;
@@ -420,7 +420,7 @@ async function SendModLog(client, guildID, channelID) {
                                 let type0resultslength = findtype0results.length;
                                 if (type0resultslength < 1) return logchannel.send(embed);;
                                 let action = findtype0results[0].action;
-                                
+
                                 let timestamp = findtype0results[0].timestamp;
                                 let formattedTimestamp4 = moment(timestamp).format("MM-D-YY, h:mm:ss a UTC")
                                 embed.addField(`${action}`, `${formattedTimestamp4}`);
@@ -444,7 +444,7 @@ async function vcPermsCheck(client, msg, callback) {
         until it finds the msg.author.id, once it does, it ends the loop, and sends a callback of the user's access
         level
     */
-    
+    console.log("VCPermsCheck")
     client.database.getConnection(async (connection_error, d) => {
         if (connection_error) return console.error(connection_error.stack);
         let vcid = msg.member.voice.channel.id;
@@ -457,10 +457,21 @@ async function vcPermsCheck(client, msg, callback) {
             let jsonObjectFromDB = JSON.parse(retrieveCoOwnersObj)
             let CurrentOwnersArray = jsonObjectFromDB.coowners || [];
             ModPermsCheck(msg, (modcheck) => {
+
                 if (msg.author.id === VCOwnerID || CurrentOwnersArray.includes(msg.author.id) || modcheck) {
                     callback(true);
+                    console.log("ModPerms Check: Passed");
                 } else {
-                    callback(false);
+                    if (CurrentOwnersArray.includes(msg.author.id)) {
+                        callback(true);
+                        console.log("Co-Owner check: Passed")
+                    } else if (VCOwnerID === msg.author.id) {
+                        callback(true);
+                        console.log("VC Owner check: Passed")
+                    } else {
+                        callback(false)
+                        console.log("VC Perms Check: Failed")
+                    }
                 }
             })
         })
@@ -478,12 +489,68 @@ async function ModPermsCheck(msg, callback) {
         callback(false)
     }
 }
+async function isActivityVC(client, msg, callback) {
+    let vcid = msg.member.voice.channel.id;
+    var sql = SqlString.format('SELECT * FROM channels WHERE id=?', [vcid]);
+    client.database.getConnection(function (err, d) {
+        if (err) {
+            console.error("error connecting: " + err.stack);
+            return;
+        }
+        d.query(sql, async (er, re) => {
+            if (er) console.error(er);
+            if (!re) return;
+            if (re.length > 0) {
+                let activity = re[0].is_stage;
+                if (activity === 1) {
+                    callback(true);
+                } else {
+                    Reply(msg, `This is an activity voice feature. The channel you are currently in is not an activity channel`);
+                    callback(false);
+                }
+            }
+        })
+        d.release(function (err) {
+            if (err) {
+                console.error(err);
+            }
+        });
+    });
+}
+async function isTmpVC(client, msg, callback) {
+    if (!msg.member.voice.channel) callback(false);
+    let vcid = msg.member.voice.channel.id;
+    var sql = SqlString.format('SELECT * FROM channels WHERE id=?', [vcid]);
+    client.database.getConnection(function (err, d) {
+        if (err) {
+            console.error("error connecting: " + err.stack);
+            return;
+        }
+        d.query(sql, async (er, re) => {
+            if (er) console.error(er);
+            if (!re) return;
+            if (re.length > 0) {
+                callback(true);
+            } else {
+                Reply(msg, `Sorry, You must be in a temporary channel to use this command`);
+                callback(false);
+            }
+        })
+        d.release(function (err) {
+            if (err) {
+                console.error(err);
+            }
+        });
+    });
+}
 //#endregion
 module.exports = {
     vcPermsCheck,
     ModPermsCheck,
     consolelog,
     AddModLog,
+    isActivityVC,
+    isTmpVC,
     AddAdminLog,
     BotStatus,
     Reply,

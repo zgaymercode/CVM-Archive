@@ -53,11 +53,14 @@ module.exports = async (client, msg) => {
                         command.run(client, msg, args);
                         break;
                     case "VC Owner Command":
-                        if (!msg.member.voice.channel) return client.functions.Reply(msg, "You are not in a voice chat");
-                        client.functions.vcPermsCheck(client, msg, (response) => {
-                            if (response) return command.run(client, msg, args);
-                            if (!response) return client.functions.Reply(msg, client.config.messages.notowner);
+                        client.functions.isTmpVC(client, msg, (callback) => {
+                            if (!callback) return;
+                            client.functions.vcPermsCheck(client, msg, (response) => {
+                                if (!response) return client.functions.Reply(msg, client.config.messages.notowner);
+                                command.run(client, msg, args);
+                            })
                         })
+                        
                         break;
                     default:
                         command.run(client, msg, args);
