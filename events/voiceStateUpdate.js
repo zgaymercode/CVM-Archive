@@ -83,8 +83,7 @@ module.exports = async (client, oldState, newState) => {
                     var sql2 = SqlString.format('INSERT INTO channels SET id=?, joinchan=?, oid=?, is_stage=?, adjust_limit=?, coowner=?, locked=?, created=CURRENT_TIMESTAMP()', [newchan.id, channelid, uid, stage, limit, obj, autolock]);
                     d.query(sql2, async (er2, res2) => {
                         if (er2) console.error(er);
-                        if (!res2) console.error(er2);
-                        if (res2) console.log("New channel created");
+                        if (!res2.length < 1) return
                         if (newState.channel.userLimit != 0) {
                             // if the channel is anything other than 0 we need to log it, otherwise, we don't need it :3
                             client.functions.AddModLog(client, guild.id, memberObject.id, `Created "${newchan.name}" Limit: "${newState.channel.userLimit}"`, newchan, '1')
@@ -99,11 +98,11 @@ module.exports = async (client, oldState, newState) => {
                 });
                 //#endregion
                 //#region Input Timestamp for OwnerLeave
-                let findstatus = SqlString.format(`SELECT * FROM channels WHERE id=?`, [oldchan]);
+                let findstatus = SqlString.format(`SELECT * FROM channels WHERE id=? AND oid=?`, [oldchan, uid]);
                 d.query(findstatus, (find_Error, channelsresults) => {
                     if (find_Error) return console.error(find_Error);
                     if (channelsresults.length < 1) return;
-                    let addtimestamp = SqlString.format(`UPDATE channels SET ownerleavetimestamp=CURRENT_TIMESTAMP()`);
+                    let addtimestamp = SqlString.format(`UPDATE channels SET ownerleavetimestamp=CURRENT_TIMESTAMP() WHERE id=?`, [oldchan]);
                     d.query(addtimestamp, (errorTimeStampEntry, resultsTimeStampEntry) => {
                         if (errorTimeStampEntry) console.log(errorTimeStampEntry);
                     })
@@ -112,7 +111,7 @@ module.exports = async (client, oldState, newState) => {
                 //#endregion
                 //#region Owner leave reset
                 /* if the owner returns before the timestamp is set to null, this set's it to null */
-                let setNullTimestamp = SqlString.format(`UPDATE channels SET ownerleavetimestamp=null WHERE oid=? AND id=?`, [uid, channelid]);
+                let setNullTimestamp = SqlString.format(`UPDATE channels SET ownerleavetimestamp=null WHERE oid=? AND id=?`, [uid, newState.channelID]);
                 d.query(setNullTimestamp, (setNullError, setNullResults) => {
                     if (setNullError) console.error(setNullError);
                     if (setNullResults) return;
