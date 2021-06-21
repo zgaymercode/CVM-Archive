@@ -61,5 +61,5 @@ module.exports.help = {
     description: "transfers ownership to the @mentioned user",
     usage: "transfer @member",
     category: "VC Owner Command",
-    maintenancemode: 1
+    maintenancemode: 0
 }
