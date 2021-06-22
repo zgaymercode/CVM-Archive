@@ -18,19 +18,28 @@ module.exports.run = async (client, msg, args) => {
                     if (!re) fn.Reply(msg, config.messages.oof)
                     if (re) {
                         let locked = re[0].locked;
+                        let activityStatus = re[0].is_stage;
                         if (locked === 0) {
-                            fn.Reply(msg, "That channel is not locked");
+                            fn.Reply(msg, "This channel is not either a lockable channel");
                             return;
+                        } else {
+                            let vccheck;
+                            msg.member.voice.channel.members.each((memberinvc) => {
+                                if (member.id != memberinvc.id) return;
+                                vccheck = 1;
+                            })
+                            if (vccheck != 1) return client.functions.Reply(msg, `<@${member.id}> is not in the voice channel`);
+                            member.voice.kick();
+                            let vc = msg.member.voice.channel;
+                            vc.updateOverwrite(
+                                member.id,
+                                {
+                                    CONNECT: false
+                                }
+                            )
+                            client.functions.AddModLog(client, msg.guild.id, msg.author.id, `<@${member.id}> kicked from VC`, msg.member.voice.channel, '3')
+                            client.functions.Reply(msg, `Successfully kicked <@${member.id}> from the channel`);
                         }
-                        let vccheck;
-                        msg.member.voice.channel.members.each((memberinvc) => {
-                            if (member.id != memberinvc.id) return;
-                            vccheck = 1;
-                        })
-                        if (vccheck != 1) return client.functions.Reply(msg, `<@${member.id}> is not in the voice channel`);
-                        member.voice.kick();
-                        client.functions.AddModLog(client, msg.guild.id, msg.author.id, `<@${member.id}> kicked from VC`, msg.member.voice.channel, '3')
-                        client.functions.Reply(msg, `Successfully kicked <@${member.id}> from the channel`);
                     }
                 })
                 d.release(function (err) {
