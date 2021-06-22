@@ -80,17 +80,15 @@ async function QCleanup(client) {
             if (error) console.error(error);
             if (results.length < 1) return;
             for (let i = 0; i < results.length; i++){
-                let vcid = results[i].vcid;
-                let sql = SqlString.format(`SELECT * FROM channels WHERE id=?`, [vcid]);
-                d.query(sql, (er, re) => {
-                    if (er) console.error(er);
-                    if (re.length > 0) return; // if the channel exists, ignore
-                    let yeetSQL = SqlString.format(`DELETE FROM queue WHERE vcid=?`, [vcid]);
-                    d.query(yeetSQL, (err, ree) => {
-                        if (err) console.error(err);
-                        if (ree) return;
+                let created = results[i].created;
+                let time = timesince(created);
+                if (time >= 90) {
+                    let query = SqlString.format(`DELETE FROM queue WHERE created=?`, [created]);
+                    d.query(query, (erro, resul) => {
+                        if (erro) console.error(erro);
+                        if (resul) return;
                     })
-                })
+                }
             }
         })
         d.release(function (error) { if (er) console.error(er) });
@@ -149,6 +147,7 @@ async function ChannelCleanup(client) {
     }
 }
 async function JoinchanCleanup(client) {
+    
     con.getConnection(function (err, d) {
         if (err) {
             console.error("error connecting: " + err.stack);
@@ -424,7 +423,7 @@ async function SendModLog(client, guildID, channelID) {
                     let formattedTimestamp1 = moment(timestamp).format("MM-D-YY h:mm:ss a UTC")
                     let action = findtype1results[0].action;
                     let last_owner = findtype1results[0].member_id;
-                    embed.addField(`Owner:`, `<@${last_owner}>`)
+                    embed.addField(`Creator:`, `<@${last_owner}>`)
                     embed.addField(`${action}`, `${formattedTimestamp1}`)
                     d.query(findtype2, (findtype2error, findtype2results) => {
                         if (findtype2error) return console.error(findtype2error)
@@ -439,7 +438,8 @@ async function SendModLog(client, guildID, channelID) {
                                 actionArray.push(`${formattedTimestamp2} : ${action} \n`);
                             }
                             let formattedactionArray = actionArray.join(" ").replace(/,/g, '\n');
-                            if (actionArray.length > 0) embed.addField(`Channel Actions:`, `${formattedactionArray}`);
+                            if (!formattedactionArray) FormattedPermsactionArray = "None Found";
+                            embed.addField(`Channel Actions:`, `${formattedactionArray}`);
                         }
                         d.query(findtype3, (findtype3error, findtype3results) => {
                             if (findtype3error) return console.error(findtype3error)
@@ -453,12 +453,12 @@ async function SendModLog(client, guildID, channelID) {
                                     PermsactionArray.push(`${formattedTimestamp3}: ${action}`);
                                 }
                                 let FormattedPermsactionArray = PermsactionArray.join(" ").replace(/,/g, '\n');
-                                if (PermsactionArray.length > 0) embed.addField(`Permission Actions:`, `${FormattedPermsactionArray}`);
+                                if (!FormattedPermsactionArray) FormattedPermsactionArray = "None Found";
+                                embed.addField(`Permission Actions:`, `${FormattedPermsactionArray}`);
                             }
                             d.query(findtype0, (findtype0error, findtype0results) => {
                                 if (findtype0error) return console.error(findtype0error)
-                                let type0resultslength = findtype0results.length;
-                                if (type0resultslength < 1) return logchannel.send(embed);;
+                                if (findtype0results.length < 1) logchannel.send(embed)
                                 let action = findtype0results[0].action;
 
                                 let timestamp = findtype0results[0].timestamp;

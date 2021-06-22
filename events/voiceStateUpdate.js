@@ -2,9 +2,6 @@ const { PermissionOverwrites } = require("discord.js");
 const SqlString = require("sqlstring");
 const { consolelog } = require("../functions");
 module.exports = async (client, oldState, newState) => {
-    let fn = client.functions;
-    let config = client.config;
-    let con = client.database;
     if (oldState.id === newState.id) {
         if (oldState.channelID != newState.channelID) {
             let uid = oldState.id;
@@ -12,7 +9,7 @@ module.exports = async (client, oldState, newState) => {
             let channelid = newState.channelID;
             let oldchan = oldState.channelID;
             if (oldchan === channelid) return;
-            con.getConnection(function (err, d) {
+            client.database.getConnection(function (err, d) {
                 if (err) {
                     console.error("error connecting: " + err.stack);
                     return;
@@ -79,6 +76,21 @@ module.exports = async (client, oldState, newState) => {
                             }
                         )
                     }
+                    if (autolock === 1) {
+                        newchan.updateOverwrite(
+                            guild.roles.everyone.id,
+                            {
+                                CONNECT: false
+                            }
+                        )
+                        newchan.updateOverwrite(
+                            userObject.id,
+                            {
+                                CONNECT: true
+                            },
+                        )
+                    }
+                    
                     let obj = '{"coowners": []}';
                     var sql2 = SqlString.format('INSERT INTO channels SET id=?, joinchan=?, oid=?, is_stage=?, adjust_limit=?, coowner=?, locked=?, created=CURRENT_TIMESTAMP()', [newchan.id, channelid, uid, stage, limit, obj, autolock]);
                     d.query(sql2, async (er2, res2) => {
@@ -131,7 +143,9 @@ module.exports = async (client, oldState, newState) => {
                         } else {
                             client.functions.AddModLog(client, oldState.guild.id, uid, `Deleted "${vc.name}"`, vc, '0')
                         }
-                        client.functions.SendModLog(client, oldState.guild.id, vc.id);
+                        setTimeout(() => {
+                            client.functions.SendModLog(client, oldState.guild.id, vc.id);
+                        }, 1000);
                         // yeet the info from the database
                         let sqlzor = SqlString.format('DELETE FROM channels WHERE id=?', [oldchan]);
                         d.query(sqlzor, async (er, res234) => {
