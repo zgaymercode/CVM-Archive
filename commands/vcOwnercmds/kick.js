@@ -28,7 +28,17 @@ module.exports.run = async (client, msg, args) => {
                                 if (member.id != memberinvc.id) return;
                                 vccheck = 1;
                             })
-                            if (vccheck != 1) return client.functions.Reply(msg, `<@${member.id}> is not in the voice channel`);
+                            if (vccheck != 1) {
+                                client.functions.Reply(msg, `<@${member.id}> has been denied access joining the channel`);
+                                vc.updateOverwrite(
+                                    member.id,
+                                    {
+                                        CONNECT: false
+                                    }
+                                )
+                                client.functions.AddModLog(client, msg.guild.id, msg.author.id, `<@${member.id}> blocked from joining VC`, msg.member.voice.channel, '3')
+                                return;
+                            }
                             member.voice.kick();
                             let vc = msg.member.voice.channel;
                             vc.updateOverwrite(
