@@ -1,12 +1,9 @@
 const Discord = module.require('discord.js')
 const SqlString = module.require('sqlstring')
-const { MessageButton, MessageActionRow } = require("discord-buttons");
-const { fn } = require("moment");
 module.exports.run = async (client, msg, args) => {
     // Define the reactions (if you modify these, modify them in the messageReactionAdd event as well)
     try {
         let vcid = msg.member.voice.channel.id;
-        var sql = SqlString.format('SELECT * FROM channels WHERE id=?', [vcid]);
         client.database.getConnection(function (err, d) {
             if (err) {
                 console.error("error connecting: " + err.stack);
