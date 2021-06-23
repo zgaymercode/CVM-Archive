@@ -2,7 +2,7 @@ exports.run = (client, msg, args) => {
     if (client.config.bot.isdevbuild === 0) {
         const { exec } = require('child_process');
         exec('../../../autopull.sh', (error, stdout, stderr) => {
-            msg.channel.send(`Pulling from GitHub main branch and than Restarting. test`).then((m) => {
+            msg.channel.send(`Pulling from GitHub main branch and than Restarting.`).then((m) => {
                 setTimeout(() => {
                     m.delete();
                     setTimeout(function () {
