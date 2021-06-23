@@ -23,6 +23,9 @@ module.exports.run = async (client, msg, args) => {
                     if (!res234) console.log("cant find joinchannel on unlock command")
                     if (res234) {
                         let lockable = res234[0].lockable;
+                        let joinchan = res234[0].joinchan;
+                        let jc = msg.guild.channels.cache.get(joinchan);
+
                         if (lockable === 0) fn.Reply(msg, "This channel is not allowed to be unlocked")
                         if (lockable === 1) {
                             var sql = SqlString.format('UPDATE channels SET locked="0" WHERE id=?', [vcid]);
@@ -32,9 +35,9 @@ module.exports.run = async (client, msg, args) => {
                                 if (re) {
                                     let vc = msg.guild.channels.cache.get(vcid);
                                     client.functions.AddModLog(client, msg.guild.id, msg.author.id, `Channel Unlocked`, vc, '3')
-                                    await vc.lockPermissions().then(() => {
+                                    await vc.overwritePermissions(jc.permissionOverwrites).then(() => {
                                         fn.Reply(msg, "Successfully unlocked channel");
-                                    });
+                                    })
                                 }
                             })
                         }
