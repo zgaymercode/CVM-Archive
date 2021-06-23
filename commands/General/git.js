@@ -24,5 +24,5 @@ module.exports.help = {
     description: "Displays the GitHub link for this bot and invite link",
     usage: "github",
     category: "General",
-    maintenancemode: 0
+    maintenancemode: 1
 }
