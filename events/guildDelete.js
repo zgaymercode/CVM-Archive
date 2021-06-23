@@ -17,11 +17,6 @@ module.exports = async (client, guild) => {
         d.query(sql, (err, res) => {
             if (err) console.error(err);
         })
-        // REMOVE ID FROM TABLE FOR WEBPANEL TO TRACK WHAT SERVERS THE BOT IS IN
-        var sql2 = SqlString.format('DELETE FROM serverids SET sid=?', [guild.id])
-        d.query(sql2, (err, res) => {
-            if (err) console.error(err);
-        })
         //#endregion
         d.release(function (err) {
             if (err) {
