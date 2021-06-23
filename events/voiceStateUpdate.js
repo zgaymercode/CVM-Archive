@@ -68,11 +68,20 @@ module.exports = async (client, oldState, newState) => {
                         permissionOverwrites: newState.channel.permissionOverwrites
                     });
                     if (stage === 1) {
+                        // verify that owner of the stage can speak
                         newchan.updateOverwrite(
                             userObject.id,
                             {
                                 STREAM: true,
                                 SPEAK: true
+                            }
+                        )
+                        // verify that new members in the stage can't speak
+                        newchan.updateOverwrite(
+                            guild.roles.everyone.id,
+                            {
+                                STREAM: false,
+                                SPEAK: false
                             }
                         )
                     }
