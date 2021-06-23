@@ -57,5 +57,5 @@ module.exports.help = {
     description: "set's the default lock state of a channel. auto-locking channels must also be set to lockable if you want the members to be able to unlock the channels",
     usage: "defaultlock <joinchan_id> locked|unlocked",
     category: "Administrative",
-    maintenancemode: 1
+    maintenancemode: 0
 }
