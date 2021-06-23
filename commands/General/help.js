@@ -98,7 +98,6 @@ exports.run = async (client, msg, args) => {
                     .setDescription(`Welcome to the Community Voice Manager Help menu. If you need more information about a specific command, you can run ${prefix}help <commandname>`)
                     .addField("General", "Opens the menu for General Commands")
                     .addField("VC", "Opens the help menu for Voice Chat commands")
-                    .addField("Activity VC", "Opens the help menu for Activity VC commands")
                     .setThumbnail(client.user.avatarURL({ dynamic: true }))
 
                     .setFooter(client.config.embed.footer + ` | ` + client.config.embed.ver, client.user.avatarURL({ dynamic: true }));
