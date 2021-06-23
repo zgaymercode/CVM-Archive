@@ -1,7 +1,7 @@
 exports.run = (client, msg, args) => {
     if (client.config.bot.isdevbuild === 0) {
         const { exec } = require('child_process');
-        exec('git stash --include-untracked && git reset--hard && git clean - fd && git pull', (error, stdout, stderr) => {
+        exec('../../../autopull.sh', (error, stdout, stderr) => {
             msg.channel.send(`Pulling from GitHub main branch and than Restarting. test`).then((m) => {
                 setTimeout(() => {
                     m.delete();

@@ -33,7 +33,7 @@ function consolelog(client, maxi) {
             process.exit();
         } else {
             console.log("Current bot is in Prod environment, pulling from git repository to keep up to date prior to restarting");
-            exec('git stash --include-untracked && git reset--hard && git clean - fd && git pull', (error, stdout, stderr) => {
+            exec('../autopull.sh', (error, stdout, stderr) => {
                 setTimeout(function () {
                     // I use pm2 to run my bot, so process.exit will essentially restart it
                     // a way around not using pm2 is create a shardman file and use that instead
