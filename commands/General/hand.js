@@ -22,6 +22,16 @@ module.exports.run = async (client, msg, args) => {
                         })
                     })
                     break;
+                case 'clear':
+                    client.functions.ModPermsCheck(msg, (response) => {
+                        if (!response) client.functions.Reply(msg, `You must be staff to use this command`);
+                        let sql = SqlString.format(`DELETE FROM queue WHERE vcid=?`, [vcid]);
+                        d.query(sql, (error, result) => {
+                            if (error) console.error(error);
+                            client.functions.Reply(msg, `Queue has successfully been cleared`)
+                        })
+                    })
+                    break;
                 case 'lower':
                     // let's see if the requests still have messages attached to them, and if they do, YEET
                     let queueVerify = SqlString.format(`SELECT * FROM queue WHERE userid=? AND vcid=?`, [msg.author.id, msg.member.voice.channel.id]);
