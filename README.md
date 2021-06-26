@@ -3,20 +3,20 @@
 <br>
 Community Voice Manager is a Discord.js Bot made to create temporary voice channels<br>
 **Request from the author:** Please do not turn this into a close source project, if you modify it, I'd like to see what improvements you made!<br>
-[Invite me to your server!](https://discord.com/api/oauth2/authorize?client_id=843080555012161546&permissions=288369680&scope=bot%20applications.commands)
+[Invite me to your server!](https://discord.com/api/oauth2/authorize?client_id=843080555012161546&permissions=288369680&scope=bot%20applications.commands)<br>
 ## Features
-- [X] Channel Name Templates with configurable Channel prefix's
-- [X] Update increment numbers via command (for manual overrides)
-- [X] Ability for users to rename Channels
-- [X] Lockable channels: Invite / kick members
-- [X] Claim channels if owner is no longer present (after timer is finished)
-- [X] create multiple join channels with different templates
-- [X] Allow enabling/disabling of lockable channels per-catagory
-- [X] Filterable voice channels (banned words)
-- [x] Temporary stage-like channels ( controlable voice chats with video :3 )
-- [x] Addition of Co-Owners, full perms of owners except adding new Co-Owners
-- [x] Auto-Locking channel (on create, channel locked (allows invite cmd to be used, but not lock/unlock))
-- [x] Hand raise Queue (request to talk for the activity channels)
+- [X] Channel Name Templates with configurable Channel prefix's<br>
+- [X] Update increment numbers via command (for manual overrides)<br>
+- [X] Ability for users to rename Channels<br>
+- [X] Lockable channels: Invite / kick members<br>
+- [X] Claim channels if owner is no longer present (after timer is finished)<br>
+- [X] create multiple join channels with different templates<br>
+- [X] Allow enabling/disabling of lockable channels per-catagory<br>
+- [X] Filterable voice channels (banned words)<br>
+- [x] Temporary stage-like channels ( controlable voice chats with video :3 )<br>
+- [x] Addition of Co-Owners, full perms of owners except adding new Co-Owners<br>
+- [x] Auto-Locking channel (on create, channel locked (allows invite cmd to be used, but not lock/unlock))<br>
+- [x] Hand raise Queue (request to talk for the activity channels)<br>
 
 ## Automated Tasks
 These tasks run every 1.5 minutes to keep things organzied :D <br>
