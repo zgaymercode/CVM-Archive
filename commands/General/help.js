@@ -95,7 +95,7 @@ exports.run = async (client, msg, args) => {
                 let homee = new Discord.MessageEmbed()
                     .setColor(client.config.embed.color)
                     .setAuthor("CVE Help Menu", '', giturl)
-                    .setDescription(`Welcome to the Community Voice Manager Help menu. If you need more information about a specific command, you can run ${prefix}help <commandname>`)
+                    .setDescription(`Welcome to the Community Voice Manager Help menu.\nIf you need more information about a specific command, you can run ${prefix}help <commandname>\n [Invite me to your server!](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=288369680&scope=bot%20applications.commands)`)
                     .addField("General", "Opens the menu for General Commands")
                     .addField("VC", "Opens the help menu for Voice Chat commands")
                     .setThumbnail(client.user.avatarURL({ dynamic: true }))
