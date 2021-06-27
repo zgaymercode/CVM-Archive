@@ -9,7 +9,6 @@
   "dependencies": {
     "discord-buttons": "^3.2.1",
     "discord.js": "^12.5.3",
-    "fs": "*",
     "moment": "^2.29.1",
     "mysql": "^2.18.1",
     "path": "^0.12.7",
