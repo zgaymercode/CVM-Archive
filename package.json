@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "start": "nodemon voicemanager.js"
+    "start-dev": "nodemon voicemanager.js",
+    "start": "pm2 start voicemanager.js"
   },
   "engines": {
     "node": "14"
