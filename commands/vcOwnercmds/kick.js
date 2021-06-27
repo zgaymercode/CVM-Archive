@@ -20,7 +20,7 @@ module.exports.run = async (client, msg, args) => {
                         let locked = re[0].locked;
                         let activityStatus = re[0].is_stage;
                         if (locked === 0) {
-                            fn.Reply(msg, "This channel is not either a lockable channel");
+                            fn.Reply(msg, "This channel is not a lockable channel");
                             return;
                         } else {
                             let vccheck;
