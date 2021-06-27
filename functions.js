@@ -274,6 +274,22 @@ async function serverDataCheck(client, guildID, callback) {
                 prefix = results[0].prefix;
                 modlog = results[0].modlog;
                 adminlog = results[0].adminlog;
+
+                // Command Perms
+                lock = results[0].lock;
+                unlock = results[0].unlock;
+                partyremove = results[0].partyremove;
+                partyclear = results[0].partyclear;
+                partyadd = results[0].partyadd;
+                limit = results[0].limit;
+                invite = results[0].invite;
+                coowner = results[0].coowner;
+                transfer = results[0].transfer;
+                kick = results[0].kick;
+                rename = results[0].rename;
+                queue = results[0].queue;
+                claim = results[0].claim;
+                hand = results[0].hand;
                 if (prefix === null) prefix = client.config.bot.prefix;
             } else {
                 prefix = client.config.bot.prefix;
@@ -284,6 +300,22 @@ async function serverDataCheck(client, guildID, callback) {
                         prefix = client.config.bot.prefix;
                         modlog = null;
                         adminlog = null;
+
+                        // Command Perms
+                        lock = 1;
+                        unlock = 1;
+                        partyremove = 1;
+                        partyclear = 1;
+                        partyadd = 1;
+                        limit = 1;
+                        invite = 1;
+                        coowner = 1;
+                        transfer = 1;
+                        kick = 1;
+                        rename = 1;
+                        queue = 1;
+                        claim = 1;
+                        hand = 1;
                     }
 
                 })
@@ -292,6 +324,22 @@ async function serverDataCheck(client, guildID, callback) {
                 prefix, // Server's Prefix
                 modlog, // Modlog channel ID
                 adminlog, // Admin Log Channel ID
+                
+                // Command Perms
+                lock,
+                unlock,
+                partyremove,
+                partyclear,
+                partyadd,
+                limit,
+                invite,
+                coowner,
+                transfer,
+                kick,
+                rename,
+                queue: 0,
+                claim,
+                hand
             })
         })
         d.release(function (err) {

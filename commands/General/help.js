@@ -31,26 +31,96 @@ exports.run = async (client, msg, args) => {
                         embed.addField(`Aliases`, help.aliases);
                     }
                     embed.addField(`Category`, help.category);
-
-                    if (help.category === `Dev`) {
-                        if (client.config.staff.includes(msg.author.id)) {
-                            send(msg, embed, client.functions);
-                            return;
-                        } else {
-                            client.functions.Reply(msg, `Sorry, This is a Dev Command`)
-                            return;
-                        }
+                    switch (help.category) {
+                        case 'Dev':
+                            if (client.config.staff.includes(msg.author.id)) {
+                                send(msg, embed, client.functions);
+                                return;
+                            } else {
+                                client.functions.Reply(msg, `Sorry, This is a Dev Command`)
+                                return;
+                            }
+                            break;
+                        case 'Administrative':
+                            if (msg.member.hasPermission(`MANAGE_GUILD`) || msg.member.hasPermission(`ADMINISTRATOR`)) {
+                                send(msg, embed, client.functions);
+                                return;
+                            } else {
+                                client.functions.Reply(msg, client.config.messages.nomanager)
+                                return;
+                            }
+                            break;
+                        case 'VC Owner Command':
+                            switch (help.name) {
+                                case 'kick':
+                                    if (server.kick === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                    send(msg, embed, client.functions);
+                                    break;
+                                case 'transfer':
+                                    if (server.transfer === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                    send(msg, embed, client.functions);
+                                    break;
+                                case 'coowner':
+                                    if (server.coowner === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                    send(msg, embed, client.functions);
+                                    break;
+                                case 'invite':
+                                    if (server.invite === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                    send(msg, embed, client.functions);
+                                    break;
+                                case 'limit':
+                                    if (server.limit === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                    send(msg, embed, client.functions);
+                                    break;
+                                case 'partyadd':
+                                    if (server.partyadd === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                    send(msg, embed, client.functions);
+                                    break;
+                                case 'partyclear':
+                                    if (server.partyclear === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                    send(msg, embed, client.functions);
+                                    break;
+                                case 'partyremove':
+                                    if (server.partyremove === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                    send(msg, embed, client.functions);
+                                    break;
+                                case 'lock':
+                                    if (server.lock === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                    send(msg, embed, client.functions);
+                                    break;
+                                case 'unlock':
+                                    if (server.unlock === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                    send(msg, embed, client.functions);
+                                    break;
+                                case 'rename':
+                                    if (server.rename === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                    send(msg, embed, client.functions);
+                                    break;
+                                case 'queue':
+                                    if (server.queue === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);;
+                                    send(msg, embed, client.functions);
+                                    break;
+                                default:
+                                    send(msg, embed, client.functions);
+                                    break;
+                            }
+                            break;
+                        default:
+                            switch (help.name) {
+                                case 'claim':
+                                    if (server.claim === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                    send(msg, embed, client.functions);
+                                    break;
+                                case 'hand':
+                                    if (server.hand === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                    send(msg, embed, client.functions);
+                                    break;
+                                default:
+                                    send(msg, embed, client.functions);
+                                    break;
+                            }
                     }
-                    if (help.category === `Administrative`) {
-                        if (msg.member.hasPermission(`MANAGE_GUILD`) || msg.member.hasPermission(`ADMINISTRATOR`)) {
-                            send(msg, embed, client.functions);
-                            return;
-                        } else {
-                            client.functions.Reply(msg, client.config.messages.nomanager)
-                            return;
-                        }
-                    }
-                    send(msg, embed, client.functions);
+                    
 
                 } catch (e) {
                     console.error(e)
@@ -154,11 +224,76 @@ exports.run = async (client, msg, args) => {
                                 Administrativee.addField(`${prefix}${usage}`, `${description}`);
                                 break;
                             case "VC Owner Command":
-                                vce.addField(`${prefix}${usage}`, `${description}`);
+                                switch (name) {
+                                    case 'kick':
+                                        if (server.kick === 0) break;
+                                        vce.addField(`${prefix}${usage}`, `${description}`);
+                                        break;
+                                    case 'transfer':
+                                        if (server.transfer === 0) break;
+                                        vce.addField(`${prefix}${usage}`, `${description}`);
+                                        break;
+                                    case 'coowner':
+                                        if (server.coowner === 0) break;
+                                        vce.addField(`${prefix}${usage}`, `${description}`);
+                                        break;
+                                    case 'invite':
+                                        if (server.invite === 0) break;
+                                        vce.addField(`${prefix}${usage}`, `${description}`);
+                                        break;
+                                    case 'limit':
+                                        if (server.limit === 0) break;
+                                        vce.addField(`${prefix}${usage}`, `${description}`);
+                                        break;
+                                    case 'partyadd':
+                                        if (server.partyadd === 0) break;
+                                        vce.addField(`${prefix}${usage}`, `${description}`);
+                                        break;
+                                    case 'partyclear':
+                                        if (server.partyclear === 0) break;
+                                        vce.addField(`${prefix}${usage}`, `${description}`);
+                                        break;
+                                    case 'partyremove':
+                                        if (server.partyremove === 0) break;
+                                        vce.addField(`${prefix}${usage}`, `${description}`);
+                                        break;
+                                    case 'lock':
+                                        if (server.lock === 0) break;
+                                        vce.addField(`${prefix}${usage}`, `${description}`);
+                                        break;
+                                    case 'unlock':
+                                        if (server.unlock === 0) break;
+                                        vce.addField(`${prefix}${usage}`, `${description}`);
+                                        break;
+                                    case 'rename':
+                                        if (server.rename === 0) break;
+                                        vce.addField(`${prefix}${usage}`, `${description}`);
+                                        break;
+                                    case 'queue':
+                                        if (server.queue === 0) break;
+                                        generale.addField(`${prefix}${usage}`, `${description}`);
+                                        break;
+                                    default:
+                                        vce.addField(`${prefix}${usage}`, `${description}`);
+                                        break;
+                                }
+                                
                                 break;
                             default:
-                                generale.addField(`${prefix}${usage}`, `${description}`);
-                                break;
+                                switch (name) {
+                                    
+                                    case 'claim':
+                                        if (server.claim === 0) break;
+                                        generale.addField(`${prefix}${usage}`, `${description}`);
+                                        break;
+                                    case 'hand':
+                                        if (server.hand === 0) break;
+                                        generale.addField(`${prefix}${usage}`, `${description}`);
+                                        break;
+                                    default:
+                                        generale.addField(`${prefix}${usage}`, `${description}`);
+                                        break;
+                                }
                         }
                     }
 

@@ -40,6 +40,7 @@ module.exports = async (client, msg) => {
                     return;
                 }
             }
+
             switch (command.help.category) {
                 case "Dev":
                     if (!client.config.staff.includes(msg.author.id)) return client.functions.Reply(msg, "Sorry, This is a Dev Command");
@@ -54,14 +55,74 @@ module.exports = async (client, msg) => {
                         if (!callback) return;
                         client.functions.vcPermsCheck(client, msg, (response) => {
                             if (!response) return client.functions.Reply(msg, client.config.messages.notowner);
-                            command.run(client, msg, args);
+                            switch (command.help.name) {
+                                case 'kick':
+                                    if (serverConfig.kick === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                    command.run(client, msg, args);
+                                    break;
+                                case 'transfer':
+                                    if (serverConfig.transfer === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                    command.run(client, msg, args);
+                                    break;
+                                case 'coowner':
+                                    if (serverConfig.coowner === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                    command.run(client, msg, args);
+                                    break;
+                                case 'invite':
+                                    if (serverConfig.invite === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                    command.run(client, msg, args);
+                                    break;
+                                case 'limit':
+                                    if (serverConfig.limit === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                    command.run(client, msg, args);
+                                    break;
+                                case 'partyadd':
+                                    if (serverConfig.partyadd === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                    command.run(client, msg, args);
+                                    break;
+                                case 'partyclear':
+                                    if (serverConfig.partyclear === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                    command.run(client, msg, args);
+                                    break;
+                                case 'partyremove':
+                                    if (serverConfig.partyremove === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                    command.run(client, msg, args);
+                                    break;
+                                case 'lock':
+                                    if (serverConfig.lock === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                    command.run(client, msg, args);
+                                    break;
+                                case 'unlock':
+                                    if (serverConfig.unlock === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                    command.run(client, msg, args);
+                                    break;
+                                case 'queue':
+                                    if (serverConfig.queue === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                    command.run(client, msg, args);
+                                    break;
+                                default:
+                                    command.run(client, msg, args);
+                                    break;
+                            }
                         })
                     })
 
                     break;
                 default:
-                    command.run(client, msg, args);
-                    break;
+                    switch (command.help.name) {
+                        
+                        case 'claim':
+                            if (serverConfig.claim === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                            command.run(client, msg, args);
+                            break;
+                        case 'hand':
+                            if (serverConfig.hand === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                            command.run(client, msg, args);
+                            break;
+                        default:
+                            command.run(client, msg, args);
+                            break;
+                    }
             }
         }
     })
