@@ -35,6 +35,7 @@ module.exports.run = async (client, msg, args) => {
             let retrieveCoOwnersObj = DBChanneldata_result[0].coowner;
             let jsonObjectFromDB = JSON.parse(retrieveCoOwnersObj)
             let CurrentOwnersArray = jsonObjectFromDB.coowners || [];
+            if (!msg.mentions.members.first()) return client.functions.Reply(msg, "You must @mention a member to transfer this channel to");
             let newownerid = msg.mentions.members.first().id;
             if (CurrentOwnersArray.includes(newownerid)) {
                 RemoveCoOwner(client, msg, d, newownerid, vcid, CurrentOwnersArray)
