@@ -30,7 +30,8 @@ module.exports = async (client, oldState, newState) => {
                     let stage = res[0].is_stage;
                     let limit = res[0].adjust_limit;
                     if (template === null) {
-                        template = `${userObject.username}'s Room`;
+                        VoiceChannelName = `${userObject.username}'s Room`;
+
                     } else {
                         let game;
                         // use the user generated template
@@ -61,6 +62,7 @@ module.exports = async (client, oldState, newState) => {
                             return;
                         });
                     }
+                    
                     let newchan = await newState.guild.channels.create(VoiceChannelName, {
                         type: 'voice',
                         parent: newState.channel.parent.id,
