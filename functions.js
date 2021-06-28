@@ -342,9 +342,7 @@ async function serverDataCheck(client, guildID, callback) {
                 hand
             })
         })
-        d.release(function (err) {
-
-        });
+        d.release(function (err) { });
     });
 
 }
