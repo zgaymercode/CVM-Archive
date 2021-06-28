@@ -337,7 +337,7 @@ async function serverDataCheck(client, guildID, callback) {
                 transfer,
                 kick,
                 rename,
-                queue: 0,
+                queue,
                 claim,
                 hand
             })
