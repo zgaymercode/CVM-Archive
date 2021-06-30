@@ -16,7 +16,8 @@ module.exports.run = async (client, msg, args) => {
                     d.query(updateServerSQL, (error, result) => {
                         if (error) return console.error(error);
                         if (!result) return client.functions.Reply(msg, "Could not update admin log channel");
-                        if (result) return client.functions.Reply(msg, `Successfully set admin Log to <#${logchannelID}>`);
+                        client.functions.Reply(msg, `Successfully set admin Log to <#${logchannelID}>`);
+                        client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Updated Admin log to <#${logchannelID}>`);
                     })
                     break;
                 case 'mod':
@@ -24,7 +25,8 @@ module.exports.run = async (client, msg, args) => {
                     d.query(updateServerSQL, (error, result) => {
                         if (error) return console.error(error);
                         if (!result) return client.functions.Reply(msg, "Could not update Mod log channel");
-                        if (result) return client.functions.Reply(msg, `Successfully set Mod Log to <#${logchannelID}>`);
+                        client.functions.Reply(msg, `Successfully set Mod Log to <#${logchannelID}>`);
+                        client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Updated Mod log to <#${logchannelID}>`);
                     })
                     break;
                 default:
