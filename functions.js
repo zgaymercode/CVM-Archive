@@ -369,7 +369,11 @@ async function AddAdminLog(client, guildid, memberid, action) {
             .addField(`Member`, `<@${memberid}>`)
             .addField(`Action`, `${action}`)
             .setFooter(`${client.config.embed.footer} | ${client.config.embed.ver}`, client.user.avatarURL({ dynamic: true }));
-        client.channels.cache.get(log).send(embed);
+        try {
+            client.channels.cache.get(log).send(embed);
+        } catch (e) {
+            console.log(e)
+        }
 
 
     })
@@ -510,7 +514,11 @@ async function SendModLog(client, guildID, channelID) {
                                 let timestamp = findtype0results[0].timestamp;
                                 let formattedTimestamp4 = moment(timestamp).format("MM-D-YY, h:mm:ss a UTC")
                                 embed.addField(`${action}`, `${formattedTimestamp4}`);
-                                logchannel.send(embed);
+                                try {
+                                    logchannel.send(embed);
+                                } catch (e) {
+                                    console.log(e)
+                                }
                             })
 
                         })
