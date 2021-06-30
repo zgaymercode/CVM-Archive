@@ -107,6 +107,10 @@ exports.run = async (client, msg, args) => {
                             break;
                         default:
                             switch (help.name) {
+                                case 'owner':
+                                    if (server.owner === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                    send(msg, embed, client.functions);
+                                    break;
                                 case 'claim':
                                     if (server.claim === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
                                     send(msg, embed, client.functions);
@@ -281,7 +285,10 @@ exports.run = async (client, msg, args) => {
                                 break;
                             default:
                                 switch (name) {
-                                    
+                                    case 'owner':
+                                        if (server.owner === 0) break;
+                                        generale.addField(`${prefix}${usage}`, `${description}`);
+                                        break;
                                     case 'claim':
                                         if (server.claim === 0) break;
                                         generale.addField(`${prefix}${usage}`, `${description}`);

@@ -276,6 +276,7 @@ async function serverDataCheck(client, guildID, callback) {
                 adminlog = results[0].adminlog;
 
                 // Command Perms
+                owner = results[0].owner;
                 lock = results[0].lock;
                 unlock = results[0].unlock;
                 partyremove = results[0].partyremove;
@@ -302,6 +303,7 @@ async function serverDataCheck(client, guildID, callback) {
                         adminlog = null;
 
                         // Command Perms
+                        owner = 1,
                         lock = 1;
                         unlock = 1;
                         partyremove = 1;
@@ -326,6 +328,7 @@ async function serverDataCheck(client, guildID, callback) {
                 adminlog, // Admin Log Channel ID
                 
                 // Command Perms
+                owner,
                 lock,
                 unlock,
                 partyremove,

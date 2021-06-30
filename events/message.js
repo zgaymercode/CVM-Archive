@@ -110,7 +110,10 @@ module.exports = async (client, msg) => {
                     break;
                 default:
                     switch (command.help.name) {
-                        
+                        case 'owner':
+                            if (serverConfig.owner === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                            command.run(client, msg, args);
+                            break;
                         case 'claim':
                             if (serverConfig.claim === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
                             command.run(client, msg, args);
