@@ -30,7 +30,8 @@ These tasks run every 1.5 minutes to keep things organzied :D <br>
 
 ## Future Plans
 Things that will come to the bot in the near future
+- [ ] Web Dashboard (in progress)
+- [ ] setup guide
 - [ ] Slash Commands
-- [ ] setup guide (maybe a website?)
 - [ ] Admin Panel (pending Discord bot UI update)
 - [ ] Win the game
