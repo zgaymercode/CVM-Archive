@@ -79,7 +79,7 @@ async function QCleanup(client) {
         d.query(`SELECT * FROM queue`, (error, results) => {
             if (error) console.error(error);
             if (results.length < 1) return;
-            for (let i = 0; i < results.length; i++){
+            for (let i = 0; i < results.length; i++) {
                 let created = results[i].created;
                 let time = timesince(created);
                 if (time >= 90) {
@@ -147,7 +147,7 @@ async function ChannelCleanup(client) {
     }
 }
 async function JoinchanCleanup(client) {
-    
+
     con.getConnection(function (err, d) {
         if (err) {
             console.error("error connecting: " + err.stack);
@@ -264,9 +264,26 @@ async function serverDataCheck(client, guildID, callback) {
         }
         let sql = SqlString.format(`SELECT * FROM servers WHERE id=?`, [guildID]);
         d.query(sql, async (error, results) => {
-            let prefix;
-            let modlog;
-            let adminlog;
+            let prefix; // Server's Prefix
+            let modlog; // Modlog channel ID
+            let adminlog; // Admin Log Channel ID
+            let premiumBlessed;
+            // Command Perms
+            let owner;
+            let lock;
+            let unlock;
+            let partyremove;
+            let partyclear;
+            let partyadd;
+            let limit;
+            let invite;
+            let coowner;
+            let transfer;
+            let kick;
+            let rename;
+            let queue;
+            let claim;
+            let hand;
 
             if (error) return console.error(error);
             if (results.length > 0) {
@@ -274,6 +291,7 @@ async function serverDataCheck(client, guildID, callback) {
                 prefix = results[0].prefix;
                 modlog = results[0].modlog;
                 adminlog = results[0].adminlog;
+                premiumBlessed = results[0].premium_blessed;
 
                 // Command Perms
                 owner = results[0].owner;
@@ -301,6 +319,7 @@ async function serverDataCheck(client, guildID, callback) {
                         prefix = client.config.bot.prefix;
                         modlog = null;
                         adminlog = null;
+                        premiumBlessed = 0;
 
                         // Command Perms
                         owner = 1,
@@ -326,8 +345,9 @@ async function serverDataCheck(client, guildID, callback) {
                 prefix, // Server's Prefix
                 modlog, // Modlog channel ID
                 adminlog, // Admin Log Channel ID
-                
-                // Command Perms
+                premiumBlessed, // Whether the server has access to premium features
+
+                // Server Wide Command Perms
                 owner,
                 lock,
                 unlock,
@@ -647,6 +667,124 @@ async function DeleteFromQueue(client, id) {
         d.release(function (releaseerror) { if (releaseerror) console.error(releaseerror); });
     });
 }
+async function premiumChannelPermChecks(client, msg, callback) {
+    let owner;
+    let lock;
+    let unlock;
+    let partyremove;
+    let partyclear;
+    let partyadd;
+    let limit;
+    let invite;
+    let coowner;
+    let transfer;
+    let kick;
+    let rename;
+    let queue;
+    let claim;
+    let hand;
+
+    serverDataCheck(client, msg.guild.id, (server) => {
+        if (server.premiumBlessed == 0) {
+            console.log(`Not a premium server ${msg.guild.id} ${server.premiumBlessed}`);
+            // Command Perms
+            owner = 1;
+            lock = 1;
+            unlock = 1;
+            partyremove = 1;
+            partyclear = 1;
+            partyadd = 1;
+            limit = 1;
+            invite = 1;
+            coowner = 1;
+            transfer = 1;
+            kick = 1;
+            rename = 1;
+            queue = 1;
+            claim = 1;
+            hand = 1;
+            callback({
+                // Command Perms
+                owner,
+                lock,
+                unlock,
+                partyremove,
+                partyclear,
+                partyadd,
+                limit,
+                invite,
+                coowner,
+                transfer,
+                kick,
+                rename,
+                queue,
+                claim,
+                hand
+            })
+        } else {
+            client.database.getConnection(function (err, d) {
+                if (err) {
+                    console.error("error connecting: " + err.stack);
+                    return;
+                }
+                let vcid = msg.member.voice.channel.id;
+                var sql = SqlString.format('SELECT * FROM channels WHERE id=?', [vcid]);
+                d.query(sql, async (er, re) => {
+                    if (er) console.error(er);
+                    if (re.length < 1) return;
+                    let joinchan = re[0].joinchan;
+                    let sqlcheckJoinChan = SqlString.format(`SELECT * FROM joinchans WHERE joinchan=?`, [joinchan]);
+                    d.query(sqlcheckJoinChan, (errorjoincheck, resultsjoincheck) => {
+                        if (errorjoincheck) console.error(errorjoincheck);
+                        
+                        // Command Perms
+                        owner = resultsjoincheck[0].owner;
+                        lock = resultsjoincheck[0].lock;
+                        unlock = resultsjoincheck[0].unlock;
+                        partyremove = resultsjoincheck[0].partyremove;
+                        partyclear = resultsjoincheck[0].partyclear;
+                        partyadd = resultsjoincheck[0].partyadd;
+                        limit = resultsjoincheck[0].limit;
+                        invite = resultsjoincheck[0].invite;
+                        coowner = resultsjoincheck[0].coowner;
+                        transfer = resultsjoincheck[0].transfer;
+                        kick = resultsjoincheck[0].kick;
+                        rename = resultsjoincheck[0].rename;
+                        queue = resultsjoincheck[0].queue;
+                        claim = resultsjoincheck[0].claim;
+                        hand = resultsjoincheck[0].hand;
+
+
+                        callback({
+                            // Command Perms
+                            owner,
+                            lock,
+                            unlock,
+                            partyremove,
+                            partyclear,
+                            partyadd,
+                            limit,
+                            invite,
+                            coowner,
+                            transfer,
+                            kick,
+                            rename,
+                            queue,
+                            claim,
+                            hand
+                        })
+                    })
+
+                })
+                d.release(function (err) {
+                    if (err) {
+                        console.error(err);
+                    }
+                });
+            });
+        }
+    })
+}
 //#endregion
 module.exports = {
     AddAdminLog,
@@ -657,10 +795,10 @@ module.exports = {
     isActivityVC,
     isTmpVC,
     ModPermsCheck,
+    premiumChannelPermChecks,
     Reply,
     SendModLog,
     serverDataCheck,
     timesince,
     vcPermsCheck,
 }
- 
