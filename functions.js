@@ -703,7 +703,7 @@ async function premiumChannelPermChecks(client, msg, callback) {
             queue = 1;
             claim = 1;
             hand = 1;
-            callback({
+            return callback({
                 // Command Perms
                 owner,
                 lock,
@@ -726,6 +726,41 @@ async function premiumChannelPermChecks(client, msg, callback) {
                 if (err) {
                     console.error("error connecting: " + err.stack);
                     return;
+                }
+                if (!msg.member.voice.channel) {
+                    owner = 1;
+                    lock = 1;
+                    unlock = 1;
+                    partyremove = 1;
+                    partyclear = 1;
+                    partyadd = 1;
+                    limit = 1;
+                    invite = 1;
+                    coowner = 1;
+                    transfer = 1;
+                    kick = 1;
+                    rename = 1;
+                    queue = 1;
+                    claim = 1;
+                    hand = 1;
+                    return callback({
+                        // Command Perms
+                        owner,
+                        lock,
+                        unlock,
+                        partyremove,
+                        partyclear,
+                        partyadd,
+                        limit,
+                        invite,
+                        coowner,
+                        transfer,
+                        kick,
+                        rename,
+                        queue,
+                        claim,
+                        hand
+                    })
                 }
                 let vcid = msg.member.voice.channel.id;
                 var sql = SqlString.format('SELECT * FROM channels WHERE id=?', [vcid]);
@@ -755,7 +790,7 @@ async function premiumChannelPermChecks(client, msg, callback) {
                         hand = resultsjoincheck[0].hand;
 
 
-                        callback({
+                        return callback({
                             // Command Perms
                             owner,
                             lock,
