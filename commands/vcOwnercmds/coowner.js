@@ -27,7 +27,7 @@ module.exports.run = async (client, msg, args) => {
             let CurrentOwnersArray = jsonObjectFromDB.coowners || [];
             
             // Now let's lock this command to owner only (non-owner has the owner command that will show the same data)
-            if (msg.author.id != oid) return client.functions.reply(msg, `Only the active owner can run this command`);
+            if (msg.author.id != oid) return client.functions.Reply(msg, `Only the active owner can run this command`);
             ArrayofModifiedCoOwners = [];
             let updateOwnerstatus = msg.mentions.members.first();
             switch (args[0]) {
