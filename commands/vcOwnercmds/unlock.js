@@ -35,6 +35,9 @@ module.exports.run = async (client, msg, args) => {
                                 if (re) {
                                     let vc = msg.guild.channels.cache.get(vcid);
                                     client.functions.AddModLog(client, msg.guild.id, msg.author.id, `Channel Unlocked`, vc, '3')
+                                    if (msg.needsAdminLog === 1) {
+                                        client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Unlocked ${vc.id}`);
+                                    }
                                     await vc.overwritePermissions(jc.permissionOverwrites).then(() => {
                                         fn.Reply(msg, "Successfully unlocked channel");
                                     })

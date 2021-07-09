@@ -3,7 +3,7 @@ const SqlString = module.require('sqlstring')
 const { MessageButton, MessageActionRow } = require("discord-buttons");
 const { fn } = require("moment");
 
-async function GrantNext(client, msg, grant, vc, oid ,jcid) {
+async function GrantNext(client, msg, grant, vc, oid, jcid) {
     // clear the channel's permissions
     let vcmembers = msg.member.voice.channel;
     vcmembers.members.each((member) => {
@@ -43,6 +43,9 @@ async function GrantNext(client, msg, grant, vc, oid ,jcid) {
     let tmpar = client.config.tmp.array;
     tmpar.push(grant.id);
     client.functions.AddModLog(client, msg.guild.id, msg.author.id, `<@${grant.id}> Granted`, vc, '3')
+    if (msg.needsAdminLog === 1) {
+        client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Granted <@${grant.id}> to speak & stream in ${vc.id}`)
+    }
     grant.voice.setChannel(tmpchannel).then(() => {
         tmpchannel.members.each((memberintmp) => {
             if (memberintmp.id != grant.id) return;
@@ -99,9 +102,9 @@ module.exports.run = async (client, msg, args) => {
                                         if (vccheck != 1) {
                                             client.functions.Reply(msg, `<@${grant.id}> is no longer in the voice chat. \n`);
                                             client.functions.DeleteFromQueue(client, grantid);
-                                            GrantNext(client, msg, grant, vc, oid ,jcid)
+                                            GrantNext(client, msg, grant, vc, oid, jcid)
                                         }
-                                        GrantNext(client, msg, grant, vc, oid ,jcid)
+                                        GrantNext(client, msg, grant, vc, oid, jcid)
                                     })
                                 })
                                 break;

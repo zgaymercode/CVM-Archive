@@ -27,10 +27,13 @@ module.exports.run = async (client, msg, args) => {
                         vc.updateOverwrite(
                             member,
                             {
-                                CONNECT: true,
+                                //CONNECT: true,
                                 VIEW_CHANNEL: true
                             }
                         )
+                        if (msg.needsAdminLog === 1) {
+                            client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `invited <@${member.id}> to ${vc.id}`)
+                        }
                         client.functions.AddModLog(client, msg.guild.id, msg.author.id, `<@${member.id}> Invited`, vc, '3');
                         msg.channel.send("Successfully invited <@" + member.id + "> to the channel").then((m) => {
                             setTimeout(() => {

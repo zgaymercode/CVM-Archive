@@ -33,7 +33,7 @@ function consolelog(client, maxi) {
             process.exit();
         } else {
             console.log("Current bot is in Prod environment, pulling from git repository to keep up to date prior to restarting");
-            exec('git stash --include-untracked && git reset--hard && git clean - fd && git pull', (error, stdout, stderr) => {
+            exec('git stash --include-untracked && git reset --hard && git clean - fd && git pull', (error, stdout, stderr) => {
                 setTimeout(function () {
                     // I use pm2 to run my bot, so process.exit will essentially restart it
                     // a way around not using pm2 is create a shardman file and use that instead
@@ -323,7 +323,7 @@ async function serverDataCheck(client, guildID, callback) {
 
                         // Command Perms
                         owner = 1,
-                        lock = 1;
+                            lock = 1;
                         unlock = 1;
                         partyremove = 1;
                         partyclear = 1;
@@ -573,16 +573,32 @@ async function vcPermsCheck(client, msg, callback) {
             let jsonObjectFromDB = JSON.parse(retrieveCoOwnersObj)
             let CurrentOwnersArray = jsonObjectFromDB.coowners || [];
             ModPermsCheck(msg, (modcheck) => {
-
-                if (msg.author.id === VCOwnerID || CurrentOwnersArray.includes(msg.author.id) || modcheck) {
-                    callback(true);
+                if (modcheck && msg.author.id != VCOwnerID && !CurrentOwnersArray.includes(msg.author.id)) {
+                    callback({
+                        auth: 1,
+                        modlog: 1
+                    });
+                } else if (msg.author.id === VCOwnerID || CurrentOwnersArray.includes(msg.author.id) || modcheck) {
+                    callback({
+                        auth: 1,
+                        modlog: 0
+                    });
                 } else {
                     if (CurrentOwnersArray.includes(msg.author.id)) {
-                        callback(true);
+                        callback({
+                            auth: 1,
+                            modlog: 0
+                        });
                     } else if (VCOwnerID === msg.author.id) {
-                        callback(true);
+                        callback({
+                            auth: 1,
+                            modlog: 0
+                        });
                     } else {
-                        callback(false)
+                        callback({
+                            auth: 0,
+                            modlog: 0
+                        });
                     }
                 }
             })
@@ -630,7 +646,10 @@ async function isActivityVC(client, msg, callback) {
     });
 }
 async function isTmpVC(client, msg, callback) {
-    if (!msg.member.voice.channel) callback(false);
+    if (!msg.member.voice.channel) {
+        callback(false);
+        return;
+    }
     let vcid = msg.member.voice.channel.id;
     var sql = SqlString.format('SELECT * FROM channels WHERE id=?', [vcid]);
     client.database.getConnection(function (err, d) {
@@ -766,12 +785,46 @@ async function premiumChannelPermChecks(client, msg, callback) {
                 var sql = SqlString.format('SELECT * FROM channels WHERE id=?', [vcid]);
                 d.query(sql, async (er, re) => {
                     if (er) console.error(er);
-                    if (re.length < 1) return;
+                    if (re.length < 1) {
+                        owner = 1;
+                        lock = 1;
+                        unlock = 1;
+                        partyremove = 1;
+                        partyclear = 1;
+                        partyadd = 1;
+                        limit = 1;
+                        invite = 1;
+                        coowner = 1;
+                        transfer = 1;
+                        kick = 1;
+                        rename = 1;
+                        queue = 1;
+                        claim = 1;
+                        hand = 1;
+                        return callback({
+                            // Command Perms
+                            owner,
+                            lock,
+                            unlock,
+                            partyremove,
+                            partyclear,
+                            partyadd,
+                            limit,
+                            invite,
+                            coowner,
+                            transfer,
+                            kick,
+                            rename,
+                            queue,
+                            claim,
+                            hand
+                        })
+                    }
                     let joinchan = re[0].joinchan;
                     let sqlcheckJoinChan = SqlString.format(`SELECT * FROM joinchans WHERE joinchan=?`, [joinchan]);
                     d.query(sqlcheckJoinChan, (errorjoincheck, resultsjoincheck) => {
                         if (errorjoincheck) console.error(errorjoincheck);
-                        
+
                         // Command Perms
                         owner = resultsjoincheck[0].owner;
                         lock = resultsjoincheck[0].lock;

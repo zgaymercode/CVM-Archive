@@ -22,7 +22,7 @@ module.exports.run = async (client, msg, args) => {
                     if (res234) {
                         let lockable = res234[0].lockable;
                         if (lockable === 0) fn.Reply(msg, "This channel is not allowed to be locked")
-                        if(lockable === 1) {
+                        if (lockable === 1) {
                             var sql = SqlString.format('UPDATE channels SET locked="1" WHERE id=?', [vcid]);
                             d.query(sql, async (er, re) => {
                                 if (er) console.error(er);
@@ -35,6 +35,9 @@ module.exports.run = async (client, msg, args) => {
                                             CONNECT: false
                                         }
                                     );
+                                    if (msg.needsAdminLog === 1) {
+                                        client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Locked ${vc.id}`)
+                                    }
                                     client.functions.AddModLog(client, msg.guild.id, msg.author.id, `Channel Locked`, vc, '3')
                                     fn.Reply(msg, 'Successfully locked channel')
                                 }

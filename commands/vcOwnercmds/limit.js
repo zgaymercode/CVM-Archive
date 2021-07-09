@@ -13,9 +13,9 @@ module.exports.run = async (client, msg, args) => {
             }
             d.query(sql, async (er, re) => {
                 if (er) console.error(er);
-                if (re.length<1) fn.Reply(msg, config.messages.oof)
+                if (re.length < 1) fn.Reply(msg, config.messages.oof)
                 let adjustLimitAllowed = re[0].adjust_limit;
-                if(adjustLimitAllowed != 1) return client.functions.Reply(msg, `<#${vcid}> does not permit voice channel limits from being edited`)
+                if (adjustLimitAllowed != 1) return client.functions.Reply(msg, `<#${vcid}> does not permit voice channel limits from being edited`)
                 let vc = msg.guild.channels.cache.get(vcid);
                 let newlim = args[0];
                 if (isNaN(newlim)) return fn.Reply(msg, "The limit provided is not an number!");
@@ -29,6 +29,9 @@ module.exports.run = async (client, msg, args) => {
                     numlim = "Unlimited";
                 }
                 fn.Reply(msg, `Successfully updated channel's limit to: ${numlim}`)
+                if (msg.needsAdminLog === 1) {
+                    client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Updated ${vc.id}'s limit to ${numlim}`)
+                }
                 client.functions.AddModLog(client, msg.guild.id, msg.author.id, `Channel Limit changed to ${numlim}`, vc, '2')
             })
             d.release(function (err) {

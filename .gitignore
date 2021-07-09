@@ -7,7 +7,10 @@ logs
 *.log
 
 #ignore config file
-config.js
+/config.js
+
+# ignore the dev test file
+/commands/dev/test.js
 
 # Ignore the build directory
 /dist
@@ -19,5 +22,3 @@ config.js
 .idea/
 .vscode/
 *.sw*
-config.js
-commands/dev/test.js

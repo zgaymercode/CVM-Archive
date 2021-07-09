@@ -25,6 +25,7 @@ module.exports.run = async (client, msg, args) => {
                     let tmpchannel = client.channels.cache.get(jcid);
                     let tmpar = client.config.tmp.array;
                     tmpar.push(member.id);
+
                     member.voice.setChannel(tmpchannel).then(() => {
                         tmpchannel.members.each((memberintmp) => {
                             if (memberintmp.id != member.id) return;
@@ -39,7 +40,9 @@ module.exports.run = async (client, msg, args) => {
                         })
                     })
                 });
-
+                if (msg.needsAdminLog === 1) {
+                    client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Cleared ${vc.id}'s permission overwrites`)
+                }
                 client.functions.Reply(msg, `Voice chat has been cleared of all permission overwrites`)
 
             } else {

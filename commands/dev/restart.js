@@ -24,8 +24,8 @@ exports.run = (client, msg, args) => {
             }, 5000);
         });
     }
-    
-       
+
+
 };
 module.exports.help = {
     name: "restart",

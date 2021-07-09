@@ -37,17 +37,17 @@ module.exports.run = async (client, msg, args) => {
                                     }
                                 )
                                 client.functions.AddModLog(client, msg.guild.id, msg.author.id, `<@${member.id}> blocked from joining VC`, msg.member.voice.channel, '3')
+                                if (msg.needsAdminLog === 1) {
+                                    client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Used the kick command against <@${member.id}>`);
+                                }
                                 return;
                             }
                             member.voice.kick();
                             let vc = msg.member.voice.channel;
-                            vc.updateOverwrite(
-                                member.id,
-                                {
-                                    CONNECT: false
-                                }
-                            )
                             client.functions.AddModLog(client, msg.guild.id, msg.author.id, `<@${member.id}> kicked from VC`, msg.member.voice.channel, '3')
+                            if (msg.needsAdminLog === 1) {
+                                client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Used the kick command against <@${member.id}>`);
+                            }
                             client.functions.Reply(msg, `Successfully kicked <@${member.id}> from the channel`);
                         }
                     }

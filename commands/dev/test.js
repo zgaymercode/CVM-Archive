@@ -7,7 +7,7 @@ const { MessageButton, MessageActionRow } = require("discord-buttons");
 exports.run = async (client, msg, args) => {
     try {
 
-
+        // changy change change change
     } catch (e) {
         console.error(e);
         client.functions.Reply(msg, "There was an error in the matrix")

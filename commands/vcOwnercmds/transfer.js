@@ -17,7 +17,9 @@ function ChownR(client, msg, d, newownerid, vcid) {
     d.query(newOwnerSQL, (newOwnerSQL_error, newOwnerSQL_results) => {
         if (newOwnerSQL_error) console.error(newOwnerSQL_error);
         if (newOwnerSQL_results.length < 1) return;
-
+        if (msg.needsAdminLog === 1) {
+            client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Transfered ownership of ${vcid} to <@${newownerid}>`);
+        }
         client.functions.Reply(msg, `Ownership has been transfered to <@${newownerid}>`)
     })
 }

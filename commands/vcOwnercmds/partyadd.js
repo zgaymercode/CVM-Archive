@@ -5,7 +5,7 @@ module.exports.run = async (client, msg, args) => {
             console.error("error connecting: " + err.stack);
             return;
         }
-        
+
         let cid = msg.member.voice.channel.id;
         let vc = msg.member.voice.channel;
         var sql = SqlString.format('SELECT * FROM channels WHERE id=?', [cid]);
@@ -24,7 +24,7 @@ module.exports.run = async (client, msg, args) => {
                     vccheck = 1;
                 })
                 if (vccheck != 1) return client.functions.Reply(msg, `<@${grant.id}> is not in the voice chat`);
-                
+
                 // delete any entries for the queue that may exists
                 client.functions.DeleteFromQueue(client, grant.id);
 
@@ -39,6 +39,9 @@ module.exports.run = async (client, msg, args) => {
                 let tmpchannel = client.channels.cache.get(jcid);
                 let tmpar = client.config.tmp.array;
                 tmpar.push(grant.id);
+                if (msg.needsAdminLog === 1) {
+                    client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Granted ${grant.id} Speak and Stream in ${vc.id}`)
+                }
                 client.functions.AddModLog(client, msg.guild.id, msg.author.id, `<@${grant.id}> Granted`, vc, '3')
                 grant.voice.setChannel(tmpchannel).then(() => {
                     tmpchannel.members.each((memberintmp) => {

@@ -53,9 +53,17 @@ module.exports = async (client, msg) => {
                         break;
                     case "VC Owner Command":
                         client.functions.isTmpVC(client, msg, (callback) => {
-                            if (!callback) return;
-                            client.functions.vcPermsCheck(client, msg, (response) => {
-                                if (!response) return client.functions.Reply(msg, client.config.messages.notowner);
+                            if (!callback) {
+                                return;
+                            };
+
+                            client.functions.vcPermsCheck(client, msg, async (permcheck) => {
+                                if (permcheck.auth === 0) return client.functions.Reply(msg, client.config.messages.notowner);
+                                if (permcheck.modlog === 1) {
+                                    msg.needsAdminLog = 1;
+                                } else {
+                                    msg.needsAdminLog = 0;
+                                }
                                 switch (command.help.name) {
                                     case 'kick':
                                         if (serverConfig.kick === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
@@ -65,6 +73,11 @@ module.exports = async (client, msg) => {
                                     case 'transfer':
                                         if (serverConfig.transfer === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
                                         if (premiumPerms.transfer === 0) return client.functions.Reply(msg, client.config.messages.channeldisabled);
+                                        command.run(client, msg, args);
+                                        break;
+                                    case 'rename':
+                                        if (serverConfig.rename === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                        if (premiumPerms.rename === 0) return client.functions.Reply(msg, client.config.messages.channeldisabled);
                                         command.run(client, msg, args);
                                         break;
                                     case 'coowner':
