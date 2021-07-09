@@ -56,7 +56,7 @@ module.exports.run = async (client, msg, args) => {
 }
 module.exports.help = {
     name: "partyclear",
-    //aliases: [""],
+    aliases: ["clear"],
     description: "Resets an activity voice channel's permissions to just the owner being able to speak/stream",
     usage: "partyclear",
     category: "VC Owner Command",
