@@ -14,7 +14,7 @@ exports.run = (client, msg, args) => {
 module.exports.help = {
     name: "restart",
     //aliases: [""],
-    description: "forces a pull from github and restarts the bot, setting all the code to what is on the git repository",
+    description: "restarts bot",
     usage: "restart",
     category: "Dev",
     maintenancemode: 0
