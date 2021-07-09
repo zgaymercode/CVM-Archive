@@ -6,7 +6,7 @@ async function UpdateOwner(d, msg, fn, vc) {
         if (!ro) fn.Reply(msg, "Could not claim channel");
         if (ro) fn.Reply(msg, "you have successfully claimed this channel");
     })
-}            
+}
 async function removeCoOwnerfromCoOwnerList(d, NewOwnerId, CurrentOwnersArray, channel_id) {
     ArrayofModifiedCoOwners = [];
     for (let i = 0; i < CurrentOwnersArray.length; i++) {
@@ -41,7 +41,7 @@ module.exports.run = async (client, msg, args) => {
                         client.functions.ModPermsCheck(msg, (modperms) => {
                             if (modperms) {
                                 client.functions.AddModLog(client, msg.guild.id, msg.author.id, 'Force Claimed channel', vc, '2')
-                                client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Force Claimed vc: '${vc.name}'`)
+                                client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Force Claimed vc: '${vc.name} \n id: ${vc.id}'`)
                                 UpdateOwner(d, msg, fn, vc)
                             } else {
                                 let ownerleavetimestamp = re[0].ownerleavetimestamp
@@ -51,7 +51,7 @@ module.exports.run = async (client, msg, args) => {
                                 if (ownerleavetimestamp != null) {
                                     let timesinceleave = client.functions.timesince(ownerleavetimestamp);
                                     let cooldown = config.bot.ownerleavecooldown;
-                                
+
                                     if (timesinceleave < cooldown) {
                                         // Time Since owner is less than the cooldown
                                         let timeleft = cooldown - timesinceleave;
@@ -59,7 +59,7 @@ module.exports.run = async (client, msg, args) => {
                                             timeleft = timeleft * -1;
                                         }
                                         fn.Reply(msg, `Sorry, But there is still ${timeleft} Minutes left before you can claim this channel`);
-                                    
+
                                     } else {
                                         // Check for Co-Owners first before allowing anyone to claim
                                         if (CurrentOwnersArray.length < 1) {
