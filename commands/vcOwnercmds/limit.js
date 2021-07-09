@@ -22,8 +22,12 @@ module.exports.run = async (client, msg, args) => {
                 if (newlim < 2 && newlim != 0) return fn.Reply(msg, "The limit must be at least 2 or use 0 to remove the limit");
                 if (newlim > 99) return fn.Reply(msg, "The limit must be less than 100");
                 vc.setUserLimit(newlim)
-                if (newlim != 0) numlim = newlim;
-                if (newlim === 0) numlim = "Unlimited";
+                let numlim;
+                if (newlim != 0) {
+                    numlim = newlim;
+                } else {
+                    numlim = "Unlimited";
+                }
                 fn.Reply(msg, `Successfully updated channel's limit to: ${numlim}`)
                 client.functions.AddModLog(client, msg.guild.id, msg.author.id, `Channel Limit changed to ${numlim}`, vc, '2')
             })
