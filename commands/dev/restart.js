@@ -1,29 +1,13 @@
 const { exec } = module.require('child_process');
 exports.run = (client, msg, args) => {
-    if (client.config.bot.isdevbuild === 0) {
-        exec('git stash --include-untracked && git reset --hard && git clean - fd && git pull', (error, stdout, stderr) => {
-            msg.channel.send(`Pulling from GitHub main branch and than Restarting.`).then((m) => {
-                setTimeout(() => {
-                    m.delete();
-                    setTimeout(function () {
-                        process.exit(1);
-                    }, 100)
-                }, 5000);
-            });
-            if (error !== null) {
-                console.log(`exec error: ${error}`);
-            }
-        });
-    } else {
-        msg.channel.send(`Bot is in Dev mode, Pull from github has been canceled. Restarting now`).then((m) => {
-            setTimeout(() => {
-                m.delete();
-                setTimeout(function () {
-                    process.exit(1);
-                }, 100)
-            }, 5000);
-        });
-    }
+    msg.channel.send(`<:CVM:863021391438675978> Restarting now <:CVM:863021391438675978>`).then((m) => {
+        setTimeout(() => {
+            m.delete();
+            setTimeout(function () {
+                process.exit(1);
+            }, 100)
+        }, 5000);
+    });
 
 
 };
