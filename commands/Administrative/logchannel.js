@@ -51,5 +51,5 @@ module.exports.help = {
     description: "Sets the channel for the bot to send modlogs/adminlogs into",
     usage: "logchan admin|mod #channel",
     category: "Administrative",
-    maintenancemode: 0
+    maintenancemode: 1
 }
