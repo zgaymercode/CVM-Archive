@@ -50,7 +50,7 @@ module.exports.run = async (client, msg, args) => {
                     })
                     break;
                 case 'raise':
-                    
+
 
                     let yeetQueueRequest = SqlString.format(`DELETE FROM queue WHERE userid=? AND vcid=?`, [msg.author.id, msg.member.voice.channel.id]);
                     d.query(yeetQueueRequest, (yeetQueueRequest_error, yeetQueueRequest_results) => {
@@ -59,7 +59,7 @@ module.exports.run = async (client, msg, args) => {
                         let CreateQueueSQL = SqlString.format(`INSERT IGNORE INTO queue SET userid=?, vcid=?, created=CURRENT_TIMESTAMP()`, [userid, vcid]);
                         d.query(CreateQueueSQL, (CreateQueueSQL_error, CreateQueueSQL_results) => {
                             if (CreateQueueSQL_error) console.error(CreateQueueSQL_error);
-                            
+
                             // Create the embed to make life look PWETTY :3
                             let embed = new Discord.MessageEmbed()
                                 .setColor(client.config.embed.color)
@@ -70,7 +70,7 @@ module.exports.run = async (client, msg, args) => {
                         })
                     })
 
-                    
+
                     break;
                 case 'status':
                     let queueCheckSQL = SqlString.format(`SELECT * FROM queue WHERE vcid=? ORDER BY created ASC`, [vcid]);
@@ -114,5 +114,5 @@ module.exports.help = {
     description: 'allows you to add/remove yourself from the queue, also allows you to check the queue of speakers',
     usage: "hand raise | lower | status",
     category: "General",
-    maintenancemode: 0
+    maintenancemode: 1
 }

@@ -149,5 +149,5 @@ module.exports.help = {
     description: `Allows the owner of a channel to manage the queue of their activity channel. appending next will clear the channel's permissions and grant the next in queue. apending clear will clear the queue for the channel. remove will remove a member from the queue`,
     usage: "queue next | clear | remove",
     category: "VC Owner Command",
-    maintenancemode: 0
+    maintenancemode: 1
 }
