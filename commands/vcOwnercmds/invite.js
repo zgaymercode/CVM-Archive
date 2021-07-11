@@ -27,7 +27,7 @@ module.exports.run = async (client, msg, args) => {
                         vc.updateOverwrite(
                             member,
                             {
-                                //CONNECT: true,
+                                CONNECT: true,
                                 VIEW_CHANNEL: true
                             }
                         )
