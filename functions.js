@@ -676,21 +676,7 @@ async function DeleteFromQueue(client, id) {
     });
 }
 async function premiumChannelPermChecks(client, msg, callback) {
-    let owner;
-    let lock;
-    let unlock;
-    let partyremove;
-    let partyclear;
-    let partyadd;
-    let limit;
-    let invite;
-    let coowner;
-    let transfer;
-    let kick;
-    let rename;
-    let queue;
-    let claim;
-    let hand;
+    let owner, lock, unlock, partyremove, partyclear, partyadd, limit, invite, coowner, transfer, kick, rename, queue, claim, hand;
 
     serverDataCheck(client, msg.guild.id, (server) => {
         if (server.premiumBlessed == 0) {
@@ -872,6 +858,8 @@ module.exports = {
     isActivityVC,
     isTmpVC,
     ModPermsCheck,
+    ChannelCleanup,
+    JoinchanCleanup,
     premiumChannelPermChecks,
     Reply,
     SendModLog,
