@@ -14,7 +14,7 @@ module.exports = async (client, guild) => {
             if (err) console.error(err);
         })
         // Delete the server's config (if it exists)
-        var sql2 = SqlString.format(`DELETE FROM serverconfig WHERE id=?`, [guild.id]);
+        var sql2 = SqlString.format(`DELETE FROM servers WHERE id=?`, [guild.id]);
         d.query(sql2, (err, res) => {
             if (err) console.error(err);
         })
