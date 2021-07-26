@@ -35,11 +35,7 @@ module.exports.run = async (client, msg, args) => {
                             client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `invited <@${member.id}> to ${vc.id}`)
                         }
                         client.functions.AddModLog(client, msg.guild.id, msg.author.id, `<@${member.id}> Invited`, vc, '3');
-                        msg.channel.send("Successfully invited <@" + member.id + "> to the channel").then((m) => {
-                            setTimeout(() => {
-                                m.delete()
-                            }, 5000);
-                        })
+                        client.functions.Reply(msg, `Successfully invited <@${member.id}> to the channel`);
                     }
                 })
                 d.release(function (err) {

@@ -114,6 +114,17 @@ client.database = mysql.createPool({
     database: client.config.db.database,
     charset: "utf8mb4"
 });
+
+client.database2 = mysql.createPool({
+    connectionLimit: 10,
+    host: client.config.db.host2,
+    user: client.config.db.user,
+    password: client.config.db.pass,
+    database: client.config.db.database2,
+    charset: "utf8mb4"
+
+});
+
 client.ws.on('INTERACTION_CREATE', async interaction => {
     let cmdname = interaction.data.name;
     if (client.slashcmds.has(cmdname)) client.slashcmds.get(cmdname).run(client, interaction);
