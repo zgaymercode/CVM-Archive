@@ -4,6 +4,7 @@ module.exports = async (client, msg) => {
     // Get the server's data to see which server and what it's config is
     client.functions.serverDataCheck(client, msg.guild.id, (serverConfig) => {
         // handle the command arguments and schtuffs
+        msg.serverConfig = serverConfig;
         let prefix = serverConfig.prefix;
         if (msg.content === `<@!${client.user.id}>`) {
             client.functions.Reply(msg, `My current prefix is: ${prefix}`)
@@ -32,6 +33,7 @@ module.exports = async (client, msg) => {
             }
         } else {
             client.functions.premiumChannelPermChecks(client, msg, (premiumPerms) => {
+                msg.premiumPerms = premiumPerms;
                 if (command.help.maintenancemode === 1) {
                     if (client.config.staff.includes(msg.author.id)) {
                         command.run(client, msg, args);

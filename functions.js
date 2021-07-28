@@ -8,12 +8,19 @@ const fs = require("fs");
 const moment = require("moment");
 //#endregion
 //#region DATABASE
-var con = mysql.createPool({
+var botDB = mysql.createPool({
     connectionLimit: 10,
     host: config.db.host,
     user: config.db.user,
     password: config.db.pass,
     database: config.db.database,
+});
+var dashboardDB = mysql.createPool({
+    connectionLimit: 10,
+    host: config.db.host2,
+    user: config.db.user,
+    password: config.db.pass,
+    database: config.db.database2,
 });
 //#endregion
 //#region BOTSTUFF
@@ -85,7 +92,7 @@ async function QCleanup(client) {
 }
 async function ChannelCleanup(client) {
     try {
-        con.getConnection(function (err, d) {
+        botDB.getConnection(function (err, d) {
             if (err) {
                 console.error("error connecting: " + err.stack);
                 return;
@@ -137,7 +144,7 @@ async function ChannelCleanup(client) {
 }
 async function JoinchanCleanup(client) {
 
-    con.getConnection(function (err, d) {
+    botDB.getConnection(function (err, d) {
         if (err) {
             console.error("error connecting: " + err.stack);
             return;
@@ -168,7 +175,7 @@ async function JoinchanCleanup(client) {
     });
 }
 async function FilterListCleanup(client) {
-    con.getConnection(function (err, d) {
+    botDB.getConnection(function (err, d) {
         if (err) {
             console.error("error connecting: " + err.stack);
             return;
@@ -225,7 +232,7 @@ async function BlistedWordCheck(word, msg) {
     try {
 
         var sql = SqlString.format('SELECT * FROM forbiddonwords WHERE word=? AND gid=?', [word, gid]);
-        con.getConnection(function (err, d) {
+        botDB.getConnection(function (err, d) {
             if (err) {
                 console.error("error connecting: " + err.stack);
                 return;
