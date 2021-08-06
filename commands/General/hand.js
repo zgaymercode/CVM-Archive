@@ -114,5 +114,6 @@ module.exports.help = {
     description: 'allows you to add/remove yourself from the queue, also allows you to check the queue of speakers',
     usage: "hand raise | lower | status",
     category: "General",
-    maintenancemode: 1
+    cooldown: 0,
+    maintenancemode: 0
 }

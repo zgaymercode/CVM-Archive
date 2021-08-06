@@ -29,5 +29,6 @@ module.exports.help = {
     description: "Lists all commands that are currently in Maitenance Mode",
     usage: "maintenancemode",
     category: "Dev",
+    cooldown: 0,
     maintenancemode: 0
 }

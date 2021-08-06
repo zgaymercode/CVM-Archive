@@ -34,7 +34,7 @@ function consolelog(client, maxi) {
         console.log(" ");
     }
 
-    if (v === maxi) {
+    if (v === maxi && client.config.bot.isdevbuild === 0) {
         console.log("Maximum numbers of intervals per-session has been reached... Restarting");
         process.exit();
     }
@@ -53,19 +53,29 @@ function BotStatus(client) {
 async function intervals(client) {
     m = 50; // max intervals before restart
     client.user.setActivity(client.config.bot.startstatus, { type: "PLAYING" });
-    consolelog(client, m);
-    ChannelCleanup(client);
-    QCleanup(client);
-    JoinchanCleanup(client);
-    FilterListCleanup(client);
-    setInterval(() => {
-        BotStatus(client);
+    if (client.config.isdevbuild === 0) {
+        consolelog(client, m);
         ChannelCleanup(client);
         QCleanup(client);
         JoinchanCleanup(client);
         FilterListCleanup(client);
+        setInterval(() => {
+            BotStatus(client);
+            ChannelCleanup(client);
+            QCleanup(client);
+            JoinchanCleanup(client);
+            FilterListCleanup(client);
+            consolelog(client, m);
+        }, 150000); // every 2.5 minutes
+    } else {
         consolelog(client, m);
-    }, 150000); // every 2.5 minutes
+        QCleanup(client);
+        setInterval(() => {
+            BotStatus(client);
+            QCleanup(client);
+            consolelog(client, m);
+        }, 150000); // every 2.5 minutes
+    }
 }
 //#endregion
 //#region Cron Jobs
@@ -207,6 +217,17 @@ async function FilterListCleanup(client) {
         });
     });
 }
+async function cooldownCmdsCleanup(client) {
+    /*
+        select  * from cooldown_tracker
+        command (varchar(100))
+        userid (varchar(100))
+        timestamp (UTC)
+
+        check if timestamp is > 1hr ago
+        delete if match
+    */
+}
 //#endregion
 //#region Utility Functions
 async function Reply(msg, error) {
@@ -226,6 +247,67 @@ function timesince(timestamp) {
         minDiff = minDiff * -1;
     }
     return minDiff;
+}
+function secondssince(timestamp) {
+    // helper function to check difference in time (used in rename command)
+    var CurrentDate = moment();
+    var startDate = moment(CurrentDate, 'YYYY-M-DD HH:mm:ss')
+    var endDate = moment(timestamp, 'YYYY-M-DD HH:mm:ss')
+    var secDiff = endDate.diff(startDate, 'seconds')
+
+    if (secDiff < 0) {
+        secDiff = secDiff * -1;
+    }
+    return secDiff;
+}
+async function coolDownCheck(client, command, cooldown, userid, callback) {
+    var sql = SqlString.format('SELECT * FROM cooldown_tracker WHERE command=? AND userid=?', [command, userid]);
+    client.database.getConnection(function (err, d) {
+        if (err) {
+            console.error("error connecting: " + err.stack);
+            return;
+        }
+        d.query(sql, async (er, re) => {
+            if (er) console.error(er);
+            if (re.length < 1) {
+                // add the timestamp
+                let createEntry = SqlString.format(`INSERT IGNORE INTO cooldown_tracker SET command=?, userid=?, timestamp=CURRENT_TIMESTAMP()`, [command, userid]);
+                d.query(createEntry, async (errorEntry, resultEntry) => {
+                    if (errorEntry) return console.error(errorEntry);
+                    callback({
+                        status: true,
+                        timeleft: cooldown - timesince
+                    })
+                })
+            } else {
+                // check the timestamp against cooldown
+                let dbTimestamp = re[0].timestamp;
+                let timesince = secondssince(dbTimestamp);
+                if (timesince >= cooldown) {
+                    let yeetEntry = SqlString.format(`UPDATE cooldown_tracker SET timestamp=CURRENT_TIMESTAMP() WHERE command=? AND userid=?`, [command, userid]);
+                    d.query(yeetEntry, async (er, re) => {
+                        if (er) console.error(er);
+                        callback({
+                            status: true,
+                            timeleft: cooldown - timesince
+                        })
+                    })
+
+                } else {
+                    callback({
+                        status: false,
+                        timeleft: cooldown - timesince
+                    })
+                }
+            }
+
+        })
+        d.release(function (err) {
+            if (err) {
+                console.error(err);
+            }
+        });
+    });
 }
 async function BlistedWordCheck(word, msg) {
     let gid = msg.guild.id;
@@ -860,6 +942,8 @@ module.exports = {
     AddAdminLog,
     AddModLog,
     BlistedWordCheck,
+    coolDownCheck,
+    cooldownCmdsCleanup,
     DeleteFromQueue,
     intervals,
     isActivityVC,
@@ -870,6 +954,7 @@ module.exports = {
     premiumChannelPermChecks,
     Reply,
     SendModLog,
+    secondssince,
     serverDataCheck,
     timesince,
     vcPermsCheck,

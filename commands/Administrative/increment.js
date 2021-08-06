@@ -49,5 +49,6 @@ module.exports.help = {
     description: "Updates the incremental number for a joinchannel",
     usage: "increment <joinchanid> <increment_#>",
     category: "Administrative",
+    cooldown: 0,
     maintenancemode: 0
 }

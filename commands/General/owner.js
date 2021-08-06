@@ -142,5 +142,6 @@ module.exports.help = {
     description: "Shows who the current Owner and Co-Owners are. Mods can affix <channel_id> to the end of the command and see this info as well",
     usage: "owner {channel_id}",
     category: "General",
+    cooldown: 0,
     maintenancemode: 0
 }

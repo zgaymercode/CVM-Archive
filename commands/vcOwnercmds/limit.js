@@ -52,5 +52,6 @@ module.exports.help = {
     description: "updates the user limit of a voice channel.",
     usage: "limit #",
     category: "VC Owner Command",
+    cooldown: 5,
     maintenancemode: 0
 }

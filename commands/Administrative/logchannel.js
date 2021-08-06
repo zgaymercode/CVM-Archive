@@ -34,7 +34,7 @@ module.exports.run = async (client, msg, args) => {
                     break;
             }
 
-           
+
             d.release(function (err) {
                 if (err) {
                     console.error(err);
@@ -51,5 +51,6 @@ module.exports.help = {
     description: "Sets the channel for the bot to send modlogs/adminlogs into",
     usage: "logchan admin|mod #channel",
     category: "Administrative",
+    cooldown: 0,
     maintenancemode: 1
 }

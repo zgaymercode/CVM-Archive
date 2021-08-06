@@ -5,7 +5,6 @@ module.exports.run = async (client, msg, args) => {
             console.error("error connecting: " + err.stack);
             return;
         }
-
         let cid = msg.member.voice.channel.id;
         let vc = msg.member.voice.channel;
         var sql = SqlString.format('SELECT * FROM channels WHERE id=?', [cid]);
@@ -13,43 +12,37 @@ module.exports.run = async (client, msg, args) => {
             if (er) console.error(er);
             if (!re.length) return client.functions.Reply(msg, "OOF, a glitch occured. I couldn't find the entry of the voice channel your in, try agin or contact bot support");
             let stagestate = re[0].is_stage;
+            let jcid = re[0].joinchan;
+            let owner = re[0].oid;
+
             if (stagestate === 1) {
-                let grant = msg.mentions.members.first();
-                if (!grant) return client.functions.Reply(msg, "You must @mention a member to grant speaking/video permissions!");
-                let jcid = re[0].joinchan; // join channel id 
+                let deny = msg.mentions.members.first();
+                if (!deny) return client.functions.Reply(msg, "You must @mention a member to deny speaking/video permissions!");
+                if (deny.id === owner) return client.functions.Reply(msg, `That member is the owner, their perms can not be yeeted`);
                 let vcmembers = msg.member.voice.channel;
                 let vccheck;
                 vcmembers.members.each((member) => {
-                    if (member.id != grant.id) return;
+                    if (member.id != deny.id) return;
                     vccheck = 1;
                 })
-                if (vccheck != 1) return client.functions.Reply(msg, `<@${grant.id}> is not in the voice chat`);
-
-                // delete any entries for the queue that may exists
-                client.functions.DeleteFromQueue(client, grant.id);
-
-                //grant the perms in the channel
-                vc.updateOverwrite(
-                    grant,
-                    {
-                        STREAM: true,
-                        SPEAK: true
-                    }
-                )
+                if (vccheck != 1) return client.functions.Reply(msg, `<@${deny.id}> is not in the voice chat`);
+                let overwrites = vc.permissionOverwrites.get(deny.id);
+                if (!overwrites) return client.functions.Reply(msg, `<@${deny.id}> is not currently granted speak/stream permissions`);
+                overwrites.delete();
+                client.functions.AddModLog(client, msg.guild.id, msg.author.id, `<@${deny.id}> Denied`, vc, '3')
+                if (msg.needsAdminLog === 1) {
+                    client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Revoked <@${deny.id}>'s access to speak & stream in ${vc.id}`)
+                }
                 let tmpchannel = client.channels.cache.get(jcid);
                 let tmpar = client.config.tmp.array;
-                tmpar.push(grant.id);
-                if (msg.needsAdminLog === 1) {
-                    client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Granted ${grant.id} Speak and Stream in ${vc.id}`)
-                }
-                client.functions.AddModLog(client, msg.guild.id, msg.author.id, `<@${grant.id}> Granted`, vc, '3')
-                grant.voice.setChannel(tmpchannel).then(() => {
+                tmpar.push(deny.id);
+                deny.voice.setChannel(tmpchannel).then(() => {
                     tmpchannel.members.each((memberintmp) => {
-                        if (memberintmp.id != grant.id) return;
+                        if (memberintmp.id != deny.id) return;
                         setTimeout(() => {
-                            grant.voice.setChannel(vc);
+                            deny.voice.setChannel(vc);
                             for (var i = 0; i < tmpar.length; i++) {
-                                if (tmpar[i] === grant.id) {
+                                if (tmpar[i] === deny.id) {
                                     tmpar.splice(i, 1);
                                 }
                             }
@@ -57,7 +50,7 @@ module.exports.run = async (client, msg, args) => {
                     })
 
                 })
-                client.functions.Reply(msg, `<@${grant.id}> has been allowed to speak and stream in this channel`)
+                client.functions.Reply(msg, `<@${deny.id}> has been denied from speaking and streaming in this channel`)
 
             } else {
                 client.functions.Reply(msg, "Sorry, this is a Activity Voice feature. You must be in a voice chat with this enabled")
@@ -72,10 +65,11 @@ module.exports.run = async (client, msg, args) => {
     });
 }
 module.exports.help = {
-    name: "partyadd",
-    aliases: ["grant"],
-    description: "Grants a user the ability to speak and stream in the channel",
-    usage: "partyadd @user",
+    name: "deny",
+    aliases: ["partyremove"],
+    description: "revokes a users ability to speak and use video in stage channels",
+    usage: "deny @user",
     category: "VC Owner Command",
+    cooldown: 15,
     maintenancemode: 0
 }

@@ -379,5 +379,6 @@ module.exports.help = {
     description: `This command shows information about other commands`,
     usage: `help`,
     category: `General`,
+    cooldown: 0,
     maintenancemode: 0
 }

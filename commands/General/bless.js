@@ -14,5 +14,6 @@ module.exports.help = {
     description: "Allows premium members to bless servers",
     usage: "bless add | remove",
     category: "General",
+    cooldown: 0,
     maintenancemode: 1
 }

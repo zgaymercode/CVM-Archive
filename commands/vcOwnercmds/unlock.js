@@ -66,5 +66,6 @@ module.exports.help = {
     description: "resets the channel to the join channel's permissions. assuming the channel is allowed to be unlocked",
     usage: "unlock",
     category: "VC Owner Command",
+    cooldown: 0,
     maintenancemode: 0
 }

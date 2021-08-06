@@ -5,7 +5,7 @@ module.exports.run = async (client, msg, args) => {
     let config = client.config;
     let fn = client.functions;
     try {
-        
+
         if (args) {
             if (isNaN(args[0])) return fn.Reply(msg, `Supplied channel id is not numeric: ${args[0]}`);
             let chid = args[0];
@@ -86,5 +86,6 @@ module.exports.help = {
     description: "Debugs the server's permissions or the mentioned channel's permissions",
     usage: "debug or debug (channel_id)",
     category: "Administrative",
+    cooldown: 0,
     maintenancemode: 0
 }

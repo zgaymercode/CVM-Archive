@@ -38,7 +38,7 @@ module.exports.run = async (client, msg, args) => {
                 case 'setactivity':
                     import(setactivity.command);
                     break;
-                
+
                 default:
                     client.functions.Reply(msg, `Invalid option provided, try ${prefix}config help`)
             }
@@ -53,5 +53,6 @@ module.exports.help = {
     description: "TDB",
     usage: "config (TBD)",
     category: "Administrative",
+    cooldown: 0,
     maintenancemode: 1
 }

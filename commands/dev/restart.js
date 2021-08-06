@@ -17,5 +17,6 @@ module.exports.help = {
     description: "restarts bot",
     usage: "restart",
     category: "Dev",
+    cooldown: 0,
     maintenancemode: 0
 }

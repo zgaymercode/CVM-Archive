@@ -74,5 +74,6 @@ module.exports.help = {
     description: "kicks a member from a locked channel",
     usage: "kick @member",
     category: "VC Owner Command",
+    cooldown: 5,
     maintenancemode: 0
 }

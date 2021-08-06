@@ -32,7 +32,7 @@ module.exports.run = async (client, msg, args) => {
         } else {
             args.splice(0, 1)
             let ar = args.toString().split(/,/).join(' ');
-            
+
             var sql = SqlString.format('UPDATE joinchans SET template=? WHERE joinchan=?', [ar, pid]);
             con.getConnection(function (err, d) {
                 if (err) {
@@ -68,5 +68,6 @@ module.exports.help = {
     description: "Updates the Channel's template. instead of <new_template> you can put reset to reset to default. %INC% = Increment %USERNAME% = username   %NICKNAME% = nickname",
     usage: "template <join_channel_id> <new_template>",
     category: "Administrative",
+    cooldown: 0,
     maintenancemode: 0
 }

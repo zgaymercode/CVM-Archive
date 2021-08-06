@@ -58,10 +58,11 @@ module.exports.run = async (client, msg, args) => {
     });
 }
 module.exports.help = {
-    name: "partyclear",
-    aliases: ["clear"],
+    name: "clear",
+    aliases: ["partyclear"],
     description: "Resets an activity voice channel's permissions to just the owner being able to speak/stream",
-    usage: "partyclear",
+    usage: "clear",
     category: "VC Owner Command",
+    cooldown: 0,
     maintenancemode: 0
 }

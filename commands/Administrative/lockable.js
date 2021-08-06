@@ -69,5 +69,6 @@ module.exports.help = {
     description: "Enables/Disables the ability to lock a channel based on the join channel",
     usage: "lockable <joinchan_id> enable|disable",
     category: "Administrative",
+    cooldown: 0,
     maintenancemode: 0
 }

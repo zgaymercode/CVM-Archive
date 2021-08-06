@@ -66,5 +66,6 @@ module.exports.help = {
     description: "invites a member to a locked channel. Up to 5 members can be invited at once",
     usage: "invite @member1",
     category: "VC Owner Command",
+    cooldown: 5,
     maintenancemode: 0
 }

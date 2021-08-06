@@ -111,5 +111,6 @@ module.exports.help = {
     description: "Renames the channel that you are in, assuming you're the owner or have the right perms",
     usage: "rename <new name>",
     category: "VC Owner Command",
+    cooldown: 0,
     maintenancemode: 0
 }

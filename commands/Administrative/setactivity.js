@@ -14,10 +14,10 @@ async function updateStage(client, msg, jcid, newval) {
                 if (er2) return client.functions.Reply(msg, "There was a glitch in the matrix, please contact bot support :3");
                 if (!re2) return client.functions.Reply(msg, `There was an error updating that channel, please contact bot support`)
                 client.functions.Reply(msg, `Successfully updated <#${jcid}>`);
-                
-            
+
+
             })
-        })        
+        })
         d.release(function (err) {
             if (err) {
                 console.error(err);
@@ -55,5 +55,6 @@ module.exports.help = {
     description: "Sets a joinchannel to be a stage like vc (not an actual discord stage)",
     usage: "setactivity true <join_channel_id>",
     category: "Administrative",
+    cooldown: 0,
     maintenancemode: 0
 }

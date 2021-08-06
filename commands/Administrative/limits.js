@@ -28,7 +28,7 @@ module.exports.run = async (client, msg, args) => {
                         if (er2) return client.functions.Reply(msg, "There was a glitch in the matrix, please contact bot support :3");
                         if (!re2) return client.functions.Reply(msg, `There was an error updating that channel, please contact bot support`)
                         client.functions.Reply(msg, `Successfully updated <#${joinchan}>`);
-                        
+
                     })
                     d.release((error2) => {
                         if (error2) return console.error(error2);
@@ -51,5 +51,6 @@ module.exports.help = {
     description: "Enables/Disables the ability to change a channel's limits based on the join channel",
     usage: "limits <joinchan_id> allow|deny",
     category: "Administrative",
+    cooldown: 0,
     maintenancemode: 0
 }

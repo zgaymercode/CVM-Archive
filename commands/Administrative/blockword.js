@@ -6,7 +6,7 @@ exports.run = async (client, msg, args) => {
     let fn = client.functions;
     let gid = msg.guild.id
     try {
-        switch (args[0]){
+        switch (args[0]) {
             case "add":
                 args.splice('add', 1); // remove add from the args
                 client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `added "${args}" to server's blocked word list`)
@@ -119,5 +119,6 @@ module.exports.help = {
     description: "Add/Remove words from your server's block list, view currently blocked words. reset will yeet all words from the list. The block list will prevent users from renaming their channels with words including whats on the list.",
     usage: "blockword add|remove|list word1 word2 word3 ...",
     category: "Administrative",
+    cooldown: 0,
     maintenancemode: 0
 }

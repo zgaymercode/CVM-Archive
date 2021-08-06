@@ -12,7 +12,7 @@ module.exports.run = async (client, msg, args) => {
                     id: msg.guild.id,
                     allow: ['VIEW_CHANNEL', 'CONNECT']
                 },
-                { 
+                {
                     id: client.user.id,
                     allow: ['MANAGE_CHANNELS', 'VIEW_CHANNEL']
                 }
@@ -32,7 +32,7 @@ module.exports.run = async (client, msg, args) => {
                 }
             ]
         })
-        
+
 
         let gid = msg.guild.id;
         let joinchan = newchan.id;
@@ -60,7 +60,7 @@ module.exports.run = async (client, msg, args) => {
                 }
             });
         });
-    }   
+    }
     catch (error) {
         console.log(error);
         fn.Reply("Could not create new channel. If this problem persists, Please contact the bot dev")
@@ -72,5 +72,6 @@ module.exports.help = {
     description: "creates a new category for voice chat",
     usage: "newcat",
     category: "Administrative",
+    cooldown: 0,
     maintenancemode: 0
 }

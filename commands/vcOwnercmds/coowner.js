@@ -25,7 +25,7 @@ module.exports.run = async (client, msg, args) => {
             let retrieveCoOwnersObj = re[0].coowner;
             let jsonObjectFromDB = JSON.parse(retrieveCoOwnersObj)
             let CurrentOwnersArray = jsonObjectFromDB.coowners || [];
-            
+
             // Now let's lock this command to owner only (non-owner has the owner command that will show the same data)
             if (msg.author.id != oid) return client.functions.Reply(msg, `Only the active owner can run this command`);
             ArrayofModifiedCoOwners = [];
@@ -33,7 +33,7 @@ module.exports.run = async (client, msg, args) => {
             switch (args[0]) {
                 case 'list':
                     ArrayofCoOwnerTags = [];
-                    for (let i = 0; i < CurrentOwnersArray.length; i++){
+                    for (let i = 0; i < CurrentOwnersArray.length; i++) {
                         ArrayofCoOwnerTags.push(`<@${CurrentOwnersArray[i]}>`);
                     }
                     let CoOwnerTags = ArrayofCoOwnerTags.toString().replace(/,/g, ' \n')
@@ -78,5 +78,6 @@ module.exports.help = {
     description: "add/remove/list coowners of a vc",
     usage: "coowner add|remove|list (if add/remove @user here)",
     category: "VC Owner Command",
+    cooldown: 0,
     maintenancemode: 0
 }

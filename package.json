@@ -4,7 +4,8 @@
     "start": "pm2 start voicemanager.js"
   },
   "engines": {
-    "node": "14"
+    "node": "v16.6.1",
+    "npm": "7.20.3"
   },
   "dependencies": {
     "discord-buttons": "^3.2.1",

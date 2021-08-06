@@ -64,5 +64,6 @@ module.exports.help = {
     description: "prevents @everyone from connecting to the channel assuming current channel is allowed to be locked",
     usage: "lock",
     category: "VC Owner Command",
+    cooldown: 0,
     maintenancemode: 0
 }

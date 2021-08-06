@@ -28,7 +28,7 @@ module.exports.run = async (client, msg, args) => {
             joinchanid = args[1];
             if (isNaN(joinchanid)) return client.functions.Reply(msg, `You must supply a valid join channel id`);
             console.log(args);
-            prep = args.toString().replace(joinchanid+",", '').replace('set,', '');
+            prep = args.toString().replace(joinchanid + ",", '').replace('set,', '');
             new_prefix = prep.replace(/,/g, ' ');
             UpdateChanPrefix(client, msg, new_prefix, joinchanid)
             break;
@@ -49,5 +49,6 @@ module.exports.help = {
     description: "Updates the Channel's prefix. if you wish to reset the value to null, you can do reset <join_channel_id> instead",
     usage: "vcprefix set <join_channel_id> <new_prefix>  OR reset <join_channel_id>",
     category: "Administrative",
+    cooldown: 0,
     maintenancemode: 0
 }

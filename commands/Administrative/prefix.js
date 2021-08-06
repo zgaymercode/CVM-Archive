@@ -40,5 +40,6 @@ module.exports.help = {
     description: "sets this server's prefix or reset's prefix to base prefix",
     usage: "prefix set <newprefix> OR reset",
     category: "Administrative",
+    cooldown: 0,
     maintenancemode: 0
 }

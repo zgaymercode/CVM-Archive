@@ -39,7 +39,7 @@ module.exports.run = async (client, msg, args) => {
                         break;
 
                 }
-                
+
                 d.release(function (err) { if (err) { console.error(err); } });
             });
         } else {
@@ -57,5 +57,6 @@ module.exports.help = {
     description: "set's the default lock state of a channel. auto-locking channels must also be set to lockable if you want the members to be able to unlock the channels",
     usage: "defaultlock <joinchan_id> locked|unlocked",
     category: "Administrative",
+    cooldown: 0,
     maintenancemode: 0
 }
