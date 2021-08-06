@@ -92,7 +92,7 @@ module.exports.run = async (client, msg, args) => {
                     if (re.length > 0) {
                         client.functions.ModPermsCheck(msg, (modperms) => {
                             if (modperms) {
-                                client.functions.AddModLog(client, msg.guild.id, msg.author.id, 'Force Claimed channel', vc, '2')
+                                client.functions.AddModLog(client, msg.guild.id, msg.author.id, `Force Claimed by: <@${msg.author.id}> `, vc, '2')
                                 client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Force Claimed vc: '${vc.name} \n id: ${vc.id}'`)
                                 UpdateOwner(client, d, msg, fn, vc)
                             } else {
