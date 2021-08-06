@@ -115,12 +115,12 @@ module.exports.run = async (client, msg, args) => {
                                     } else {
                                         // Check for Co-Owners first before allowing anyone to claim
                                         if (CurrentOwnersArray.length < 1) {
-                                            client.functions.AddModLog(client, msg.guild.id, msg.author.id, 'Claimed channel', vc, '2')
+                                            client.functions.AddModLog(client, msg.guild.id, msg.author.id, `<@${msg.author.id}> Claimed channel`, vc, '2')
                                             UpdateOwner(client, d, msg, fn, vc)
 
                                         } else {
                                             if (CurrentOwnersArray.includes(msg.author.id)) {
-                                                client.functions.AddModLog(client, msg.guild.id, msg.author.id, 'Claimed channel', vc, '2')
+                                                client.functions.AddModLog(client, msg.guild.id, msg.author.id, `<@${msg.author.id}> Claimed channel`, vc, '2')
                                                 removeCoOwnerfromCoOwnerList(d, msg.author.id, CurrentOwnersArray, vc.id);
                                                 UpdateOwner(client, d, msg, fn, vc)
                                             } else {
