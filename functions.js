@@ -362,6 +362,7 @@ async function serverDataCheck(client, guildID, callback) {
             let queue;
             let claim;
             let hand;
+            let bitrate;
 
             if (error) return console.error(error);
             if (results.length > 0) {
@@ -387,6 +388,7 @@ async function serverDataCheck(client, guildID, callback) {
                 queue = results[0].queue;
                 claim = results[0].claim;
                 hand = results[0].hand;
+                bitrate = results[0].bitrate;
                 if (prefix === null) prefix = client.config.bot.prefix;
             } else {
                 prefix = client.config.bot.prefix;
@@ -415,6 +417,7 @@ async function serverDataCheck(client, guildID, callback) {
                         queue = 1;
                         claim = 1;
                         hand = 1;
+                        bitrate = 1;
                     }
 
                 })
@@ -440,7 +443,8 @@ async function serverDataCheck(client, guildID, callback) {
                 rename,
                 queue,
                 claim,
-                hand
+                hand,
+                bitrate
             })
         })
         d.release(function (err) { });
@@ -559,6 +563,13 @@ async function SendModLog(client, guildID, channelID) {
                     .setThumbnail(client.user.avatarURL({ dynamic: true }))
                     .setTimestamp()
                     .setFooter(`${client.config.embed.footer} | ${client.config.embed.ver}`, client.user.avatarURL({ dynamic: true }));
+                tooLong = new Discord.MessageEmbed()
+                    .setColor(client.config.embed.color)
+                    .setAuthor(`${client.user.username} Channel Log`, '', client.config.bot.giturl)
+                    .setThumbnail(client.user.avatarURL({ dynamic: true }))
+                    .setTimestamp()
+                    .setFooter(`${client.config.embed.footer} | ${client.config.embed.ver}`, client.user.avatarURL({ dynamic: true }))
+                    .setDescription("Complete log not sent");
                 // form the query for searching for types of logs
                 let findtype0 = SqlString.format(`SELECT * FROM modlog WHERE channel_id=? AND type='0' ORDER BY timestamp desc`, [channelID]);
                 let findtype1 = SqlString.format(`SELECT * FROM modlog WHERE channel_id=? AND type='1' ORDER BY timestamp desc`, [channelID]);
@@ -575,7 +586,9 @@ async function SendModLog(client, guildID, channelID) {
                     let action = findtype1results[0].action;
                     let last_owner = findtype1results[0].member_id;
                     embed.addField(`Creator:`, `<@${last_owner}>`)
+                    tooLong.addField(`Creator:`, `<@${last_owner}>`)
                     embed.addField(`${action}`, `${formattedTimestamp1}`)
+                    tooLong.addField(`${action}`, `${formattedTimestamp1}`)
                     d.query(findtype2, (findtype2error, findtype2results) => {
                         if (findtype2error) return console.error(findtype2error)
                         let type2resultslength = findtype2results.length;
@@ -615,8 +628,12 @@ async function SendModLog(client, guildID, channelID) {
                                 let timestamp = findtype0results[0].timestamp;
                                 let formattedTimestamp4 = moment(timestamp).format("MM-D-YY, h:mm:ss a UTC")
                                 embed.addField(`${action}`, `${formattedTimestamp4}`);
+                                tooLong.addField(`${action}`, `${formattedTimestamp4}`);
                                 try {
-                                    logchannel.send(embed);
+                                    logchannel.send(embed).catch((e) => {
+                                        console.log(e);
+                                        logchannel.send(tooLong);
+                                    });
                                 } catch (e) {
                                     console.log(e)
                                 }
@@ -765,7 +782,7 @@ async function DeleteFromQueue(client, id) {
     });
 }
 async function premiumChannelPermChecks(client, msg, callback) {
-    let owner, lock, unlock, partyremove, partyclear, partyadd, limit, invite, coowner, transfer, kick, rename, queue, claim, hand;
+    let owner, lock, unlock, partyremove, partyclear, partyadd, limit, invite, coowner, transfer, kick, rename, queue, claim, hand, bitrate;
 
     serverDataCheck(client, msg.guild.id, (server) => {
         if (server.premiumBlessed == 0) {
@@ -786,6 +803,7 @@ async function premiumChannelPermChecks(client, msg, callback) {
             queue = 1;
             claim = 1;
             hand = 1;
+            bitrate = 1;
             return callback({
                 // Command Perms
                 owner,
@@ -802,7 +820,8 @@ async function premiumChannelPermChecks(client, msg, callback) {
                 rename,
                 queue,
                 claim,
-                hand
+                hand,
+                bitrate
             })
         } else {
             client.database.getConnection(function (err, d) {
@@ -826,6 +845,7 @@ async function premiumChannelPermChecks(client, msg, callback) {
                     queue = 1;
                     claim = 1;
                     hand = 1;
+                    bitrate = 1;
                     return callback({
                         // Command Perms
                         owner,
@@ -842,7 +862,8 @@ async function premiumChannelPermChecks(client, msg, callback) {
                         rename,
                         queue,
                         claim,
-                        hand
+                        hand,
+                        bitrate
                     })
                 }
                 let vcid = msg.member.voice.channel.id;
@@ -865,6 +886,7 @@ async function premiumChannelPermChecks(client, msg, callback) {
                         queue = 1;
                         claim = 1;
                         hand = 1;
+                        bitrate = 1;
                         return callback({
                             // Command Perms
                             owner,
@@ -881,7 +903,8 @@ async function premiumChannelPermChecks(client, msg, callback) {
                             rename,
                             queue,
                             claim,
-                            hand
+                            hand,
+                            bitrate
                         })
                     }
                     let joinchan = re[0].joinchan;
@@ -905,6 +928,7 @@ async function premiumChannelPermChecks(client, msg, callback) {
                         queue = resultsjoincheck[0].queue;
                         claim = resultsjoincheck[0].claim;
                         hand = resultsjoincheck[0].hand;
+                        bitrate = resultsjoincheck[0].bitrate;
 
 
                         return callback({
@@ -923,7 +947,8 @@ async function premiumChannelPermChecks(client, msg, callback) {
                             rename,
                             queue,
                             claim,
-                            hand
+                            hand,
+                            bitrate
                         })
                     })
 

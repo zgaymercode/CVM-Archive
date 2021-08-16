@@ -36,6 +36,7 @@ module.exports = async (client, msg) => {
                 msg.premiumPerms = premiumPerms;
                 if (command.help.maintenancemode === 1) {
                     if (client.config.staff.includes(msg.author.id)) {
+                        console.log("Running with Bot Staff Priv");
                         command.run(client, msg, args);
                         return;
                     } else {
@@ -46,9 +47,11 @@ module.exports = async (client, msg) => {
                 let cooldown = command.help.cooldown;
                 client.functions.coolDownCheck(client, command.help.name, cooldown, msg.author.id, (cooldownSuccess) => {
                     if (!cooldownSuccess.status) return client.functions.Reply(msg, `You are on cooldown from using this command please wait ${cooldownSuccess.timeleft} more seconds before trying again`);
+                    console.log(command.help.category + " " + command.help.name)
                     switch (command.help.category) {
                         case "Dev":
                             if (!client.config.staff.includes(msg.author.id)) return client.functions.Reply(msg, "Sorry, This is a Dev Command");
+                            console.log("Running with Bot Staff Priv");
                             command.run(client, msg, args);
                             break;
                         case "Administrative":
@@ -69,7 +72,17 @@ module.exports = async (client, msg) => {
                                         msg.needsAdminLog = 0;
                                     }
                                     switch (command.help.name) {
+                                        case 'bitrate':
+                                            if (serverConfig.bitrate === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                            if (premiumPerms.bitrate === 0) return client.functions.Reply(msg, client.config.messages.channeldisabled);
+                                            command.run(client, msg, args);
+                                            break;
                                         case 'kick':
+                                            if (serverConfig.kick === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                            if (premiumPerms.kick === 0) return client.functions.Reply(msg, client.config.messages.channeldisabled);
+                                            command.run(client, msg, args);
+                                            break;
+                                        case 'ban':
                                             if (serverConfig.kick === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
                                             if (premiumPerms.kick === 0) return client.functions.Reply(msg, client.config.messages.channeldisabled);
                                             command.run(client, msg, args);

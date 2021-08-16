@@ -39,6 +39,12 @@ module.exports.run = async (client, msg, args) => {
             let CurrentOwnersArray = jsonObjectFromDB.coowners || [];
             if (!msg.mentions.members.first()) return client.functions.Reply(msg, "You must @mention a member to transfer this channel to");
             let newownerid = msg.mentions.members.first().id;
+            let invc;
+            msg.member.voice.channel.members.each((member) => {
+                if (member.id != newownerid) return
+                invc = 1;
+            })
+            if (invc != 1) return client.functions.Reply(msg, `<@${newownerid}> is not in the channel with you`)
             if (CurrentOwnersArray.includes(newownerid)) {
                 RemoveCoOwner(client, msg, d, newownerid, vcid, CurrentOwnersArray)
             }

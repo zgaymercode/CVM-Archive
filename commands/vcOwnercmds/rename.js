@@ -50,7 +50,7 @@ module.exports.run = async (client, msg, args) => {
                                         if (er2) console.error(er2);
                                         vc.setName(prefix + text, `Channel Rename Command used by: ${msg.author.username}`);
                                         if (msg.needsAdminLog === 1) {
-                                            client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Renamed <@${vcid}> to ${prefix}${text}`);
+                                            client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Renamed <#${vcid}> to ${prefix}${text}`);
                                         }
                                         client.functions.AddModLog(client, msg.guild.id, msg.author.id, `Channel renamed to ${prefix}${text}`, vc, '2')
                                         fn.Reply(msg, "Successfully renamed channel")

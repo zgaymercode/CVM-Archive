@@ -57,12 +57,20 @@ exports.run = async (client, msg, args) => {
                                         if (server.kick === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
                                         send(msg, embed, client.functions);
                                         break;
+                                    case 'ban':
+                                        if (server.kick === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                        send(msg, embed, client.functions);
+                                        break;
                                     case 'transfer':
                                         if (server.transfer === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
                                         send(msg, embed, client.functions);
                                         break;
                                     case 'coowner':
                                         if (server.coowner === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
+                                        send(msg, embed, client.functions);
+                                        break;
+                                    case 'bitrate':
+                                        if (server.bitrate === 0) return client.functions.Reply(msg, client.config.messages.admindisabled);
                                         send(msg, embed, client.functions);
                                         break;
                                     case 'invite':
@@ -233,6 +241,16 @@ exports.run = async (client, msg, args) => {
                                         case 'kick':
                                             if (server.kick === 0) break;
                                             if (premiumPerms.kick === 0) break;
+                                            vce.addField(`${prefix}${usage}`, `${description}`);
+                                            break;
+                                        case 'ban':
+                                            if (server.kick === 0) break;
+                                            if (premiumPerms.kick === 0) break;
+                                            vce.addField(`${prefix}${usage}`, `${description}`);
+                                            break;
+                                        case 'bitrate':
+                                            if (server.bitrate === 0) break;
+                                            if (premiumPerms.bitrate === 0) break;
                                             vce.addField(`${prefix}${usage}`, `${description}`);
                                             break;
                                         case 'transfer':

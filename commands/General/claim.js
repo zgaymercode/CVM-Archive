@@ -1,5 +1,31 @@
 const SqlString = module.require('sqlstring');
 async function UpdateOwner(client, d, msg, fn, vc) {
+    let tmpchannel = client.channels.cache.get(msg.jcid);
+    let tmpar = client.config.tmp.array;
+    tmpar.push(msg.author.id);
+    msg.member.voice.setChannel(tmpchannel).then(() => {
+        tmpchannel.members.each((memberintmp) => {
+            if (memberintmp.id != msg.author.id) return;
+            setTimeout(() => {
+                msg.member.voice.setChannel(vc);
+                for (var i = 0; i < tmpar.length; i++) {
+                    if (tmpar[i] === msg.author.id) {
+                        tmpar.splice(i, 1);
+                    }
+                }
+            }, 1000);
+        })
+
+    })
+    if (msg.is_stage === 1) {
+        msg.member.voice.channel.updateOverwrite(
+            msg.member,
+            {
+                STREAM: true,
+                SPEAK: true
+            }
+        )
+    }
     var sql = SqlString.format(`UPDATE channels SET oid=?, ownerleavetimestamp=null WHERE id=?`, [msg.author.id, vc.id]);
     d.query(sql, async (er, ro) => {
         if (er) console.error(er);
@@ -51,6 +77,7 @@ async function UpdateOwner(client, d, msg, fn, vc) {
                             if (prefix === null) prefix = '';
                             VoiceChannelName = `${prefix} ${template}`;
                             vc.setName(`${VoiceChannelName}`, `Channel Claimed by: ${msg.author.username}`);
+
                         }
 
                     })
@@ -90,6 +117,8 @@ module.exports.run = async (client, msg, args) => {
                 d.query(sql, async (er, re) => {
                     if (er) console.error(er);
                     if (re.length > 0) {
+                        msg.is_stage = re[0].is_stage;
+                        msg.jcid = re[0].joinchan;
                         client.functions.ModPermsCheck(msg, (modperms) => {
                             if (modperms) {
                                 client.functions.AddModLog(client, msg.guild.id, msg.author.id, `Force Claimed by: <@${msg.author.id}> `, vc, '2')
@@ -160,6 +189,6 @@ module.exports.help = {
     description: "Claims a voice chat when the owner has left. Members with Move Members or Administrator will bypass all checks in this command and claim by force",
     usage: "claim",
     category: "General",
-    cooldown: 10,
+    cooldown: 0,//10,
     maintenancemode: 0
 }

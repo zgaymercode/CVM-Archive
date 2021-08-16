@@ -19,6 +19,7 @@ module.exports.run = async (client, msg, args) => {
                     if (re) {
                         let locked = re[0].locked;
                         let activityStatus = re[0].is_stage;
+                        let vc = msg.member.voice.channel;
                         if (locked === 0 && activityStatus === 0) {
                             fn.Reply(msg, "Channel needs to be either a lockable channel or an activity channel to use this command");
                             return;
@@ -43,7 +44,7 @@ module.exports.run = async (client, msg, args) => {
                                 return;
                             }
                             member.voice.kick();
-                            let vc = msg.member.voice.channel;
+
                             client.functions.AddModLog(client, msg.guild.id, msg.author.id, `<@${member.id}> kicked from VC`, msg.member.voice.channel, '3')
                             if (msg.needsAdminLog === 1) {
                                 client.functions.AddAdminLog(client, msg.guild.id, msg.author.id, `Used the kick command against <@${member.id}>`);
