@@ -53,7 +53,7 @@ function BotStatus(client) {
 async function intervals(client) {
     m = 50; // max intervals before restart
     client.user.setActivity(client.config.bot.startstatus, { type: "PLAYING" });
-    if (client.config.isdevbuild === 0) {
+    if (client.config.bot.isdevbuild === 0) {
         consolelog(client, m);
         ChannelCleanup(client);
         QCleanup(client);
