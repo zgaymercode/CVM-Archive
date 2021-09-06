@@ -40,20 +40,25 @@ function consolelog(client, maxi) {
     }
 }
 function BotStatus(client) {
-    // Random status' are fun arn't they? xD
-    const activities_list = [
-        'Multiple Voice chats at once. cvhelp for more info',
-        'cvhelp for more info',
-        'All the channels get created. cvhelp for more info',
-        '@me for my current prefix in your server!'
-    ];
-    const index = Math.floor(Math.random() * (activities_list.length - 1) + 1); // generates a random number between 1 and the length of the activities array list (in this case 5).
-    client.user.setActivity(activities_list[index], { type: "WATCHING" }); // sets bot's activities to one of the phrases in the arraylist.
+    if (client.config.bot.isdevbuild === 0){
+        // Random status' are fun arn't they? xD
+        const activities_list = [
+            'Multiple Voice chats at once. cvhelp for more info',
+            'cvhelp for more info',
+            'All the channels get created. cvhelp for more info',
+            '@me for my current prefix in your server!'
+        ];
+        const index = Math.floor(Math.random() * (activities_list.length - 1) + 1); // generates a random number between 1 and the length of the activities array list (in this case 5).
+        client.user.setActivity(activities_list[index], { type: "WATCHING" }); // sets bot's activities to one of the phrases in the arraylist.
+    } else {
+        client.user.setActivity("CVM Beta - Prefix cv ", { type: "PLAYING" });
+    }
 }
 async function intervals(client) {
     m = 50; // max intervals before restart
-    client.user.setActivity(client.config.bot.startstatus, { type: "PLAYING" });
+    
     if (client.config.bot.isdevbuild === 0) {
+        client.user.setActivity(client.config.bot.startstatus, { type: "PLAYING" });
         consolelog(client, m);
         ChannelCleanup(client);
         QCleanup(client);
@@ -68,6 +73,7 @@ async function intervals(client) {
             consolelog(client, m);
         }, 150000); // every 2.5 minutes
     } else {
+        client.user.setActivity("CVM Beta - Prefix cv ", { type: "PLAYING" });
         consolelog(client, m);
         QCleanup(client);
         setInterval(() => {
