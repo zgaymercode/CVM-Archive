@@ -146,7 +146,13 @@ module.exports = async (client, oldState, newState) => {
                     if (er) console.error(er);
                     if (!res.length) return;
                     let vc = oldState.guild.channels.cache.get(oldState.channelID);
-                    if (vc.members.size < 1) {
+                    let voiceChatMembers = vc.members;
+                    let HumanDetected = false;
+                    voiceChatMembers.each((memeber) => {
+                        if (memeber.user.bot) return;
+                        HumanDetected = true;
+                    })
+                    if (!HumanDetected) {
                         vc.delete()
                         if (oldState.channel.userLimit != 0) {
                             // if the channel is anything other than 0 we need to log it, otherwise, we don't need it :3
@@ -162,10 +168,7 @@ module.exports = async (client, oldState, newState) => {
                         d.query(sqlzor, async (er, res234) => {
                             if (er) console.error(er);
                             if (!res234) console.error("Could not delete entry");
-
-
                         })
-
                     }
                 })
                 //#endregion
