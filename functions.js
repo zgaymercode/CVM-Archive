@@ -126,7 +126,7 @@ async function ChannelCleanup(client) {
                             d.query(sqlGAYYY, async (err, res) => {
                                 if (err) console.error(err);
                                 if (!res) return;
-                                if (res) console.log("Removed " + id + " from the DB");
+                                if (res) console.log(`Removed ${id} from the DB`);
                             })
                         } else {
                             /*
