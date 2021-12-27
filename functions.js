@@ -240,7 +240,11 @@ async function Reply(msg, error) {
     let embed = new Discord.MessageEmbed()
         .setColor(config.embed.color)
         .setDescription(error);
-    msg.channel.send(embed);
+    msg.channel.send(embed).then((e) => {
+        setTimeout(() => {
+            e.delete();
+        }, 10000);
+    })
 }
 function timesince(timestamp) {
     // helper function to check difference in time (used in rename command)
