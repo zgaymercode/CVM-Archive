@@ -6,9 +6,6 @@ package-lock.json
 logs
 *.log
 
-#ignore config file
-/config.js
-
 # ignore the dev test file
 /commands/dev/test.js
 
