@@ -1,4 +1,6 @@
-# Community Voice Manager (CVM)
+# Community Voice Manager (CVM) Archive
+
+This, is the old version of the bot, like, way old. someone asked for a copy, so it's open source, enjoy my cancer
 
 <br>
 Community Voice Manager is a Discord.js Bot made to create temporary voice channels<br>
