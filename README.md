@@ -4,8 +4,6 @@ This, is the old version of the bot, like, way old. someone asked for a copy, so
 
 <br>
 Community Voice Manager is a Discord.js Bot made to create temporary voice channels<br>
-**Note from Management to code reviewers:** <br>
- Downloading files from this repository is prohibited. You may review the code here on github.<br> any copies grabbed from current code must be approved by Management of this git project.<br>
 
 [Invite me to your server!](https://discord.com/api/oauth2/authorize?client_id=843080555012161546&permissions=288369680&scope=bot%20applications.commands) <br>
 
