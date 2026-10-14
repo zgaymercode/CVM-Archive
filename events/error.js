@@ -1,3 +1,3 @@
 module.exports = async (client, error) => {
-    console.error(er);
+    console.error(error);
 }

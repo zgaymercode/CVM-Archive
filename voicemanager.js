@@ -40,6 +40,7 @@ const { promisify } = require("util");
 const readdir = promisify(require("fs").readdir);
 const disbut = require('discord-buttons');
 disbut(client);
+client.login(client.config.bot.token).catch(console.error());
 client.functions = require('./functions.js');
 ["commands", "aliases", "slashcmds"].forEach((x) => (client[x] = new Discord.Collection()));
 const LoadFiles = async () => {
@@ -57,27 +58,33 @@ const LoadFiles = async () => {
     console.info(`Successfully loaded ${evtFiles.length} events.`);
 
     let dir2 = "./slashcmds/";
-    const cmdFiles = await readdir(dir2);
-
-    cmdFiles.forEach((file2, i) => {
-        const cmd = require(`${dir2}${file2}`);
-        let name = cmd.name;
-        if (name === "template") return;
-        if (client.slashcmds.get(name)) {
-            console.warn(`Two or more slash commands have the same name: ${name}`);
-            return;
-        }
-        if (typeof name === 'string') {
+    readdirSync(dir2).forEach((dirs) => {
+        const slashcommands = readdirSync(`${dir2}${sep}${dirs}${sep}`).filter((files) => files.endsWith(".js"));
+        for (const file of slashcommands) {
+            const cmd = require(`${dir2}/${dirs}/${file}`);
+            let name = cmd.name;
+            let description = cmd.description
+            if (name === "template") continue;
+            if (client.slashcmds.get(name)) {
+                console.warn(`Two or more slash commands have the same name: ${name}`);
+                return;
+            }
+            if (typeof name != 'string') {
+                console.warn(`Error loading file in ${dir2}${file2}. you have a missing name or name is not a string`)
+                return;
+            }
+            if (typeof description != 'string') {
+                console.warn(`Error loading file in ${dir2}${file2}. you have a missing name or name is not a string`)
+                return;
+            }
             client.slashcmds.set(name, cmd)
-        } else {
-            console.warn(`Error loading file in ${dir2}${file2}. you have a missing name or name is not a string`)
-            return;
+            
         }
-
-
     });
     let count = Array.from(client.slashcmds.values());
     console.info(`Successfully loaded ${count.length} slash commands.`);
+
+    
     let dir = "./commands/";
     readdirSync(dir).forEach((dirs) => {
         const commands = readdirSync(`${dir}${sep}${dirs}${sep}`).filter((files) => files.endsWith(".js"));
@@ -124,10 +131,3 @@ client.database2 = mysql.createPool({
     charset: "utf8mb4"
 
 });
-
-client.ws.on('INTERACTION_CREATE', async interaction => {
-    let cmdname = interaction.data.name;
-    if (client.slashcmds.has(cmdname)) client.slashcmds.get(cmdname).run(client, interaction);
-    return;
-});
-client.login(client.config.bot.token).catch(console.error());
